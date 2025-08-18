@@ -1,0 +1,112 @@
+#
+# user profile (non-privileged interactive shells)
+#
+
+set -o emacs
+
+bind '^L=clear-screen'
+
+if (( USER_ID )); then
+	export PS1='$(printf "\1\r\1\033[0;32m\1%${COLUMNS}s\1\033[m\1\n" "[ ${PWD} ]")'$'\1\r\1\033[0;32m\1$\1\033[m\1 '
+	export PS2='  '
+	export PS3=$'\1\r\1\033[0;32m\1?\1\033[m\1 '
+	export PS4=$'\1\r\1\033[0;32m\1[${EPOCHREALTIME}]\1\033[m\1 '
+else
+	export PS1='$(printf "\1\r\1\033[0;31m\1%${COLUMNS}s\1\033[m\1\n" "[ ${PWD} ]")'$'\1\r\1\033[0;31m\1#\1\033[m\1 '
+	export PS2='  '
+	export PS3=$'\1\r\1\033[0;31m\1?\1\033[m\1 '
+	export PS4=$'\1\r\1\033[0;31m\1[${EPOCHREALTIME}]\1\033[m\1 '
+
+	[ -x /usr/local/bin/doas ] && DOAS='/usr/local/bin/doas'
+fi
+
+alias pkgin='idprio 10 pkg install'
+alias root='$DOAS su -m'
+alias poweroff='$DOAS /sbin/shutdown -p now'
+alias reboot='$DOAS /sbin/shutdown -r now'
+alias p='$PAGER'
+alias e='$EDITOR'
+alias h='fc -rl 1 | $PAGER'
+alias r='fc -s'
+alias lk='lock -vnp'
+alias ls='ls -A'
+alias ll='ls -lh'
+alias mkdir='mkdir -p'
+alias mv='mv -v'
+alias rm='rm -rv'
+alias df='df -h'
+alias du='du -shA'
+alias top='top -Szs1'
+alias iotop='top -Szs1 -m io'
+alias psl='ps auxww'
+alias pss='ps -A -o pid,args'
+alias eject='cdcontrol eject cd0'
+alias pwgen='LC_ALL=C tr -cd "A-Za-z0-9!#$%&*+,-.:=@^_~" < /dev/urandom | head -c 36'
+alias pull='rsync -4rlpogdchzvK --delete --files-from "$XDG_CONFIG_HOME"/.rsynclist backup:. "$HOME"/'
+alias push='rsync -4rlpogdchzv  --delete --files-from "$XDG_CONFIG_HOME"/.rsynclist "$HOME"/ backup:.'
+
+function ..  { builtin cd ..    && ls; }
+function ... { builtin cd ../.. && ls; }
+function cd  { builtin cd "$@"  && ls; }
+
+pkgrm() {
+	if "$DOAS" pkg delete -q "$@"; then
+		"$DOAS" pkg autoremove -qy
+	fi
+}
+
+pkginfo() {
+	case "$1" in
+	-i)	pkg query -a "%n-%v" ;;
+	-l)	pkg info "$@" 2>/dev/null || echo "${2}:"; sed 's/^/	/' /usr/ports/${2}/pkg-plist 2>/dev/null ;;
+	-d)	pkg info "$@" 2>/dev/null || pkg rquery "\t%dn-%dv" "$2" ;;
+	-r)	pkg info "$@" 2>/dev/null || pkg rquery "\t%rn-%rv" "$2" ;;
+	-o)	pkg which "$2" ;;
+	''|-*)	cat <<- INFO ;;
+		usage: pkginfo [options] <package>
+		   <package>       list <package> information
+		   -i              list installed packages
+		   -l <package>    list files in <package>
+		   -d <package>    list dependencies of <package>
+		   -r <package>    list packages that require <package>
+		   -o <pattern>    list owner of file matching <pattern>
+		INFO
+	*)	pkg info "$@" 2>/dev/null || pkg rquery "Name\t\t: %n\nVersion\t\t: %v\nOrigin\t\t: %o\nArchitecture\t: %q\nPrefix\t\t: %p\nMaintainer\t: %m\nWWW\t\t: %w\nComment\t\t: %c\nFlat size\t: %sh" "$@" ;;
+	esac
+}
+
+pkgseek() {
+	case "$1" in
+	-c)	pkg search -o "$@" | sort ;;
+	''|-*)	cat <<- INFO ;;
+		usage: pkgseek [options] <package>
+		   <package>       search for <package> in names
+		   -c <package>    search for <package> in comments
+		INFO
+	*)	pkg search -o "$@" | sort ;;
+	esac
+}
+
+bkup() {
+	TMPDIR=$(mktemp -d)
+	echo -n 'Syncing ...'
+	rsync -rlpogdchzqK --delete --files-from "$XDG_CONFIG_HOME"/.rsync_list backup:. "$TMPDIR"/
+	echo -n ' Compressing ...'
+	tar Jcf "$HOME"/backup-$(date +'%Y-%m-%d').txz -C "$TMPDIR" .
+	\rm -rf "$TMPDIR"
+	echo ' Done'
+}
+
+uu() {
+	local MOUNTPOINT
+	for MOUNTPOINT in $(mount -p | awk '$2 ~ /mnt\/.+/ && $3 == "msdosfs" {print $2}'); do
+		if [ -n "$MOUNTPOINT" ]; then
+			if "$DOAS" umount "$MOUNTPOINT"; then
+				"$DOAS" rmdir "$MOUNTPOINT"
+				echo "$MOUNTPOINT has been unmounted"
+			else
+				echo "Failed to unmount $MOUNTPOINT"
+			fi
+		fi
+	done
+}

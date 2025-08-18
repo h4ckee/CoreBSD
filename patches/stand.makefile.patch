@@ -1,0 +1,12 @@
+diff -Naur src.orig/stand/Makefile src/stand/Makefile
+--- src.orig/stand/Makefile	2025-06-06 03:04:21.000000000 +0300
++++ src/stand/Makefile	2025-06-09 20:44:15.841978000 +0300
+@@ -24,8 +24,6 @@
+ S.${MK_LOADER_LUA}+=	liblua
+ S.${MK_LOADER_LUA}+=	lua
+ S.yes+=			defaults
+-S.yes+=			fonts
+-S.yes+=			images
+ S.yes+=			man
+ 
+ .if ${MK_FORTH} != "no"

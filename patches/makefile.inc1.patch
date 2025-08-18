@@ -1,0 +1,45 @@
+diff -Naur src.orig/Makefile.inc1 src/Makefile.inc1
+--- src.orig/Makefile.inc1	2025-06-06 03:04:14.000000000 +0300
++++ src/Makefile.inc1	2025-06-15 12:51:22.260486000 +0300
+@@ -1327,16 +1327,8 @@
+ #
+ # Check for missing UIDs/GIDs.
+ #
+-CHECK_UIDS=	auditdistd
+-CHECK_GIDS=	audit
+-CHECK_UIDS+=	ntpd
+-CHECK_GIDS+=	ntpd
+-CHECK_UIDS+=	proxy
+-CHECK_GIDS+=	proxy authpf
+-CHECK_UIDS+=	smmsp
+-CHECK_GIDS+=	smmsp
+-CHECK_UIDS+=	unbound
+-CHECK_GIDS+=	unbound
++CHECK_UIDS=
++CHECK_GIDS=
+ _installcheck_world: __installcheck_UGID
+ __installcheck_UGID: .PHONY
+ .for uid in ${CHECK_UIDS}
+@@ -3277,10 +3269,8 @@
+ cddl/lib/libdtrace__L: lib/libxo__L
+ .endif
+ # cddl/lib/libdtrace requires lib/libproc and lib/librtld_db
+-_prebuild_libs+=	lib/libprocstat lib/libproc lib/librtld_db
++_prebuild_libs+=	lib/libprocstat
+ lib/libprocstat__L: lib/libelf__L lib/libkvm__L lib/libutil__L
+-lib/libproc__L: lib/libprocstat__L
+-lib/librtld_db__L: lib/libprocstat__L
+ 
+ .if ${MK_CRYPT} != "no"
+ .if ${MK_OPENSSL} != "no"
+@@ -3355,10 +3345,6 @@
+ .if ${MK_OPENSSL} == "no"
+ lib/libradius__L: lib/libmd__L
+ .endif
+-
+-lib/libproc__L: \
+-    ${_cddl_lib_libctf:D${_cddl_lib_libctf}__L} \
+-    lib/libelf__L lib/librtld_db__L lib/libutil__L lib/libcxxrt__L
+ 
+ .for _lib in ${_prereq_libs}
+ ${_lib}__PL: .PHONY .MAKE

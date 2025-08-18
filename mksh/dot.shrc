@@ -1,0 +1,34 @@
+#
+# root profile (interactive shells)
+#
+
+set -o emacs
+
+bind '^L=clear-screen'
+
+export PS1='$(printf "\1\r\1\033[0;31m\1%${COLUMNS}s\1\033[m\1\n" "[ ${PWD} ]")'$'\1\r\1\033[0;31m\1#\1\033[m\1 '
+export PS2='  '
+export PS3=$'\1\r\1\033[0;31m\1?\1\033[m\1 '
+export PS4=$'\1\r\1\033[0;31m\1[${EPOCHREALTIME}]\1\033[m\1 '
+
+alias poweroff='/sbin/shutdown -p now'
+alias reboot='/sbin/shutdown -r now'
+alias p='$PAGER'
+alias e='$EDITOR'
+alias h='fc -rl 1 | $PAGER'
+alias r='fc -s'
+alias ls='ls -A'
+alias ll='ls -lh'
+alias mkdir='mkdir -p'
+alias mv='mv -v'
+alias rm='rm -rv'
+alias df='df -h'
+alias du='du -shA'
+alias top='top -Szs1'
+alias iotop='top -Szs1 -m io'
+alias psl='ps auxww'
+alias pss='ps -A -o pid,args'
+
+function ..  { builtin cd ..    && ls; }
+function ... { builtin cd ../.. && ls; }
+function cd  { builtin cd "$@"  && ls; }

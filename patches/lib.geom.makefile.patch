@@ -1,0 +1,25 @@
+diff -Naur src.orig/lib/geom/Makefile.classes src/lib/geom/Makefile.classes
+--- src.orig/lib/geom/Makefile.classes	2024-11-29 03:03:41.000000000 +0300
++++ src/lib/geom/Makefile.classes	2025-06-03 16:08:05.641510000 +0300
+@@ -5,21 +5,7 @@
+ GEOM_CLASS_DIR?=/usr/lib${COMPAT_libcompat}/geom
+ .endif
+ 
+-GEOM_CLASSES=	cache
+-GEOM_CLASSES+=	concat
+-.if ${MK_OPENSSL} != "no"
+-GEOM_CLASSES+=	eli
+-.endif
+-GEOM_CLASSES+=	journal
+ GEOM_CLASSES+=	label
+ GEOM_CLASSES+=	mirror
+-GEOM_CLASSES+=	mountver
+-GEOM_CLASSES+=	multipath
+-GEOM_CLASSES+=	nop
+ GEOM_CLASSES+=	part
+-GEOM_CLASSES+=	raid
+-GEOM_CLASSES+=	raid3
+-GEOM_CLASSES+=	shsec
+ GEOM_CLASSES+=	stripe
+-GEOM_CLASSES+=	union
+-GEOM_CLASSES+=	virstor

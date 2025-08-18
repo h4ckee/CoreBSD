@@ -1,0 +1,12 @@
+diff -Naur src.orig/lib/ncurses/tinfo/Makefile src/lib/ncurses/tinfo/Makefile
+--- src.orig/lib/ncurses/tinfo/Makefile	2025-06-06 00:04:20.000000000 +0000
++++ src/lib/ncurses/tinfo/Makefile	2025-08-10 16:12:17.903879000 +0000
+@@ -235,7 +235,7 @@
+ 	    ${NCURSES_DIR}/include/Caps ${NCURSES_DIR}/include/Caps-ncurses > comp_captab.c
+ 
+ fallback.c: MKfallback.sh
+-	sh ${NCURSES_DIR}/ncurses/tinfo/MKfallback.sh "" "" "" > ${.TARGET}.tmp && \
++	sh ${NCURSES_DIR}/ncurses/tinfo/MKfallback.sh "" "" "" "" > ${.TARGET}.tmp && \
+ 	    mv -f ${.TARGET}.tmp ${.TARGET}
+ 
+ comp_userdefs.c: MKuserdefs.sh Caps Caps-ncurses make_hash

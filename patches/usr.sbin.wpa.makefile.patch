@@ -1,0 +1,14 @@
+diff -Naur src.orig/usr.sbin/wpa/Makefile src/usr.sbin/wpa/Makefile
+--- src.orig/usr.sbin/wpa/Makefile	2024-11-29 03:03:49.000000000 +0300
++++ src/usr.sbin/wpa/Makefile	2025-06-05 18:39:16.571845000 +0300
+@@ -2,9 +2,7 @@
+ SUBDIR=	src .WAIT \
+ 	wpa_supplicant \
+ 	wpa_cli \
+-	wpa_passphrase \
+-	hostapd \
+-	hostapd_cli
++	wpa_passphrase
+ 
+ SUBDIR_PARALLEL=
+ 

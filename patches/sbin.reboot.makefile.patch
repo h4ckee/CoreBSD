@@ -1,0 +1,14 @@
+diff -Naur src.orig/sbin/reboot/Makefile src/sbin/reboot/Makefile
+--- src.orig/sbin/reboot/Makefile	2024-11-29 03:03:42.000000000 +0300
++++ src/sbin/reboot/Makefile	2025-05-14 15:07:36.469632000 +0300
+@@ -5,6 +5,10 @@
+ MAN=	reboot.8 nextboot.8
+ MLINKS=	reboot.8 halt.8 reboot.8 fastboot.8 reboot.8 fasthalt.8
+ 
++BINOWN=	root
++BINGRP=	operator
++BINMODE=4554
++
+ .if exists(${.CURDIR}/boot_${MACHINE}.8)
+ MAN+=	boot_${MACHINE}.8
+ MLINKS+= boot_${MACHINE}.8 boot.8

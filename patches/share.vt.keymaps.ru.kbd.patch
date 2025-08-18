@@ -1,0 +1,20 @@
+diff -Naur src.orig/share/vt/keymaps/ru.kbd src/share/vt/keymaps/ru.kbd
+--- src.orig/share/vt/keymaps/ru.kbd	2025-06-06 03:04:21.000000000 +0300
++++ src/share/vt/keymaps/ru.kbd	2025-06-12 14:39:52.379943000 +0300
+@@ -97,12 +97,12 @@
+   092   nscr   pscr   debug  debug  nop    nop    nop    nop     O
+   093   ralt   ralt   ralt   ralt   ralt   ralt   ralt   ralt    O
+   094   fkey49 fkey49 fkey49 fkey49 fkey49 fkey49 fkey49 fkey49  O
+-  095   fkey50 fkey50 fkey50 fkey50 fkey50 fkey50 fkey50 fkey50  O
++  095   fkey50 fkey73 fkey69 fkey77 fkey65 fkey81 fkey85 fkey50  O
+   096   fkey51 fkey51 fkey51 fkey51 fkey51 fkey51 fkey51 fkey51  O
+-  097   fkey53 fkey53 fkey53 fkey53 fkey53 fkey53 fkey53 fkey53  O
+-  098   fkey55 fkey55 fkey55 fkey55 fkey55 fkey55 fkey55 fkey55  O
++  097   fkey53 fkey76 fkey72 fkey80 fkey68 fkey84 fkey88 fkey53  O
++  098   fkey55 fkey75 fkey71 fkey79 fkey67 fkey83 fkey87 fkey55  O
+   099   fkey57 fkey57 fkey57 fkey57 fkey57 fkey57 fkey57 fkey57  O
+-  100   fkey58 fkey58 fkey58 fkey58 fkey58 fkey58 fkey58 fkey58  O
++  100   fkey58 fkey74 fkey70 fkey78 fkey66 fkey82 fkey86 fkey58  O
+   101   fkey59 fkey59 fkey59 fkey59 fkey59 fkey59 fkey59 fkey59  O
+   102   fkey60 paste  fkey60 fkey60 fkey60 fkey60 fkey60 fkey60  O
+   103   fkey61 fkey61 fkey61 fkey61 fkey61 fkey61 boot   fkey61  O

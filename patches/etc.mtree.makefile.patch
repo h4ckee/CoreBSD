@@ -1,0 +1,11 @@
+diff -Naur src.orig/etc/mtree/Makefile src/etc/mtree/Makefile
+--- src.orig/etc/mtree/Makefile	2024-11-29 03:03:41.000000000 +0300
++++ src/etc/mtree/Makefile	2025-06-01 17:11:16.854853000 +0300
+@@ -6,7 +6,6 @@
+ 
+ # NOTE: BSD.debug.dist is unconditionally installed for developer ease-of-use.
+ FILES=	\
+-	BSD.debug.dist \
+ 	BSD.include.dist \
+ 	BSD.root.dist \
+ 	${_BSD.libcompats.dist} \

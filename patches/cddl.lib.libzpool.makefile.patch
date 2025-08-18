@@ -1,0 +1,15 @@
+diff -Naur src.orig/cddl/lib/libzpool/Makefile src/cddl/lib/libzpool/Makefile
+--- src.orig/cddl/lib/libzpool/Makefile	2025-06-06 03:04:14.000000000 +0300
++++ src/cddl/lib/libzpool/Makefile	2025-06-15 18:11:48.954680000 +0300
+@@ -284,11 +284,6 @@
+ 
+ CSTD=	c99
+ 
+-# Since there are many asserts in this library, it makes no sense to compile
+-# it without debugging.
+-
+-CFLAGS+=	-g -DDEBUG=1
+-
+ # Pointer values are used as debugging "tags" to mark reference count
+ # ownerships and in some cases the tag reference is dropped after an
+ # object is freed.

@@ -1,0 +1,14 @@
+diff -Naur src.orig/cddl/usr.libexec/Makefile src/cddl/usr.libexec/Makefile
+--- src.orig/cddl/usr.libexec/Makefile	2024-11-29 03:03:36.000000000 +0300
++++ src/cddl/usr.libexec/Makefile	2025-06-06 16:37:43.464658000 +0300
+@@ -1,10 +1,6 @@
+ 
+ .include <src.opts.mk>
+ 
+-SUBDIR.${MK_ZFS}+= \
+-	zfs_prepare_disk \
+-	zpool_influxdb
+-
+ SUBDIR_PARALLEL=
+ 
+ .include <bsd.subdir.mk>

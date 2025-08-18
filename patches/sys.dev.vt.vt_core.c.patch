@@ -1,0 +1,31 @@
+diff -Naur src.orig/sys/dev/vt/vt_core.c src/sys/dev/vt/vt_core.c
+--- src.orig/sys/dev/vt/vt_core.c	2025-06-06 03:04:25.000000000 +0300
++++ src/sys/dev/vt/vt_core.c	2025-06-12 14:44:03.634063000 +0300
+@@ -919,6 +919,27 @@
+ 			return (0);
+ 		}
+ 
++		int fkey = c - (FKEY | F(1));
++		/* checking if function key strings are set (see kbdcontrol(1) manual)*/
++		if (fkey > 64 && fkey < 97) {
++			size_t len;
++			fkey += F_FN;
++			u_char *raw_str = kbdd_get_fkeystr(kbd, fkey, &len);
++			if (raw_str) {
++				/*
++				  since our strings here are of type u_char *,
++				  normal strncpy() would not work here.
++				*/
++				u_char fkey_str[MAXFK];
++				for (int i = 0 ; i < len; i++) {
++					fkey_str[i] = raw_str[i];
++				}
++				fkey_str[len] = '\0';
++				terminal_handle_fkey(vw->vw_terminal, fkey_str);
++				return (0);
++			}
++		}
++
+ 		switch (c) {
+ 		case NEXT:
+ 			/* Switch to next VT. */

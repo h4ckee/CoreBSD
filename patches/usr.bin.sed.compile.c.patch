@@ -1,0 +1,13 @@
+diff -Naur src.orig/usr.bin/sed/compile.c src/usr.bin/sed/compile.c
+--- src.orig/usr.bin/sed/compile.c	2024-11-29 03:03:48.000000000 +0300
++++ src/usr.bin/sed/compile.c	2025-05-12 11:47:04.059685000 +0300
+@@ -868,9 +868,7 @@
+ 	while (cu_fgets(lbuf, sizeof(lbuf), NULL) != NULL) {
+ 		op = s = text + size;
+ 		p = lbuf;
+-#ifdef LEGACY_BSDSED_COMPAT
+ 		EATSPACE();
+-#endif
+ 		for (esc_nl = 0; *p != '\0'; p++) {
+ 			if (*p == '\\' && p[1] != '\0' && *++p == '\n')
+ 				esc_nl = 1;

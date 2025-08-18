@@ -1,0 +1,11 @@
+diff -Naur src.orig/lib/libc/posix1e/Makefile.inc src/lib/libc/posix1e/Makefile.inc
+--- src.orig/lib/libc/posix1e/Makefile.inc	2025-06-06 00:04:20.000000000 +0000
++++ src/lib/libc/posix1e/Makefile.inc	2025-06-25 15:02:22.543257000 +0000
+@@ -7,7 +7,6 @@
+ subr_acl_nfs4.c: ${SRCTOP}/sys/kern/subr_acl_nfs4.c
+ 	cat ${.ALLSRC} > ${.TARGET}
+ 
+-CONFS+=	posix1e/mac.conf
+ SRCS+=	acl_branding.c			\
+ 	acl_calc_mask.c			\
+ 	acl_cmp_np.c			\

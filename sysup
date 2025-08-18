@@ -1,0 +1,101 @@
+#!/bin/sh
+
+build_pkgs() {
+	if [ ! -f /etc/wpa_supplicant.conf ]; then
+		cat <<- 'END' | unexpand > /etc/wpa_supplicant.conf
+			ctrl_interface=/var/run/wpa_supplicant
+			eapol_version=2
+			ap_scan=1
+			fast_reauth=1
+
+			network={
+			        ssid="KPECT"
+			        psk=<SET KEYPASS HERE>
+			}
+		END
+	fi
+
+	if [ ! -f ${DSTDIR}/etc/ntpd.conf ]; then
+		cat <<- 'END' > ${DSTDIR}/etc/ntpd.conf
+			servers by.pool.ntp.org
+			sensor *
+			constraints from "https://ya.ru"
+		END
+	fi
+
+	if [ ! -f ${DSTDIR}/etc/doas.conf ]; then
+		echo 'permit nopass keepenv :wheel' > ${DSTDIR}/etc/doas.conf
+	fi
+
+	if [ ! -f ${DSTDIR}/etc/pkg.conf ]; then
+		cat <<- 'END' > ${DSTDIR}/etc/pkg.conf
+			AUTOCLEAN = true;
+			CONSERVATIVE_UPGRADE = false;
+		END
+		sed -E '/^(#|$$)/d' ${DISTDIR}/etc/pkg.conf.sample >> ${DISTDIR}/etc/pkg.conf
+	fi
+
+	if ! sysrc -qc dbus_enable; then
+		sysrc dbus_enable="YES"
+	fi
+	if ! sysrc -qc sndiod_enable; then
+		sysrc sndiod_enable="YES"
+		sysrc sndiod_flags="-f rsnd/0 -c 0:7 -j on -m play -s default -m mon -s monitor"
+	fi
+	if ! sysrc -qc openntpd_enable; then
+		sysrc openntpd_enable="YES"
+		sysrc openntpd_flags="-s"
+	fi
+	if ! sysrc -qc kld_list; then
+		sysrc kld_list="$LOAD_MODULES"
+	fi
+
+	pkg info -e portmaster		|| PKGS="$PKGS ports-mgmt/portmaster"
+	pkg info -e pkg			|| PKGS="$PKGS ports-mgmt/pkg"
+	pkg info -e indexinfo		|| PKGS="$PKGS print/indexinfo"
+	pkg info -e openntpd		|| PKGS="$PKGS net/openntpd"
+	pkg info -e rsync		|| PKGS="$PKGS net/rsync"
+	pkg info -e mksh		|| PKGS="$PKGS shells/mksh"
+	pkg info -e doas		|| PKGS="$PKGS security/doas"
+	pkg info -e drm-legacy-kmod	|| PKGS="$PKGS graphics/drm-legacy-kmod"
+	pkg info -e ImageMagick7	|| PKGS="$PKGS graphics/ImageMagick7"
+	pkg info -e sxiv		|| PKGS="$PKGS graphics/sxiv"
+	pkg info -e mupdf		|| PKGS="$PKGS graphics/mupdf"
+	pkg info -e xmodmap		|| PKGS="$PKGS x11/xmodmap"
+	pkg info -e xrdb		|| PKGS="$PKGS x11/xrdb"
+	pkg info -e xset		|| PKGS="$PKGS x11/xset"
+	pkg info -e xsetroot		|| PKGS="$PKGS x11/xsetroot"
+	pkg info -e xorg-minimal	|| PKGS="$PKGS x11/xorg-minimal"
+	pkg info -e xkb-switch		|| PKGS="$PKGS x11/xkb-switch"
+	pkg info -e xclip		|| PKGS="$PKGS x11/xclip"
+	pkg info -e xtitle		|| PKGS="$PKGS x11/xtitle"
+	pkg info -e rxvt-unicode	|| PKGS="$PKGS x11/rxvt-unicode"
+	pkg info -e hsetroot		|| PKGS="$PKGS x11/hsetroot"
+	pkg info -e i3lock		|| PKGS="$PKGS x11/i3lock"
+	pkg info -e dmenu		|| PKGS="$PKGS x11/dmenu"
+	pkg info -e mkfontscale		|| PKGS="$PKGS x11-fonts/mkfontscale"
+	pkg info -e paratype		|| PKGS="$PKGS x11-fonts/paratype"
+	pkg info -e symbola		|| PKGS="$PKGS x11-fonts/symbola"
+	pkg info -e cursor-dmz-theme	|| PKGS="$PKGS x11-themes/cursor-dmz-theme"
+	pkg info -e bspwm		|| PKGS="$PKGS x11-wm/bspwm"
+	pkg info -e transmission-gtk	|| PKGS="$PKGS net-p2p/transmission-gtk"
+	pkg info -e mpv			|| PKGS="$PKGS multimedia/mpv"
+	pkg info -e sndio		|| PKGS="$PKGS audio/sndio"
+	pkg info -e firefox		|| PKGS="$PKGS www/firefox"
+	pkg info -e micro		|| PKGS="$PKGS editors/micro"
+	#pkg info -e compton		|| PKGS="$PKGS x11-wm/compton"
+	#pkg info -e cdrtools		|| PKGS="$PKGS sysutils/cdrtools"
+	#pkg info -e dconf		|| PKGS="$PKGS devel/dconf"
+	#pkg info -e surf		|| PKGS="$PKGS www/surf"
+	#pkg info -e tabbed		|| PKGS="$PKGS x11/tabbed"
+	#pkg info -e libva-intel-driver	|| PKGS="$PKGS multimedia/libva-intel-driver"
+	#pkg info -e xf86-video-intel	|| PKGS="$PKGS x11-drivers/xf86-video-intel"
+
+#	[ -n "$PKGS" ] && portmaster -R $PKGS || exit 1
+
+#	pkg info -e clock	|| make install clean -C /home/x/ports/clock
+#	pkg info -e lemonbar	|| make install clean -C /home/x/ports/lemonbar
+#	pkg info -e xdo		|| make install clean -C /home/x/ports/xdo
+}
+
+# pkg install xorg-minimal xset xsetroot xmodmap xrdb xclip setxkbmap mkfontscale cursor-dmz-theme drm-61-kmod libva-intel-driver ungoogled-chromium optipng mpv nsxiv aria2 bspwm xtitle sterm dmenu micro lemonbar-xft opendoas openrsync rdate jetbrains-mono paratype

@@ -1,0 +1,11 @@
+include         BASE
+ident		LAPTOP
+
+#device		acpi_ibm
+#device		acpi_video
+#device		sound
+#device		snd_hda
+#device		iwn
+#device		iwn6000g2afw
+device		xhci
+device		aesni

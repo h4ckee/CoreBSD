@@ -1,0 +1,29 @@
+#!/bin/sh
+#
+# /etc/rc.d/powerd: system power control daemon
+#
+
+command='powerd'
+flags='-n hadp'
+pidfile="/var/run/${command}.pid"
+
+case "$1" in
+start)		if [ "$RC_BOOT" ] || ! pgrep -q "$command"; then
+			if ! limits -C daemon "$command" $flags; then
+				echo >&2 "$command failed"
+				exit 1
+			fi
+		fi
+		;;
+stop)		if [ -f "$pidfile" ]; then
+			kill $(< "$pidfile")
+			rm -f "$pidfile"
+		fi
+		;;
+restart)	"$0" stop
+		"$0" start
+		;;
+*)		echo "${0##*/} [start|stop|restart]"
+		exit
+		;;
+esac

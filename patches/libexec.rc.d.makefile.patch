@@ -1,0 +1,179 @@
+diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
+--- src.orig/libexec/rc/rc.d/Makefile	2025-06-06 00:04:20.000000000 +0000
++++ src/libexec/rc/rc.d/Makefile	2025-08-15 14:14:15.831362000 +0000
+@@ -5,109 +5,12 @@
+ CONFGROUPS=	CONFS
+ CONFSPACKAGE=	rc
+ 
+-CONFS=	DAEMON \
+-	FILESYSTEMS \
+-	LOGIN \
+-	NETWORKING \
+-	SERVERS \
+-	adjkerntz \
+-	bgfsck \
+-	${_blacklistd} \
+-	bridge \
+-	cfumass \
+-	cleanvar \
+-	cleartmp \
+-	cron \
+-	ctld \
+-	ddb \
+-	defaultroute \
+-	devfs \
+-	dmesg \
+-	dumpon \
+-	fsck \
+-	gbde \
+-	geli \
+-	geli2 \
+-	gptboot \
+-	growfs \
+-	growfs_fstab \
+-	hostid \
+-	hostid_save \
+-	hostname \
+-	iovctl \
+-	ip6addrctl \
+-	ipsec \
+-	${_kadmind} \
+-	${_kdc} \
+-	${_kfd} \
+-	kld \
+-	kldxref \
+-	${_kpasswdd} \
+-	ldconfig \
+-	linux \
+-	local \
+-	localpkg \
+-	lockd \
+-	mixer \
+-	motd \
+-	mountcritlocal \
+-	mountcritremote \
+-	mountlate \
+-	mdconfig \
+-	mdconfig2 \
+-	mountd \
+-	msgs \
+-	natd \
++CONFS=	cron \
+ 	netif \
+-	netoptions \
+-	netwait \
+-	newsyslog \
+-	nfsclient \
+-	nfscbd \
+-	nfsd \
+-	nfsuserd \
+-	nisdomain \
+-	${_nscd} \
+-	ntpdate \
+-	${_opensm} \
+-	os-release \
+ 	pf \
+ 	pflog \
+-	pfsync \
+ 	powerd \
+-	ppp \
+-	pppoed \
+-	pwcheck \
+-	quota \
+-	random \
+-	rarpd \
+-	rctl \
+-	root \
+-	route6d \
+-	routing \
+-	rpcbind \
+-	rtadvd \
+-	rtsold \
+-	rwho \
+-	savecore \
+-	securelevel \
+-	serial \
+-	statd \
+-	static_arp \
+-	static_ndp \
+-	stf \
+-	swap \
+-	swaplate \
+-	sysctl \
+-	sysctl_lastload \
+-	syslogd \
+-	sysvipc \
+-	tmp \
+-	ugidfw \
+-	${_utx} \
+-	var \
+-	var_run \
+-	watchdogd
++	syslogd
+ 
+ CONFGROUPS+=		DEVD
+ DEVD=			devd
+@@ -121,14 +24,6 @@
+ DHCLIENT=		dhclient
+ DHCLIENTPACKAGE=	dhclient
+ 
+-CONFGROUPS+=		GGATED
+-GGATED=			ggated
+-GGATEDPACKAGE=		ggate
+-
+-CONFGROUPS+=		RESOLVCONF
+-RESOLVCONF=		resolv
+-RESOLVCONFPACKAGE=	resolvconf
+-
+ .if ${MK_NIS} != "no"
+ CONFS+=	ypbind \
+ 	ypldap \
+@@ -252,7 +147,6 @@
+ .if ${MK_LEGACY_CONSOLE} != "no"
+ CONFGROUPS+=	CONSOLE
+ CONSOLE+=	moused
+-CONSOLE+=	syscons
+ CONSOLEPACKAGE=	console-tools
+ .endif
+ 
+@@ -285,14 +179,6 @@
+ _opensm=	opensm
+ .endif
+ 
+-.if ${MK_OPENSSL} != "no"
+-CONFS+=		keyserv
+-.if ${MK_OPENSSL_KTLS} != "no"
+-CONFS+=		tlsclntd \
+-		tlsservd
+-.endif
+-.endif
+-
+ .if ${MK_OPENSSH} != "no"
+ CONFGROUPS+=	SSH
+ SSH=		sshd
+@@ -331,12 +217,10 @@
+ 
+ .if ${MK_VI} != "no"
+ CONFGROUPS+=	VI
+-VI+=		virecover
+ VIPACKAGE=	vi
+ .endif
+ 
+ .if ${MK_WIRELESS} != "no"
+-CONFS+=		hostapd
+ CONFS+=		wpa_supplicant
+ .endif
+ 
+@@ -344,12 +228,10 @@
+ CONFGROUPS+=	ZFS
+ ZFS+=		zfs
+ ZFS+=		zfsbe
+-ZFS+=		zfsd
+ ZFS+=		zfskeys
+ ZFS+=		zpool
+ ZFS+=		zpoolreguid
+ ZFS+=		zpoolupgrade
+-ZFS+=		zvol
+ ZFSPACKAGE=	rc
+ .endif
+ 

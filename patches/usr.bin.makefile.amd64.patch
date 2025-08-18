@@ -1,0 +1,6 @@
+diff -Naur src.orig/usr.bin/Makefile.amd64 src/usr.bin/Makefile.amd64
+--- src.orig/usr.bin/Makefile.amd64	2024-11-29 03:03:48.000000000 +0300
++++ src/usr.bin/Makefile.amd64	2025-05-15 19:04:55.517219000 +0300
+@@ -1,2 +0,0 @@
+-
+-SUBDIR+=	smbutil

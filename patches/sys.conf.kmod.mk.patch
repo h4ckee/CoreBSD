@@ -1,0 +1,12 @@
+diff -Naur src.orig/sys/conf/kmod.mk src/sys/conf/kmod.mk
+--- src.orig/sys/conf/kmod.mk	2025-06-06 00:04:21.000000000 +0000
++++ src/sys/conf/kmod.mk	2025-07-01 07:57:41.848590000 +0000
+@@ -162,7 +162,7 @@
+ CFLAGS+=	${DEBUG_FLAGS}
+ .if ${MACHINE_CPUARCH} == aarch64 || ${MACHINE_CPUARCH} == amd64 || \
+     ${MACHINE_CPUARCH} == riscv
+-CFLAGS+=	-fno-omit-frame-pointer -mno-omit-leaf-frame-pointer
++CFLAGS+=	-fno-omit-frame-pointer -mno-omit-leaf-frame-pointer -fplt
+ .endif
+ 
+ .if ${MACHINE_CPUARCH} == "aarch64" || ${MACHINE_CPUARCH} == "riscv" || \

@@ -1,0 +1,37 @@
+#!/bin/sh
+#
+# /etc/rc.shutdown: system shutdown script
+#
+
+source /etc/rc.conf
+
+trap : 2 3
+
+export HOME='/'
+export PATH='/sbin:/bin:/usr/sbin:/usr/bin'
+
+if (( ${#services[@]} )); then
+	i=${#services[@]}
+	while (( --i >= 0 )); do
+		case "${services[$i]}" in
+		\!*)	;;
+		*)	/etc/rc.d/"${services[$i]#@}" stop ;;
+		esac
+	done
+fi
+
+for mixer in /dev/mixer[0-9]; do
+	if [ -c "$mixer" ]; then
+		mixer -f "$mixer" -o > /var/db/"${mixer##*/}"-state
+	fi
+done
+
+for entropyfile in /var/db/entropy /boot/entropy; do
+	dd if=/dev/random of="$entropyfile" bs=4096 count=1 status=none
+done
+
+sync
+swapoff -aq || echo >&2 'Disabling swap failed'
+umount -a || echo >&2 'Unmounting fstab filesystems failed'
+sleep 0.5
+zfs unmount -a || echo -n 'Unmounting ZFS filesystems failed'

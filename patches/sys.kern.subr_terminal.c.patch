@@ -1,0 +1,27 @@
+diff -Naur src.orig/sys/kern/subr_terminal.c src/sys/kern/subr_terminal.c
+--- src.orig/sys/kern/subr_terminal.c	2025-06-06 03:04:25.000000000 +0300
++++ src/sys/kern/subr_terminal.c	2025-06-12 14:41:32.892036000 +0300
+@@ -369,6 +369,23 @@
+ }
+ 
+ void
++terminal_handle_fkey(struct terminal *tm, u_char *fkey_str) {
++	struct tty *tp;
++
++	tp = tm->tm_tty;
++	if (tp == NULL)
++		return;
++
++	if (fkey_str == NULL)
++		return;
++
++	tty_lock(tp);
++	ttydisc_rint_simple(tp, fkey_str, strlen(fkey_str));
++	ttydisc_rint_done(tp);
++	tty_unlock(tp);
++}
++
++void
+ terminal_input_special(struct terminal *tm, unsigned int k)
+ {
+ 	struct tty *tp;

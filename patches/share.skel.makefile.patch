@@ -1,0 +1,14 @@
+diff -Naur src.orig/share/skel/Makefile src/share/skel/Makefile
+--- src.orig/share/skel/Makefile	2024-11-29 03:03:43.000000000 +0300
++++ src/share/skel/Makefile	2025-06-05 18:05:16.712307000 +0300
+@@ -1,9 +1,7 @@
+ #	@(#)Makefile	8.1 (Berkeley) 6/8/93
+ 
+-FILES=		dot.cshrc dot.login dot.login_conf dot.mailrc dot.profile \
+-		dot.shrc dot.mail_aliases
++FILES=		dot.login_conf dot.profile dot.shrc
+ FILESDIR=	${SHAREDIR}/skel
+ FILESMODE=	0644
+-FILESMODE_dot.mail_aliases=	0600
+ 
+ .include <bsd.prog.mk>

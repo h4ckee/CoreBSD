@@ -1,0 +1,23 @@
+diff -Naur src.orig/lib/libc/net/nsswitch.conf src/lib/libc/net/nsswitch.conf
+--- src.orig/lib/libc/net/nsswitch.conf	2025-06-06 00:04:20.000000000 +0000
++++ src/lib/libc/net/nsswitch.conf	2025-06-25 15:00:46.276000000 +0000
+@@ -1,15 +1,11 @@
+ #
+ # nsswitch.conf(5) - name service switch configuration file
+ #
+-group: compat
+-group_compat: nis
++group: files
+ hosts: files dns
+-netgroup: compat
++netgroup: files
+ networks: files
+-passwd: compat
+-passwd_compat: nis
++passwd: files
+ shells: files
+-services: compat
+-services_compat: nis
++services: files
+ protocols: files
+-rpc: files

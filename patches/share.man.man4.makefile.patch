@@ -1,0 +1,36 @@
+diff -Naur src.orig/share/man/man4/Makefile src/share/man/man4/Makefile
+--- src.orig/share/man/man4/Makefile	2025-06-06 00:04:21.000000000 +0000
++++ src/share/man/man4/Makefile	2025-08-02 10:56:25.550587000 +0000
+@@ -62,8 +62,6 @@
+ 	${_atf_test_case.4} \
+ 	${_atrtc.4} \
+ 	${_attimer.4} \
+-	audit.4 \
+-	auditpipe.4 \
+ 	aue.4 \
+ 	axe.4 \
+ 	axge.4 \
+@@ -287,23 +285,6 @@
+ 	lpbb.4 \
+ 	lpt.4 \
+ 	ltc430x.4 \
+-	mac.4 \
+-	mac_biba.4 \
+-	mac_bsdextended.4 \
+-	mac_ddb.4 \
+-	mac_do.4 \
+-	mac_ifoff.4 \
+-	mac_ipacl.4 \
+-	mac_lomac.4 \
+-	mac_mls.4 \
+-	mac_none.4 \
+-	mac_ntpd.4 \
+-	mac_partition.4 \
+-	mac_portacl.4 \
+-	mac_priority.4 \
+-	mac_seeotheruids.4 \
+-	mac_stub.4 \
+-	mac_test.4 \
+ 	malo.4 \
+ 	max44009.4 \
+ 	md.4 \

@@ -1,0 +1,15 @@
+diff -Naur src.orig/sbin/devd/power_profile.conf src/sbin/devd/power_profile.conf
+--- src.orig/sbin/devd/power_profile.conf	2025-06-06 00:04:20.000000000 +0000
++++ src/sbin/devd/power_profile.conf	2025-08-02 10:00:50.947895000 +0000
+@@ -4,3 +4,11 @@
+ 	match "subsystem"	"ACAD";
+ 	action "service power_profile $notify";
+ };
++
++# Warnings and emergency shutdown if battery is running low.
++notify 10 {
++	match "system"		"ACPI";
++	match "subsystem"	"CMBAT";
++	match "notify"		"0x80";
++	action "service power_profile $notify";
++};

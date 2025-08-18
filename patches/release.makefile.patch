@@ -1,0 +1,106 @@
+diff -Naur src.orig/release/Makefile src/release/Makefile
+--- src.orig/release/Makefile	2025-06-06 00:04:20.000000000 +0000
++++ src/release/Makefile	2025-08-16 14:34:24.903648000 +0000
+@@ -179,17 +179,15 @@
+ # Install system
+ 	mkdir -p ${.TARGET}
+ 	( cd ${WORLDDIR} && ${IMAKE} installworld installkernel distribution \
+-	    DESTDIR=${.OBJDIR}/${.TARGET} MK_AT=no \
+-	    MK_INSTALLLIB=no MK_MAIL=no \
+-	    ${_ALL_LIBCOMPATS:@v@MK_LIB$v=no@} \
+-	    MK_TOOLCHAIN=no MK_PROFILE=no \
+-	    MK_RESCUE=no MK_DICT=no \
+-	    MK_KERNEL_SYMBOLS=no MK_TESTS=no MK_DEBUG_FILES=no \
++	    DESTDIR=${.OBJDIR}/${.TARGET} MK_INCLUDES=no MK_PF=no \
++	    ${_ALL_LIBCOMPATS:@v@MK_LIB$v=no@} MK_INSTALLLIB=no MK_KDUMP=no \
++	    MK_LDNS_UTILS=no MK_MAKE=no MK_MAN=no MK_NETCAT=no MK_PROFILE=no \
++	    MK_OPENSSH=no MK_PKGBOOTSTRAP=no MK_TOOLCHAIN=no \
+ 	    -DDB_FROM_SRC )
+ # Copy distfiles
+-	mkdir -p ${.TARGET}/usr/freebsd-dist
++	mkdir -p ${.TARGET}/usr/corebsd
+ 	for dist in MANIFEST $$(ls *.txz | grep -v container | grep -vE -- '(${base ${_ALL_libcompats}:L:ts|})-dbg'); \
+-	    do cp $${dist} ${.TARGET}/usr/freebsd-dist; \
++	    do cp $${dist} ${.TARGET}/usr/corebsd; \
+ 	done
+ .if defined(NO_ROOT)
+ 	echo "./usr/freebsd-dist type=dir uname=root gname=wheel mode=0755" >> ${.TARGET}/METALOG
+@@ -202,13 +200,72 @@
+ 	${PKG_INSTALL} wifi-firmware-kmod-release || true
+ .endif
+ # Set up installation environment
+-	ln -fs /tmp/bsdinstall_etc/resolv.conf ${.TARGET}/etc/resolv.conf
+-	echo sendmail_enable=\"NONE\" > ${.TARGET}/etc/rc.conf
+-	echo hostid_enable=\"NO\" >> ${.TARGET}/etc/rc.conf
+-	echo vfs.mountroot.timeout=\"10\" >> ${.TARGET}/boot/loader.conf
++	echo autoboot_delay=\"4\" > ${.TARGET}/boot/loader.conf
++	echo bootenv_autolist=\"NO\" >> ${.TARGET}/boot/loader.conf
++	echo entropy_cache_load=\"NO\" >> ${.TARGET}/boot/loader.conf
+ 	echo kernels_autodetect=\"NO\" >> ${.TARGET}/boot/loader.conf
+-	echo loader_menu_multi_user_prompt=\"Installer\" >> ${.TARGET}/boot/loader.conf
+-	cp ${.CURDIR}/rc.local ${.TARGET}/etc
++	echo hw.vga.textmode=\"0\" >> ${.TARGET}/boot/loader.conf
++	echo loader_brand_y=\"2\" >> ${.TARGET}/boot/loader.conf
++	echo loader_logo_x=\"51\" >> ${.TARGET}/boot/loader.conf
++	echo loader_logo_y=\"8\" >> ${.TARGET}/boot/loader.conf
++	echo loader_menu_title=\"LiveCD\" >> ${.TARGET}/boot/loader.conf
++	echo vfs.mountroot.timeout=\"10\" >> ${.TARGET}/boot/loader.conf
++	echo "console none unknown off secure" > ${.TARGET}/etc/ttys
++	for i in 0 1 2 3; do \
++	    echo "ttyv$${i} \"/usr/libexec/getty autologin\" xterm onifexists secure" >> ${.TARGET}/etc/ttys; \
++	done
++	chflags -R noschg ${.TARGET}/
++	cp ${.CURDIR}/rc ${.TARGET}/etc
++	cp ${.CURDIR}/rc.shutdown ${.TARGET}/etc
++	cp ${.CURDIR}/sysctl.conf ${.TARGET}/etc
++	cp ${.CURDIR}/corebsd.install ${.TARGET}/root
++	mv ${.TARGET}/usr/share/zoneinfo/Etc/UTC ${.TARGET}/etc/localtime
++	find ${.TARGET}/boot ${.TARGET}/etc ${.TARGET}/usr ${.TARGET}/var -mindepth 1 -type d -empty -delete
++	rm -rf ${.TARGET}/etc/crontab \
++	    ${.TARGET}/etc/devd* \
++	    ${.TARGET}/etc/dhclient.conf \
++	    ${.TARGET}/etc/etcupdate.conf \
++	    ${.TARGET}/etc/fbtab \
++	    ${.TARGET}/etc/hosts.* \
++	    ${.TARGET}/etc/libmap.conf \
++	    ${.TARGET}/etc/login.access \
++	    ${.TARGET}/etc/mtree/BSD.include.dist \
++	    ${.TARGET}/etc/mtree/BSD.root.dist \
++	    ${.TARGET}/etc/mtree/BSD.usr.dist \
++	    ${.TARGET}/etc/networks \
++	    ${.TARGET}/etc/pam.d/cron \
++	    ${.TARGET}/etc/pam.d/sshd \
++	    ${.TARGET}/etc/pam.d/xdm \
++	    ${.TARGET}/etc/ssl \
++	    ${.TARGET}/etc/*syslog.conf \
++	    ${.TARGET}/etc/rc.d \
++	    ${.TARGET}/etc/rc.conf \
++	    ${.TARGET}/etc/rc.suspend \
++	    ${.TARGET}/sbin/devd \
++	    ${.TARGET}/sbin/nologin \
++	    ${.TARGET}/usr/lib/libxo \
++	    ${.TARGET}/usr/libdata \
++	    ${.TARGET}/usr/libexec/flua \
++	    ${.TARGET}/usr/bin/crontab \
++	    ${.TARGET}/usr/bin/iconv \
++	    ${.TARGET}/usr/sbin/cron \
++	    ${.TARGET}/usr/sbin/etcupdate \
++	    ${.TARGET}/usr/sbin/mixer \
++	    ${.TARGET}/usr/sbin/moused \
++	    ${.TARGET}/usr/sbin/newsyslog \
++	    ${.TARGET}/usr/sbin/nologin \
++	    ${.TARGET}/usr/sbin/powerd \
++	    ${.TARGET}/usr/sbin/syslogd \
++	    ${.TARGET}/usr/share/certs \
++	    ${.TARGET}/usr/share/keys \
++	    ${.TARGET}/usr/share/man \
++	    ${.TARGET}/usr/share/mk \
++	    ${.TARGET}/usr/share/skel \
++	    ${.TARGET}/usr/share/zoneinfo \
++	    ${.TARGET}/sys \
++	    ${.TARGET}/tmp
++	ln -sf /var/tmp ${.TARGET}/tmp
++	ln -sf /var/run/resolv.conf ${.TARGET}/etc/resolv.conf
+ .if defined(NO_ROOT)
+ 	echo "./etc/resolv.conf type=link uname=root gname=wheel mode=0644 link=/tmp/bsdinstall_etc/resolv.conf" >> ${.TARGET}/METALOG
+ 	echo "./etc/rc.conf type=file uname=root gname=wheel mode=0644" >> ${.TARGET}/METALOG

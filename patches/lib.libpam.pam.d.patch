@@ -1,0 +1,106 @@
+diff -Naur src.orig/lib/libpam/pam.d/Makefile src/lib/libpam/pam.d/Makefile
+--- src.orig/lib/libpam/pam.d/Makefile	2024-11-29 03:03:42.000000000 +0300
++++ src/lib/libpam/pam.d/Makefile	2025-06-04 11:57:23.601949000 +0300
+@@ -6,12 +6,11 @@
+ NO_OBJ=
+ 
+ CONFGROUPS=	CONFS
+-CONFS=	README \
++CONFS=	\
+ 	cron \
+-	imap \
+ 	login \
+ 	other \
+-	passwd pop3 \
++	passwd \
+ 	sshd su system \
+ 	xdm
+ 
+diff -Naur src.orig/lib/libpam/pam.d/other src/lib/libpam/pam.d/other
+--- src.orig/lib/libpam/pam.d/other	2024-11-29 03:03:42.000000000 +0300
++++ src/lib/libpam/pam.d/other	2025-06-04 12:01:55.225313000 +0300
+@@ -4,13 +4,11 @@
+ #
+ 
+ # auth
+-#auth		sufficient	pam_krb5.so		no_warn try_first_pass
+ #auth		sufficient	pam_ssh.so		no_warn try_first_pass
+ auth		required	pam_unix.so		no_warn try_first_pass
+ 
+ # account
+ account		required	pam_nologin.so
+-#account	required	pam_krb5.so
+ account		required	pam_login_access.so
+ account		required	pam_unix.so
+ 
+diff -Naur src.orig/lib/libpam/pam.d/passwd src/lib/libpam/pam.d/passwd
+--- src.orig/lib/libpam/pam.d/passwd	2024-11-29 03:03:42.000000000 +0300
++++ src/lib/libpam/pam.d/passwd	2025-06-04 12:01:30.794173000 +0300
+@@ -6,5 +6,4 @@
+ # passwd(1) does not use the auth, account or session services.
+ 
+ # password
+-#password	requisite	pam_passwdqc.so		enforce=users
+ password	required	pam_unix.so		no_warn try_first_pass nullok
+diff -Naur src.orig/lib/libpam/pam.d/sshd src/lib/libpam/pam.d/sshd
+--- src.orig/lib/libpam/pam.d/sshd	2024-11-29 03:03:42.000000000 +0300
++++ src/lib/libpam/pam.d/sshd	2025-06-04 12:00:59.422952000 +0300
+@@ -4,13 +4,11 @@
+ #
+ 
+ # auth
+-#auth		sufficient	pam_krb5.so		no_warn try_first_pass
+ #auth		sufficient	pam_ssh.so		no_warn try_first_pass
+ auth		required	pam_unix.so		no_warn try_first_pass
+ 
+ # account
+ account		required	pam_nologin.so
+-#account	required	pam_krb5.so
+ account		required	pam_login_access.so
+ account		required	pam_unix.so
+ 
+@@ -19,5 +17,4 @@
+ session		required	pam_permit.so
+ 
+ # password
+-#password	sufficient	pam_krb5.so		no_warn try_first_pass
+ password	required	pam_unix.so		no_warn try_first_pass
+diff -Naur src.orig/lib/libpam/pam.d/system src/lib/libpam/pam.d/system
+--- src.orig/lib/libpam/pam.d/system	2024-11-29 03:03:42.000000000 +0300
++++ src/lib/libpam/pam.d/system	2025-06-04 11:59:41.537824000 +0300
+@@ -4,12 +4,10 @@
+ #
+ 
+ # auth
+-#auth		sufficient	pam_krb5.so		no_warn try_first_pass
+ #auth		sufficient	pam_ssh.so		no_warn try_first_pass
+ auth		required	pam_unix.so		no_warn try_first_pass nullok
+ 
+ # account
+-#account	required	pam_krb5.so
+ account		required	pam_login_access.so
+ account		required	pam_unix.so
+ 
+@@ -19,5 +17,4 @@
+ session         required        pam_xdg.so
+ 
+ # password
+-#password	sufficient	pam_krb5.so		no_warn try_first_pass
+ password	required	pam_unix.so		no_warn try_first_pass
+diff -Naur src.orig/lib/libpam/pam.d/xdm src/lib/libpam/pam.d/xdm
+--- src.orig/lib/libpam/pam.d/xdm	2024-11-29 03:03:42.000000000 +0300
++++ src/lib/libpam/pam.d/xdm	2025-06-04 11:58:54.886591000 +0300
+@@ -4,13 +4,11 @@
+ #
+ 
+ # auth
+-#auth		sufficient	pam_krb5.so		no_warn try_first_pass
+ #auth		sufficient	pam_ssh.so		no_warn try_first_pass
+ auth		required	pam_unix.so		no_warn try_first_pass
+ 
+ # account
+ account		required	pam_nologin.so
+-#account	required	pam_krb5.so
+ account		required	pam_unix.so
+ 
+ # session

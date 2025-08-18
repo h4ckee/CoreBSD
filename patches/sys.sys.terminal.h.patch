@@ -1,0 +1,11 @@
+diff -Naur src.orig/sys/sys/terminal.h src/sys/sys/terminal.h
+--- src.orig/sys/sys/terminal.h	2025-06-06 03:04:26.000000000 +0300
++++ src/sys/sys/terminal.h	2025-06-12 14:42:51.192237000 +0300
+@@ -217,6 +217,7 @@
+ void	terminal_mute(struct terminal *tm, int yes);
+ void	terminal_input_char(struct terminal *tm, term_char_t c);
+ void	terminal_input_raw(struct terminal *tm, char c);
++void	terminal_handle_fkey(struct terminal *tm, u_char *fkey_str);
+ void	terminal_input_special(struct terminal *tm, unsigned int k);
+ 
+ void	termcn_cnregister(struct terminal *tm);

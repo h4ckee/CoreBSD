@@ -1,0 +1,15 @@
+diff -Naur src.orig/stand/lua/Makefile src/stand/lua/Makefile
+--- src.orig/stand/lua/Makefile	2024-11-29 03:03:43.000000000 +0300
++++ src/stand/lua/Makefile	2025-06-08 17:35:36.589019000 +0300
+@@ -22,11 +22,7 @@
+ 	drawer.lua \
+ 	hook.lua \
+ 	loader.lua \
+-	gfx-beastie.lua \
+-	gfx-beastiebw.lua \
+-	gfx-fbsdbw.lua \
+ 	gfx-orb.lua \
+-	gfx-orbbw.lua \
+ 	menu.lua \
+ 	password.lua \
+ 	screen.lua

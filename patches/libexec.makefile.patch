@@ -1,0 +1,38 @@
+diff -Naur src.orig/libexec/Makefile src/libexec/Makefile
+--- src.orig/libexec/Makefile	2025-06-06 00:04:20.000000000 +0000
++++ src/libexec/Makefile	2025-07-13 17:05:43.156028000 +0000
+@@ -12,23 +12,15 @@
+ 	flua \
+ 	getty \
+ 	${_hyperv} \
+-	kgdb \
+ 	${_mail.local} \
+ 	${_makewhatis.local} \
+ 	${_mknetid} \
+ 	${_phttpget} \
+ 	${_pppoed} \
+ 	rc \
+-	revnetgroup \
+ 	${_rlogind} \
+-	rpc.rquotad \
+-	rpc.rstatd \
+-	rpc.rusersd \
+-	rpc.rwalld \
+-	rpc.sprayd \
+ 	${_rshd} \
+ 	${_rtld-elf} \
+-	save-entropy \
+ 	${_nuageinit} \
+ 	${_smrsh} \
+ 	${_tests} \
+@@ -79,10 +71,6 @@
+ 
+ .if ${MK_NETGRAPH} != "no"
+ _pppoed=	pppoed
+-.endif
+-
+-.if ${MK_PF} != "no"
+-_tftp-proxy=	tftp-proxy
+ .endif
+ 
+ .if !defined(NO_PIC) && !defined(NO_RTLD)

@@ -1,0 +1,12 @@
+diff -Naur src.orig/sbin/resolvconf/Makefile src/sbin/resolvconf/Makefile
+--- src.orig/sbin/resolvconf/Makefile	2024-11-29 03:03:42.000000000 +0300
++++ src/sbin/resolvconf/Makefile	2025-05-14 15:16:57.198739000 +0300
+@@ -5,7 +5,7 @@
+ 
+ SCRIPTS=	resolvconf
+ 
+-FILES=		libc dnsmasq named pdnsd pdns_recursor unbound
++FILES=		libc
+ FILESDIR=	/libexec/resolvconf
+ 
+ MAN=		resolvconf.conf.5 resolvconf.8

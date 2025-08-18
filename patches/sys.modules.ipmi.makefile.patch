@@ -1,0 +1,12 @@
+diff -Naur src.orig/sys/modules/ipmi/Makefile src/sys/modules/ipmi/Makefile
+--- src.orig/sys/modules/ipmi/Makefile	2024-11-29 03:03:47.000000000 +0300
++++ src/sys/modules/ipmi/Makefile	2025-05-19 14:39:08.766863000 +0300
+@@ -20,8 +20,6 @@
+ SRCS+=	ipmi_isa.c ipmi_pci.c ipmi_smbus.c
+ SRCS+=	isa_if.h pci_if.h smbus_if.h
+ 
+-SUBDIR+= ipmi_linux
+-
+ .elif ${MACHINE_ARCH:Mpowerpc64*} != ""
+ SRCS+=	ipmi_opal.c ofw_bus_if.h
+ .endif

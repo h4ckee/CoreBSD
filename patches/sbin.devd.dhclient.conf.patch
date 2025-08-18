@@ -1,0 +1,26 @@
+diff -Naur src.orig/sbin/devd/dhclient.conf src/sbin/devd/dhclient.conf
+--- src.orig/sbin/devd/dhclient.conf	2025-06-06 00:04:20.000000000 +0000
++++ src/sbin/devd/dhclient.conf	2025-08-02 15:27:49.978901000 +0000
+@@ -1,19 +1,14 @@
+-#
+-# Try to start dhclient on Ethernet-like interfaces when the link comes
+-# up.  Only devices that are configured to support DHCP will actually
+-# run it.  No link down rule exists because dhclient automatically exits
+-# when the link goes down.
+-#
++# Start dhclient on Ethernet-like interfaces when the link comes up.
+ notify 0 {
+ 	match "system"		"IFNET";
+ 	match "type"		"LINK_UP";
+ 	media-type		"ethernet";
+-	action "service dhclient quietstart $subsystem";
++	action "service dhclient start $subsystem";
+ };
+ 
+ notify 0 {
+ 	match "system"		"IFNET";
+ 	match "type"		"LINK_UP";
+ 	media-type		"802.11";
+-	action "service dhclient quietstart $subsystem";
++	action "service dhclient start $subsystem";
+ };

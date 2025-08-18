@@ -1,0 +1,34 @@
+diff -Naur src.orig/usr.sbin/pkg/FreeBSD.conf.quarterly src/usr.sbin/pkg/FreeBSD.conf.quarterly
+--- src.orig/usr.sbin/pkg/FreeBSD.conf.quarterly	2024-11-29 03:03:49.000000000 +0300
++++ src/usr.sbin/pkg/FreeBSD.conf.quarterly	2025-06-01 11:57:39.973713000 +0300
+@@ -6,10 +6,28 @@
+ #   echo "FreeBSD: { enabled: no }" > /usr/local/etc/pkg/repos/FreeBSD.conf
+ #
+
+-FreeBSD: {
++FreeBSD_primary: {
++  url: "http://pkg0.sjb.freebsd.org/${ABI}/quarterly",
++  mirror_type: "NONE",
++  enabled: yes,
++  ip_version: 4,
++  priority: 10
++}
++
++FreeBSD_secondary: {
++  url: "http://pkg0.nyi.freebsd.org/${ABI}/quarterly",
++  mirror_type: "NONE",
++  enabled: no,
++  ip_version: 4,
++  priority: 20
++}
++
++FreeBSD_backup: {
+   url: "pkg+https://pkg.FreeBSD.org/${ABI}/quarterly",
+   mirror_type: "srv",
+   signature_type: "fingerprints",
+   fingerprints: "/usr/share/keys/pkg",
+-  enabled: yes
++  enabled: no,
++  ip_version: 4,
++  priority: 30
+ }

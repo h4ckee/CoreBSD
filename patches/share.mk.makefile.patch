@@ -1,0 +1,11 @@
+diff -Naur src.orig/share/mk/Makefile src/share/mk/Makefile
+--- src.orig/share/mk/Makefile	2024-11-29 03:03:43.000000000 +0300
++++ src/share/mk/Makefile	2025-05-17 19:48:56.851704000 +0300
+@@ -14,7 +14,6 @@
+ 
+ FILES=	\
+ 	auto.obj.mk \
+-	bsd.README \
+ 	bsd.arch.inc.mk \
+ 	bsd.clang-analyze.mk \
+ 	bsd.compiler.mk \

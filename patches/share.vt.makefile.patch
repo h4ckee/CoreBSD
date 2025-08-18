@@ -1,0 +1,9 @@
+diff -Naur src.orig/share/vt/Makefile src/share/vt/Makefile
+--- src.orig/share/vt/Makefile	2024-11-29 03:03:43.000000000 +0300
++++ src/share/vt/Makefile	2025-06-07 14:21:37.249968000 +0300
+@@ -1,4 +1,4 @@
+ 
+-SUBDIR= fonts keymaps
++SUBDIR= keymaps
+ 
+ .include <bsd.subdir.mk>

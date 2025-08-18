@@ -1,0 +1,234 @@
+#!/bin/sh
+#
+# CoreBSD installation script
+#
+
+archives=(base.txz kernel.txz)
+srcdir='/usr/corebsd'
+rootpool='zroot'
+datapool='zdata'
+mountdir='/mnt'
+
+usage() {
+	cat <<- INFO
+	usage: ${0##*/} -a device [ -a device] [ -b device -b ...] [-r poolname] [-d poolname] [-m mountdir] [-s swapsize] [-u username]
+	    -a    rootpool device   (zmirror created if = 2)
+	    -b    datapool device   (zstripe created if > 1)
+	    -r    rootpool name     (default: zroot)
+	    -d    datapool name     (default: zdata)
+	    -m    mountdir name     (default: /mnt)
+	    -s    swap size in M|G  (default: -)
+	    -u    user name         (default: -)
+	available devices: $(sysctl -n kern.disks | grep -Eo "a?da[0-9]" | sort | tr '\n' ' ')
+	INFO
+	exit
+}
+
+while getopts 'a:b:r:d:m:s:u:' option; do
+	case "$option" in
+		a)	rootpooldevs+=("${OPTARG##/dev/}") ;;
+		b)	datapooldevs+=("${OPTARG##/dev/}") ;;
+		r)	rootpool="$OPTARG" ;;
+		d)	datapool="$OPTARG" ;;
+		m)	mountdir="$OPTARG" ;;
+		s)	swapsize="$OPTARG" ;;
+		u)	username="$OPTARG" ;;
+		?)	usage ;;
+	esac
+done
+
+if (( ${#rootpooldevs[@]} == 0 || ${#rootpooldevs[@]} > 2 )); then
+	usage
+fi
+
+if [ ! -d "$mountdir" ]; then
+	echo >&2 "ERROR: $mountdir no such directory"
+	exit 1
+fi
+
+if [[ "$swapsize" && "$swapsize" != [1-9]*([0-9])[mgMG] ]]; then
+	echo >&2 "ERROR: $swapsize is not a correct size"
+	exit 1
+fi
+
+for device in "${rootpooldevs[@]}" "${datapooldevs[@]}"; do
+	if [ ! -c /dev/"$device" ]; then
+		echo >&2 "ERROR: /dev/${device} is not a block device"
+		exit 1
+	fi
+done
+
+i=0; for device in "${rootpooldevs[@]}"; do
+	echo "===> Destroying partition table on $device"
+	gpart destroy -F "$device" &> /dev/null
+
+	echo "===> Creating GPT scheme on $device"
+	gpart create -s gpt "$device" &> /dev/null || exit 1
+
+	echo "===> Setting active attribute on $device"
+	gpart set -a active "$device" &> /dev/null || exit 1
+
+	echo "===> Creating gptboot${i} partition on $device"
+	gpart add -a 4k -l gptboot"$i" -t freebsd-boot -s 512k "$device" &> /dev/null || exit 1
+
+	if [[ "$swapsize" && -z "${datapooldevs[@]}" ]]; then
+		echo "===> Creating swap${i} partition on $device"
+		gpart add -a 1m -l swap"$i" -t freebsd-swap -s "$swapsize" "$device" &> /dev/null || exit 1
+	fi
+
+	echo "===> Creating zfs${i} partition on $device"
+	gpart add -a 1m -l zroot"$i" -t freebsd-zfs "$device" &> /dev/null || exit 1
+
+	echo "===> Setting bootstrap code on $device"
+	gpart bootcode -b /boot/pmbr -p /boot/gptzfsboot -i 1 "$device" &> /dev/null || exit 1
+
+	(( i++ ))
+done; unset i
+
+i=0; for device in "${datapooldevs[@]}"; do
+	echo "===> Destroying partition table on $device"
+	gpart destroy -F "$device" &> /dev/null
+
+	echo "===> Creating GPT scheme on $device"
+	gpart create -s gpt "$device" &> /dev/null || exit 1
+
+	if [ "$swapsize" ]; then
+		echo "===> Creating swap${i} partition on $device"
+		gpart add -a 1m -l swap"$i" -t freebsd-swap -s "$swapsize" "$device" &> /dev/null || exit 1
+	fi
+
+	echo "===> Creating zfs${i} partition on $device"
+	gpart add -a 1m -l zdata"$i" -t freebsd-zfs "$device" &> /dev/null || exit 1
+
+	(( i++ ))
+done; unset i
+
+if (( ${#rootpooldevs[@]} == 2 )); then
+	echo "===> Creating $rootpool mirrored pool"
+	zpool create -R "$mountdir" -o ashift=12 -O compression=zstd -O checksum=blake3 -O atime=off -O sync=disabled -O acltype=off -O xattr=off -O redundant_metadata=some -m none -f "$rootpool" mirror /dev/gpt/zroot* || exit 1
+else
+	echo "===> Creating $rootpool pool"
+	zpool create -R "$mountdir" -o ashift=12 -O compression=zstd -O checksum=blake3 -O atime=off -O sync=disabled -O acltype=off -O xattr=off -O redundant_metadata=some -m none -f "$rootpool" /dev/gpt/zroot* || exit 1
+fi
+
+echo "===> Creating ${rootpool}/ROOT filesystem"
+zfs create -o mountpoint=none "$rootpool"/ROOT || exit 1
+
+echo "===> Creating ${rootpool}/ROOT/default filesystem"
+zfs create -o mountpoint=/ "$rootpool"/ROOT/default || exit 1
+
+echo "===> Setting canmount=noauto property for ${rootpool}/ROOT/default"
+zfs set canmount=noauto "$rootpool"/ROOT/default || exit 1
+
+echo "===> Setting bootfs property for $rootpool"
+zpool set bootfs="$rootpool"/ROOT/default "$rootpool" || exit 1
+
+echo '===> Creating /boot/zfs directory'
+mkdir -p "$mountdir"/boot/zfs || exit 1
+
+#echo "===> Creating ${rootpool}/tmp filesystem"
+#zfs create -o mountpoint=/tmp -o exec=on -o setuid=off "$rootpool"/tmp || exit 1
+
+echo "===> Creating ${rootpool}/usr filesystem"
+zfs create -o mountpoint=/usr -o canmount=off "$rootpool"/usr || exit 1
+
+echo "===> Creating ${rootpool}/var filesystem"
+zfs create -o mountpoint=/var -o canmount=off "$rootpool"/var || exit 1
+
+echo "===> Creating ${rootpool}/var/log filesystem"
+zfs create -o exec=off -o setuid=off "$rootpool"/var/log || exit 1
+
+echo "===> Creating ${rootpool}/var/tmp filesystem"
+zfs create -o exec=on -o setuid=off "$rootpool"/var/tmp || exit 1
+
+if (( ${#datapooldevs[@]} )); then
+	echo "===> Creating $datapool pool"
+	zpool create -R "$mountdir" -o ashift=12 -O compression=zstd -O checksum=blake3 -O atime=off -O sync=disabled -O acltype=off -O xattr=off -O redundant_metadata=some -m none -f "$datapool" /dev/gpt/zdata* || exit 1
+
+	echo "===> Creating ${datapool}/usr filesystem"
+	zfs create -o mountpoint=/usr -o canmount=off "$datapool"/usr || exit 1
+
+	echo "===> Creating ${datapool}/usr/ports filesystem"
+	zfs create -o mountpoint=/usr/ports -o setuid=off "$datapool"/usr/ports || exit 1
+
+	echo "===> Creating ${datapool}/usr/src filesystem"
+	zfs create -o mountpoint=/usr/src -o setuid=off "$datapool"/usr/src || exit 1
+
+	echo "===> Creating ${datapool}/var filesystem"
+	zfs create -o mountpoint=/var -o canmount=off "$datapool"/var || exit 1
+
+	echo "===> Creating ${datapool}/var/cache filesystem"
+	zfs create -o mountpoint=/var/cache -o setuid=off -o exec=off "$datapool"/var/cache || exit 1
+
+	echo "===> Creating ${datapool}/home filesystem"
+	zfs create -o mountpoint=/home "$datapool"/home || exit 1
+
+	echo "===> Configuring ${datapool}.cache for $datapool"
+	zpool set cachefile="$mountdir"/boot/zfs/"$datapool".cache "$datapool" || exit 1
+else
+	echo "===> Creating ${rootpool}/usr/ports filesystem"
+	zfs create -o mountpoint=/usr/ports -o setuid=off "$rootpool"/usr/ports || exit 1
+
+	echo "===> Creating ${rootpool}/usr/src filesystem"
+	zfs create -o mountpoint=/usr/src -o setuid=off "$rootpool"/usr/src || exit 1
+
+	echo "===> Creating ${rootpool}/var/cache filesystem"
+	zfs create -o mountpoint=/var/cache -o setuid=off -o exec=off "$rootpool"/var/cache || exit 1
+
+	echo "===> Creating ${rootpool}/home filesystem"
+	zfs create -o mountpoint=/home "$rootpool"/home || exit 1
+fi
+
+for archive in "${archives[@]}"; do
+	echo "===> Verifying checksum of $archive"
+	CK=$(sha256 -q "$srcdir"/"$archive")
+	awk -v checksum="$CK" -v archive="$archive" -v found=0 '{
+		if (archive == $1) {
+			found = 1
+			if (checksum == $2)
+				exit(0)
+			else
+				exit(1)
+		}
+	} END {
+		if (!found)
+			exit(1)
+	}' "$srcdir"/MANIFEST
+done
+
+for archive in "${archives[@]}"; do
+	echo "===> Extracting $archive"
+	LC_ALL='C' bsdtar -C "$mountdir" -xf "$srcdir"/"$archive" || exit 1
+done
+
+echo '===> Populating /etc/fstab'
+cat <<- 'END' > "$mountdir"/etc/fstab
+	# Device	Mountpoint	FStype	Options					Dump	Pass#
+	tmpfs		/tmp		tmpfs	rw,nosuid,nomtime,nonc,mode=01777	0	0
+END
+for i in /dev/gpt/swap*; do
+	echo "$i	none		swap	sw					0	0" >> "$mountdir"/etc/fstab
+done
+
+mount -t devfs devfs "$mountdir"/dev
+chroot "$mountdir" /usr/bin/passwd root
+if [ "$username" ]; then
+	chroot "$mountdir" /usr/sbin/pw useradd "$username" -G wheel,operator,video -m
+	chroot "$mountdir" /usr/bin/passwd -l "$username"
+fi
+
+echo '===> Setting /boot/entropy file'
+dd if=/dev/random of="$mountdir"/boot/entropy bs=4096 count=1 2> /dev/null || exit 1
+chown 0:0 "$mountdir"/boot/entropy || exit 1
+
+echo '===> Edit /boot/loader.conf, /etc/rc.conf, etc. Press Ctrl+D when finished'
+chroot "$mountdir" /bin/sh -l 2>&1
+
+echo '===> Unmounting filesystems'
+umount "$mountdir"/dev || exit 1
+zfs unmount -a || exit 1
+umount "$mountdir" || exit 1
+
+echo '--------------------------------------------------------------'
+echo ">>> Installation completed at $( date )"
+echo '--------------------------------------------------------------'

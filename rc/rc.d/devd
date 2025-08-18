@@ -1,0 +1,31 @@
+#!/bin/sh
+#
+# /etc/rc.d/devd: device state change daemon
+#
+
+command='devd'
+flags='-q'
+pidfile=$(sed -rn '/pid-file/s/.+\"(.+)\";/\1/p' /etc/devd.conf)
+
+case "$1" in
+start)		if [ "$RC_BOOT" ] || ! pgrep -q "$command"; then
+			if ! limits -C daemon "$command" "$flags"; then
+				echo >&2 "$command failed"
+				exit 1
+			fi
+			sleep 0.2
+			protect -p $(< "$pidfile")
+		fi
+		;;
+stop)		if [ -f "$pidfile" ]; then
+			kill $(< "$pidfile")
+			rm -f "$pidfile"
+		fi
+		;;
+restart)	"$0" stop
+		"$0" start
+		;;
+*)		echo "${0##*/} [start|stop|restart]"
+		exit
+		;;
+esac

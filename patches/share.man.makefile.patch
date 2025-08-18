@@ -1,0 +1,12 @@
+diff -Naur src.orig/share/man/Makefile src/share/man/Makefile
+--- src.orig/share/man/Makefile	2024-11-29 03:03:42.000000000 +0300
++++ src/share/man/Makefile	2025-05-14 15:24:48.897163000 +0300
+@@ -3,7 +3,7 @@
+ .include <src.opts.mk>
+ 
+ # XXX MISSING:	man3f
+-SUBDIR=	man1 man3 man3lua man4 man5 man6 man7 man8 man9
++SUBDIR=	man1 man4 man5 man7 man8
+ SUBDIR_PARALLEL=
+ 
+ MAKEWHATIS?=	makewhatis

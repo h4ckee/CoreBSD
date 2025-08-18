@@ -1,0 +1,33 @@
+diff -Naur src.orig/sbin/devd/Makefile src/sbin/devd/Makefile
+--- src.orig/sbin/devd/Makefile	2025-06-06 00:04:20.000000000 +0000
++++ src/sbin/devd/Makefile	2025-08-02 09:58:28.862659000 +0000
+@@ -7,9 +7,6 @@
+ CONFS=	devd.conf
+ DEVD=	devmatch.conf
+ DEVDDIR=	/etc/devd
+-.if ${MK_ACPI} != "no"
+-DEVD+=	asus.conf
+-.endif
+ 
+ .if ${MK_AUTOFS} != "no"
+ CONFGROUPS+=		AUTOFS
+@@ -30,7 +27,7 @@
+ 
+ CONFGROUPS+=		CONSOLE
+ CONSOLEDIR=		${DEVDDIR}
+-CONSOLE+=		moused.conf syscons.conf
++CONSOLE+=		moused.conf
+ CONSOLEPACKAGE=		console-tools
+ 
+ .if ${MK_BLUETOOTH} != "no"
+@@ -45,10 +42,6 @@
+ HYPERVDIR=${DEVDDIR}
+ HYPERV+=	hyperv.conf
+ HYPERVPACKAGE=	hyperv-tools
+-.endif
+-
+-.if ${MK_USB} != "no"
+-DEVD+=	uath.conf ulpt.conf
+ .endif
+ 
+ .if ${MACHINE_ARCH} == "powerpc"

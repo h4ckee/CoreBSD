@@ -1,0 +1,13 @@
+diff -Naur src.orig/secure/usr.bin/openssl/Makefile src/secure/usr.bin/openssl/Makefile
+--- src.orig/secure/usr.bin/openssl/Makefile	2025-06-06 03:04:20.000000000 +0300
++++ src/secure/usr.bin/openssl/Makefile	2025-06-12 13:51:49.716847000 +0300
+@@ -6,9 +6,6 @@
+ 
+ LIBADD=	ssl crypto
+ 
+-.if exists(Makefile.man)
+-.include "Makefile.man"
+-.endif
+ .include "../../lib/libcrypto/Makefile.inc"
+ 
+ CFLAGS+=	-I${LCRYPTO_SRC}/apps/include

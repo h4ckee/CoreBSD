@@ -1,0 +1,25 @@
+#
+# System profile (login shells)
+#
+
+umask 022
+
+export LANG='ru_RU.UTF-8'
+export LC_COLLATE='C'
+export PATH='/sbin:/bin:/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin'
+export CDPATH=".:${HOME}:/usr:/var/cache"
+export HISTFILE="${HOME}/.sh_history"
+export HISTSIZE='16384'
+export CLICOLOR='1'
+export GREP_COLOR='31'
+export GREP_OPTIONS='--color=auto'
+export LSCOLORS='ExAxFxHxbxDxgxababacEx'
+export LESS='-Rgimqc'
+export LESSEDIT='%E ?lt+%lt. %f'
+export LESS_TERMCAP_mb=$'\e[1;37m'
+export LESS_TERMCAP_md=$'\e[1;34m'
+export LESS_TERMCAP_me=$'\e[m'
+export LESS_TERMCAP_se=$'\e[m'
+export LESS_TERMCAP_so=$'\e[1;31m'
+export LESS_TERMCAP_ue=$'\e[m'
+export LESS_TERMCAP_us=$'\e[0;37m'

@@ -1,0 +1,13 @@
+diff -Naur src.orig/cddl/usr.sbin/Makefile src/cddl/usr.sbin/Makefile
+--- src.orig/cddl/usr.sbin/Makefile	2024-11-29 03:03:36.000000000 +0300
++++ src/cddl/usr.sbin/Makefile	2025-06-06 16:22:30.338264000 +0300
+@@ -11,8 +11,7 @@
+ 
+ SUBDIR.${MK_ZFS}+= \
+ 	zdb \
+-	zhack \
+-	zfsd
++	zhack
+ 
+ .if ${MACHINE_ARCH} == "amd64" || ${MACHINE_ARCH} == "i386"
+ _dtrace=	dtrace

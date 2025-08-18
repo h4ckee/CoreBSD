@@ -1,0 +1,36 @@
+#!/bin/sh
+#
+# /etc/rc.d/pf: packet filter
+#
+
+rules='/etc/pf.conf'
+
+if [ ! -f "$rules" ]; then
+	echo >&2 "$rules not found"
+	exit 1
+fi
+
+case "$1" in
+start)		if pfctl -nf "$rules"; then
+			pfctl -qFa
+			if ! pfctl -f "$rules"; then
+				echo >&2 'pf failed'
+				exit 1
+			fi
+			if pfctl -sR | grep -q 'Disabled'; then
+				pfctl -eq
+			fi
+		fi
+		;;
+stop)		if pfctl -sR | grep -q 'Enabled'; then
+			pfctl -dq
+		fi
+		;;
+restart)	"$0" stop
+		"$0" start
+		;;
+status)		pfctl -si ;;
+*)		echo "${0##*/} [start|stop|restart|status]"
+		exit
+		;;
+esac
