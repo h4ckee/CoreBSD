@@ -12,7 +12,6 @@ start)		for algorithm in rsa ecdsa ed25519; do
 			keyfile="/etc/ssh/ssh_host_${algorithm}_key"
 			if [ ! -f "$keyfile" ]; then
 				/usr/bin/ssh-keygen -q -t "$algorithm" -N "" -f "$keyfile"
-				/usr/bin/ssh-keygen -l -f "${keyfile}.pub"
 			fi
 		done
 		if [ "$RC_BOOT" ] || ! pgrep -q "$command"; then

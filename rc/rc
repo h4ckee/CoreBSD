@@ -94,10 +94,7 @@ zfs mount -a || echo >&2 'Mounting ZFS filesystems failed'
 mount -a -t nonfs,nosmbfs || echo >&2 'Mounting fstab filesystems failed'
 swapon -aq || echo >&2 'Enabling swap failed'
 
-for dir in /lib /usr/lib /usr/local/lib /usr/local/lib/compat/pkg; do
-	[ -d "$dir" ] && libdirs+=("$dir")
-done
-ldconfig -i "${libdirs[@]}" &
+source /etc/rc.d/ldconfig
 
 if [ -r /boot/nextboot.conf ]; then
 	nextboot -D
