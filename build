@@ -164,7 +164,8 @@ set_environment() {
 			fi
 			export KERNCONF="DESKTOP"
 			export MODULES_OVERRIDE="libiconv cd9660_iconv msdosfs_iconv ath ath_hal_ar9300 ath_rate coretemp \
-				i2c/controllers/ichsmb i2c/smbus sound/driver/emu10k1 virtio wlan wlan_ccmp wlan_amrr"
+				i2c/controllers/ichsmb i2c/smbus sound/driver/emu10k1 wlan wlan_ccmp wlan_amrr \
+				i2c/iic i2c/iicbb i2c/iicbus linuxkpi linuxkpi_video backlight lindebugfs pseudofs"
 		fi
 		;;
 	*) echo "Profile for $HWMODEL is not defined"; exit 1 ;;
@@ -257,7 +258,7 @@ case "$COMMAND" in
 		build_kernel
 		install_kernel
 		clean_directory "$OBJDIR"
-		#shutdown -r now
+		shutdown -r now
 		;;
 	world)	check_patched
 		clean_directory "$OBJDIR"
