@@ -1,7 +1,7 @@
 diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
 --- src.orig/libexec/rc/rc.d/Makefile	2025-06-06 00:04:20.000000000 +0000
-+++ src/libexec/rc/rc.d/Makefile	2025-08-15 14:14:15.831362000 +0000
-@@ -5,109 +5,12 @@
++++ src/libexec/rc/rc.d/Makefile	2025-09-02 09:50:23.356072000 +0000
+@@ -5,109 +5,13 @@
  CONFGROUPS=	CONFS
  CONFSPACKAGE=	rc
  
@@ -43,7 +43,8 @@ diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
 -	kld \
 -	kldxref \
 -	${_kpasswdd} \
--	ldconfig \
++CONFS=	cron \
+ 	ldconfig \
 -	linux \
 -	local \
 -	localpkg \
@@ -58,7 +59,6 @@ diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
 -	mountd \
 -	msgs \
 -	natd \
-+CONFS=	cron \
  	netif \
 -	netoptions \
 -	netwait \
@@ -113,7 +113,7 @@ diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
  
  CONFGROUPS+=		DEVD
  DEVD=			devd
-@@ -121,14 +24,6 @@
+@@ -121,14 +25,6 @@
  DHCLIENT=		dhclient
  DHCLIENTPACKAGE=	dhclient
  
@@ -128,7 +128,7 @@ diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
  .if ${MK_NIS} != "no"
  CONFS+=	ypbind \
  	ypldap \
-@@ -252,7 +147,6 @@
+@@ -252,7 +148,6 @@
  .if ${MK_LEGACY_CONSOLE} != "no"
  CONFGROUPS+=	CONSOLE
  CONSOLE+=	moused
@@ -136,7 +136,7 @@ diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
  CONSOLEPACKAGE=	console-tools
  .endif
  
-@@ -285,14 +179,6 @@
+@@ -285,24 +180,12 @@
  _opensm=	opensm
  .endif
  
@@ -151,7 +151,17 @@ diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
  .if ${MK_OPENSSH} != "no"
  CONFGROUPS+=	SSH
  SSH=		sshd
-@@ -331,12 +217,10 @@
+ SSHPACKAGE=	ssh
+ .endif
+ 
+-.if ${MK_PF} != "no"
+-CONFS+=		ftp-proxy
+-.endif
+-
+ .if ${MK_ROUTED} != "no"
+ CONFS+=		routed
+ .endif
+@@ -331,26 +214,11 @@
  
  .if ${MK_VI} != "no"
  CONFGROUPS+=	VI
@@ -162,18 +172,19 @@ diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
  .if ${MK_WIRELESS} != "no"
 -CONFS+=		hostapd
  CONFS+=		wpa_supplicant
- .endif
- 
-@@ -344,12 +228,10 @@
- CONFGROUPS+=	ZFS
- ZFS+=		zfs
- ZFS+=		zfsbe
+-.endif
+-
+-.if ${MK_ZFS} != "no"
+-CONFGROUPS+=	ZFS
+-ZFS+=		zfs
+-ZFS+=		zfsbe
 -ZFS+=		zfsd
- ZFS+=		zfskeys
- ZFS+=		zpool
- ZFS+=		zpoolreguid
- ZFS+=		zpoolupgrade
+-ZFS+=		zfskeys
+-ZFS+=		zpool
+-ZFS+=		zpoolreguid
+-ZFS+=		zpoolupgrade
 -ZFS+=		zvol
- ZFSPACKAGE=	rc
+-ZFSPACKAGE=	rc
  .endif
  
+ .for fg in ${CONFGROUPS}

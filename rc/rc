@@ -119,8 +119,14 @@ for mixer in /dev/mixer[0-9]; do
 	fi
 done
 
-if [ "$(readlink /etc/localtime)" != /usr/share/zoneinfo/Etc/"$timezone" ]; then
-	ln -sf /usr/share/zoneinfo/Etc/"$timezone" /etc/localtime
+if [ -f /usr/share/zoneinfo/Etc/"$timezone" ]; then
+	if [ "$(readlink /etc/localtime)" != /usr/share/zoneinfo/Etc/"$timezone" ]; then
+		ln -sf /usr/share/zoneinfo/Etc/"$timezone" /etc/localtime
+	fi
+else
+	if [ "$(readlink /etc/localtime)" != /usr/share/zoneinfo/Etc/UTC ]; then
+		ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime
+	fi
 fi
 
 for ttyv in /dev/ttyv*; do

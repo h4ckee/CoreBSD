@@ -11,16 +11,16 @@ if (( USER_ID )); then
 	export PS2='  '
 	export PS3=$'\1\r\1\033[0;32m\1?\1\033[m\1 '
 	export PS4=$'\1\r\1\033[0;32m\1[${EPOCHREALTIME}]\1\033[m\1 '
+
+	[ -x /usr/local/bin/doas ] && DOAS='/usr/local/bin/doas'
 else
 	export PS1='$(printf "\1\r\1\033[0;31m\1%${COLUMNS}s\1\033[m\1\n" "[ ${PWD} ]")'$'\1\r\1\033[0;31m\1#\1\033[m\1 '
 	export PS2='  '
 	export PS3=$'\1\r\1\033[0;31m\1?\1\033[m\1 '
 	export PS4=$'\1\r\1\033[0;31m\1[${EPOCHREALTIME}]\1\033[m\1 '
-
-	[ -x /usr/local/bin/doas ] && DOAS='/usr/local/bin/doas'
 fi
 
-alias pkgin='idprio 10 pkg install'
+alias pkgin='$DOAS idprio 10 pkg install'
 alias root='$DOAS su -m'
 alias poweroff='$DOAS /sbin/shutdown -p now'
 alias reboot='$DOAS /sbin/shutdown -r now'
@@ -78,13 +78,13 @@ pkginfo() {
 
 pkgseek() {
 	case "$1" in
-	-c)	pkg search -o "$@" | sort ;;
+	-c)	pkg search -c "$@" | sort ;;
 	''|-*)	cat <<- INFO ;;
 		usage: pkgseek [options] <package>
 		   <package>       search for <package> in names
 		   -c <package>    search for <package> in comments
 		INFO
-	*)	pkg search -o "$@" | sort ;;
+	*)	pkg search "$@" | sort ;;
 	esac
 }
 

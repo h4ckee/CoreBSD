@@ -1,6 +1,6 @@
 diff -Naur src.orig/etc/mtree/BSD.root.dist src/etc/mtree/BSD.root.dist
---- src.orig/etc/mtree/BSD.root.dist	2024-11-29 03:03:41.000000000 +0300
-+++ src/etc/mtree/BSD.root.dist	2025-06-01 16:27:16.688291000 +0300
+--- src.orig/etc/mtree/BSD.root.dist	2025-06-06 00:04:20.000000000 +0000
++++ src/etc/mtree/BSD.root.dist	2025-09-02 09:31:22.972189000 +0000
 @@ -9,16 +9,6 @@
      boot
          defaults
@@ -18,7 +18,7 @@ diff -Naur src.orig/etc/mtree/BSD.root.dist src/etc/mtree/BSD.root.dist
          firmware
          ..
          loader.conf.d             tags=package=bootloader
-@@ -29,8 +19,6 @@
+@@ -29,68 +19,24 @@
          ..
          modules
          ..
@@ -27,10 +27,11 @@ diff -Naur src.orig/etc/mtree/BSD.root.dist src/etc/mtree/BSD.root.dist
          zfs
          ..
      ..
-@@ -39,58 +27,20 @@
+     dev             mode=0555
+     ..
      etc
-         X11
-         ..
+-        X11
+-        ..
 -        authpf
 -        ..
 -        autofs
@@ -39,8 +40,8 @@ diff -Naur src.orig/etc/mtree/BSD.root.dist src/etc/mtree/BSD.root.dist
 -        ..
          cron.d
          ..
-         defaults
-         ..
+-        defaults
+-        ..
          devd
          ..
 -        dma
@@ -86,7 +87,7 @@ diff -Naur src.orig/etc/mtree/BSD.root.dist src/etc/mtree/BSD.root.dist
          ssh
          ..
          ssl
-@@ -99,13 +49,9 @@
+@@ -99,13 +45,9 @@
              untrusted
              ..
          ..
@@ -100,7 +101,7 @@ diff -Naur src.orig/etc/mtree/BSD.root.dist src/etc/mtree/BSD.root.dist
          ..
      ..
      lib
-@@ -118,15 +64,7 @@
+@@ -118,15 +60,7 @@
          resolvconf
          ..
      ..

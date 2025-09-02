@@ -2,10 +2,15 @@
 # user profile (non-privileged login shells)
 #
 
-whence -p micro && export EDITOR='micro' || export EDITOR='vi'
+[ -d "${HOME}/.local/bin" ] && export PATH="${HOME}/.local/bin:${PATH}"
+[ -d "${HOME}/.config" ] && export XDG_CONFIG_HOME="${HOME}/.config"
+
+if whence -p micro > /dev/null; then
+	export EDITOR='micro'
+else
+	export EDITOR='vi'
+fi
 export PAGER='less'
 export TERM='xterm'
 export ENV="${HOME}/.shrc"
 
-[ -d "${HOME}/.local/bin" ] && export PATH="${HOME}/.local/bin:${PATH}"
-[ -d "${HOME}/.config" ] && export XDG_CONFIG_HOME="${HOME}/.config"

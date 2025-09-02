@@ -1,6 +1,6 @@
 diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
 --- src.orig/etc/mtree/BSD.usr.dist	2025-06-06 00:04:20.000000000 +0000
-+++ src/etc/mtree/BSD.usr.dist	2025-06-25 10:36:51.771360000 +0000
++++ src/etc/mtree/BSD.usr.dist	2025-09-02 09:24:53.559890000 +0000
 @@ -59,118 +59,22 @@
                      xray
                      ..
@@ -120,7 +120,7 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
      ..
      local
      ..
-@@ -179,30 +83,6 @@
+@@ -179,274 +83,20 @@
      sbin
      ..
      share
@@ -148,10 +148,11 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
 -            usermgmt
 -            ..
 -        ..
-         calendar
-         ..
+-        calendar
+-        ..
          certs
-@@ -211,242 +91,14 @@
+             trusted tags=package=caroot
+             ..
              untrusted tags=package=caroot
              ..
          ..
@@ -394,7 +395,7 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
                  UTF
                  ..
              ..
-@@ -459,440 +111,44 @@
+@@ -459,440 +109,44 @@
                  ..
              ..
          ..

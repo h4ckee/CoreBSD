@@ -83,15 +83,6 @@ patch_sources() {
 	cat "$CURDIR"/kernel/COREBSD.hints "$CURDIR"/kernel/LAPTOP.hints > "$SRCDIR"/sys/amd64/conf/LAPTOP.hints
 	ln "$SRCDIR"/share/numericdef_unicode/uk_UA.UTF-8.src	"$SRCDIR"/share/numericdef_unicode/ru_RU.UTF-8.src
 
-	if [ "$COMMAND" == "image" ]; then
-		sed -E -i '' '/^vfs\./!d' "$SRCDIR"/sbin/sysctl/sysctl.conf
-	else
-		case "$HWMODEL" in
-		*Core\(TM\)\ i[57]*)	sed -E -i '' '/^hw\.ath\./d'			"$SRCDIR"/sbin/sysctl/sysctl.conf ;;
-		*Core\(TM\)2*) 		sed -E -i '' '/^hw\.(acpi|psm.trackpoint)\./d'	"$SRCDIR"/sbin/sysctl/sysctl.conf ;;
-		esac
-	fi
-
 	touch "$SRCDIR"/.patched
 }
 
@@ -110,7 +101,6 @@ set_environment() {
 	export WORLD_FLAGS="$KERNEL_FLAGS"
 	export RELEASE_FLAGS="$KERNEL_FLAGS"
 	export SRCCONF="${CURDIR}/files/src.conf"
-#	export SRCCONF="${CURDIR}/files/src-notoolchain.conf"
 	export WRKDIRPREFIX="$OBJDIR"
 	export LOCAL_ITOOLS="printf"
 	export MAN_ARCH="amd64"

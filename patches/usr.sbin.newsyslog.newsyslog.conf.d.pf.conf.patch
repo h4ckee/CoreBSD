@@ -1,0 +1,6 @@
+diff -Naur src.orig/usr.sbin/newsyslog/newsyslog.conf.d/pf.conf src/usr.sbin/newsyslog/newsyslog.conf.d/pf.conf
+--- src.orig/usr.sbin/newsyslog/newsyslog.conf.d/pf.conf	2025-06-06 00:04:27.000000000 +0000
++++ src/usr.sbin/newsyslog/newsyslog.conf.d/pf.conf	2025-09-02 09:58:19.553182000 +0000
+@@ -1 +1 @@
+-/var/log/pflog				600  3	   1000	*     JB    /var/run/pflogd.pid
++/var/log/pflog				600  3	   1000	*     XB    /var/run/pflogd.pid
