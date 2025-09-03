@@ -41,6 +41,8 @@ extract_sources() {
 	LC_ALL=C bsdtar -C "$SRCDIR"/contrib --uid 0 --gid 0 -xf "$TMPDIR"/"$MKSHSRC" || exit 1
 	echo "$VERSION" > "$SRCDIR"/VERSION
 	rm -f "$TMPDIR"/"$BASESRC" "$TMPDIR"/"$MKSHSRC"
+	zfs snapshot zroot"$SRCDIR"@clone
+	zfs clone zroot"$SRCDIR"@clone zroot"$SRCDIR".orig
 	zfs snapshot zroot"$SRCDIR"@default
 }
 

@@ -139,7 +139,7 @@ echo "===> Creating ${rootpool}/var/log filesystem"
 zfs create -o exec=off -o setuid=off "$rootpool"/var/log || exit 1
 
 echo "===> Creating ${rootpool}/var/tmp filesystem"
-zfs create -o exec=on -o setuid=off "$rootpool"/var/tmp || exit 1
+zfs create -o exec=on -o setuid=off -o sync=disabled "$rootpool"/var/tmp || exit 1
 
 if (( ${#datapooldevs[@]} )); then
 	echo "===> Creating $datapool pool"
@@ -147,6 +147,9 @@ if (( ${#datapooldevs[@]} )); then
 
 	echo "===> Creating ${datapool}/usr filesystem"
 	zfs create -o mountpoint=/usr -o canmount=off "$datapool"/usr || exit 1
+
+	echo "===> Creating ${datapool}/usr/obj filesystem"
+	zfs create -o mountpoint=/usr/obj -o sync=disabled "$datapool"/usr/obj || exit 1
 
 	echo "===> Creating ${datapool}/usr/ports filesystem"
 	zfs create -o mountpoint=/usr/ports -o setuid=off "$datapool"/usr/ports || exit 1
@@ -158,14 +161,17 @@ if (( ${#datapooldevs[@]} )); then
 	zfs create -o mountpoint=/var -o canmount=off "$datapool"/var || exit 1
 
 	echo "===> Creating ${datapool}/var/cache filesystem"
-	zfs create -o mountpoint=/var/cache -o setuid=off -o exec=off "$datapool"/var/cache || exit 1
+	zfs create -o mountpoint=/var/cache -o setuid=off -o exec=off -o sync=disabled "$datapool"/var/cache || exit 1
 
 	echo "===> Creating ${datapool}/home filesystem"
-	zfs create -o mountpoint=/home "$datapool"/home || exit 1
+	zfs create -o mountpoint=/home -o sync=disabled "$datapool"/home || exit 1
 
 	echo "===> Configuring ${datapool}.cache for $datapool"
 	zpool set cachefile="$mountdir"/boot/zfs/"$datapool".cache "$datapool" || exit 1
 else
+	echo "===> Creating ${rootpool}/usr/obj filesystem"
+	zfs create -o mountpoint=/usr/obj -o sync=disabled "$rootpool"/usr/obj || exit 1
+
 	echo "===> Creating ${rootpool}/usr/ports filesystem"
 	zfs create -o mountpoint=/usr/ports -o setuid=off "$rootpool"/usr/ports || exit 1
 
@@ -173,10 +179,10 @@ else
 	zfs create -o mountpoint=/usr/src -o setuid=off "$rootpool"/usr/src || exit 1
 
 	echo "===> Creating ${rootpool}/var/cache filesystem"
-	zfs create -o mountpoint=/var/cache -o setuid=off -o exec=off "$rootpool"/var/cache || exit 1
+	zfs create -o mountpoint=/var/cache -o setuid=off -o exec=off -o sync=disabled "$rootpool"/var/cache || exit 1
 
 	echo "===> Creating ${rootpool}/home filesystem"
-	zfs create -o mountpoint=/home "$rootpool"/home || exit 1
+	zfs create -o mountpoint=/home -o sync=disabled "$rootpool"/home || exit 1
 fi
 
 for archive in "${archives[@]}"; do
@@ -204,7 +210,7 @@ done
 echo '===> Populating /etc/fstab'
 cat <<- 'END' > "$mountdir"/etc/fstab
 	# Device	Mountpoint	FStype	Options					Dump	Pass#
-	tmpfs		/tmp		tmpfs	rw,nosuid,nomtime,nonc,mode=01777	0	0
+	tmpfs		/tmp		tmpfs	rw,nomtime,mode=1777,size=1g		0	0
 END
 for i in /dev/gpt/swap*; do
 	echo "$i	none		swap	sw					0	0" >> "$mountdir"/etc/fstab

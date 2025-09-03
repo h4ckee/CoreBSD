@@ -1,6 +1,6 @@
 diff -Naur src.orig/Makefile.inc1 src/Makefile.inc1
---- src.orig/Makefile.inc1	2025-06-06 03:04:14.000000000 +0300
-+++ src/Makefile.inc1	2025-06-15 12:51:22.260486000 +0300
+--- src.orig/Makefile.inc1	2025-06-05 20:04:14.000000000 -0400
++++ src/Makefile.inc1	2025-09-03 04:39:44.582920000 -0400
 @@ -1327,16 +1327,8 @@
  #
  # Check for missing UIDs/GIDs.
@@ -20,7 +20,19 @@ diff -Naur src.orig/Makefile.inc1 src/Makefile.inc1
  _installcheck_world: __installcheck_UGID
  __installcheck_UGID: .PHONY
  .for uid in ${CHECK_UIDS}
-@@ -3277,10 +3269,8 @@
+@@ -2643,11 +2635,6 @@
+ _basic_bootstrap_tools+=sbin/md5
+ .endif
+ 
+-# tzsetup is needed as an install tool
+-.if ${MK_ZONEINFO} != "no"
+-_basic_bootstrap_tools+=usr.sbin/tzsetup
+-.endif
+-
+ .if defined(BOOTSTRAP_ALL_TOOLS)
+ _other_bootstrap_tools+=${_basic_bootstrap_tools}
+ .for _subdir _links in ${_basic_bootstrap_tools_multilink}
+@@ -3277,10 +3264,8 @@
  cddl/lib/libdtrace__L: lib/libxo__L
  .endif
  # cddl/lib/libdtrace requires lib/libproc and lib/librtld_db
@@ -32,7 +44,7 @@ diff -Naur src.orig/Makefile.inc1 src/Makefile.inc1
  
  .if ${MK_CRYPT} != "no"
  .if ${MK_OPENSSL} != "no"
-@@ -3355,10 +3345,6 @@
+@@ -3355,10 +3340,6 @@
  .if ${MK_OPENSSL} == "no"
  lib/libradius__L: lib/libmd__L
  .endif
