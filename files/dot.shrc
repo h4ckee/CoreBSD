@@ -46,7 +46,7 @@ alias pwgen='LC_ALL=C tr -cd "A-Za-z0-9!#$%&*+,-.:=@^_~" < /dev/urandom | head -
 alias pull='rsync -4rlpogdchzvK --delete --files-from "$XDG_CONFIG_HOME"/.rsynclist backup:. "$HOME"/'
 alias push='rsync -4rlpogdchzv  --delete --files-from "$XDG_CONFIG_HOME"/.rsynclist "$HOME"/ backup:.'
 alias rsrc='$DOAS zfs rollback zroot/usr/src@default'
-alias psrc='$DOAS patch -s -V none -d /usr <'
+alias psrc='$DOAS patch -V none -d /usr <'
 
 function ..  { builtin cd ..    && ls; }
 function ... { builtin cd ../.. && ls; }
