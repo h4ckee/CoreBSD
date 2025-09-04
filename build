@@ -263,7 +263,7 @@ case "$COMMAND" in
 		delete_old
 		unmount_boot_environment
 		clean_directory "$OBJDIR"
-		#shutdown -r now
+		shutdown -r now
 		;;
 	image)	check_patched
 		clean_directory "$OBJDIR"
@@ -271,7 +271,7 @@ case "$COMMAND" in
 		build_world
 		build_kernel
 		build_image
-#		clean_directory "$OBJDIR"
+		clean_directory "$OBJDIR"
 		echo '--------------------------------------------------------------'
 		echo ">>> Building COREBSD image completed at $( date )"
 		echo '--------------------------------------------------------------'
