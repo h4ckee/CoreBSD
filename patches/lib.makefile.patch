@@ -1,6 +1,6 @@
 diff -Naur src.orig/lib/Makefile src/lib/Makefile
---- src.orig/lib/Makefile	2025-06-06 00:04:20.000000000 +0000
-+++ src/lib/Makefile	2025-07-02 13:51:06.596209000 +0000
+--- src.orig/lib/Makefile	2025-06-05 20:04:20.000000000 -0400
++++ src/lib/Makefile	2025-09-06 10:23:51.184651000 -0400
 @@ -29,17 +29,10 @@
  
  SUBDIR=	${SUBDIR_BOOTSTRAP} \
@@ -130,12 +130,3 @@ diff -Naur src.orig/lib/Makefile src/lib/Makefile
  SUBDIR.${MK_PF}+=	libpfctl
  SUBDIR.${MK_PMC}+=	libpmc libpmcstat
  SUBDIR.${MK_RADIUS_SUPPORT}+=	libradius
-@@ -220,7 +182,7 @@
- SUBDIR.${MK_TESTS_SUPPORT}+=	liblutok
- SUBDIR.${MK_TESTS}+=	tests
- SUBDIR.${MK_UNBOUND}+=	libunbound
--SUBDIR.${MK_USB}+=	libusbhid libusb
-+SUBDIR.${MK_USB}+=	libusb
- SUBDIR.${MK_OFED}+=	ofed
- SUBDIR.${MK_VERIEXEC}+=	libveriexec
- SUBDIR.${MK_ZFS}+=	libbe

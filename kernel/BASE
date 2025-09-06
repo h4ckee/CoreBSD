@@ -82,19 +82,19 @@ device		firmware
 device		xz
 device		bpf
 device		netmap
-#options	EVDEV_SUPPORT
+options		EVDEV_SUPPORT
 device		evdev
 device		uinput
 device		ehci
 device		ums
+device		hkbd
 device		ukbd
 device		umass
 device		usb
-#device		usbhid
-#device		uhid
+device		usbhid
 device		hid
-#device		hidbus
-#options	IICHID_SAMPLING
+device		hidbus
+options		IICHID_SAMPLING
 
 envvar		kern.hostid="0"
 envvar		kern.hostuuid="CoreBSD"

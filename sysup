@@ -1,5 +1,10 @@
 #!/bin/sh
 
+mkdir -p /usr/local/etc/pkg/repos /usr/local/pkgs
+cp configs/local.conf /usr/local/etc/pkg/repos/
+cp ~/llvm19/llvm19*.pkg /usr/local/pkgs/
+pkg repo /usr/local/pkgs
+
 build_pkgs() {
 	if [ ! -f /etc/wpa_supplicant.conf ]; then
 		cat <<- 'END' | unexpand > /etc/wpa_supplicant.conf
