@@ -219,7 +219,7 @@ done
 mount -t devfs devfs "$mountdir"/dev
 chroot "$mountdir" /usr/bin/passwd root
 if [ "$username" ]; then
-	chroot "$mountdir" /usr/sbin/pw useradd "$username" -G wheel,operator,video -m
+	chroot "$mountdir" /usr/sbin/pw useradd "$username" -G wheel,operator,video -L russian -m
 	chroot "$mountdir" /usr/bin/passwd -l "$username"
 fi
 

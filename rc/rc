@@ -91,7 +91,9 @@ if ! mount -uw /; then
 fi
 
 zfs mount -a || echo >&2 'Mounting ZFS filesystems failed'
+
 mount -a -t nonfs,nosmbfs || echo >&2 'Mounting fstab filesystems failed'
+
 swapon -aq || echo >&2 'Enabling swap failed'
 
 source /etc/rc.d/ldconfig
@@ -110,7 +112,9 @@ if [ -s /var/db/entropy ]; then
 fi
 
 newsyslog -CN
+
 adjkerntz -i
+
 hostname "$hostname"
 
 for mixer in /dev/mixer[0-9]; do

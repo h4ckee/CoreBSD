@@ -31,7 +31,15 @@ for entropyfile in /var/db/entropy /boot/entropy; do
 done
 
 sync
-swapoff -aq || echo >&2 'Disabling swap failed'
-umount -a || echo >&2 'Unmounting fstab filesystems failed'
-sleep 0.5
-zfs unmount -a || echo -n 'Unmounting ZFS filesystems failed'
+
+swapoff -aq
+
+if ! umount -a &> /dev/null; then
+	umount -af
+fi
+
+sleep 1
+
+if ! zfs unmount -a &> /dev/null; then
+	zfs unmount -af
+fi

@@ -69,16 +69,17 @@ patch_sources() {
 		patch -s -V none -d /usr < "$patch" || exit 1
 	done
 
-	cp -R "$CURDIR"/mksh			"$SRCDIR"/bin/
-	cp -R "$CURDIR"/rc/*			"$SRCDIR"/libexec/rc/
-	cp "$CURDIR"/livecd/*			"$SRCDIR"/release/
-	cp "$CURDIR"/kernel/*			"$SRCDIR"/sys/amd64/conf/
-	cp "$CURDIR"/files/loader*		"$SRCDIR"/stand/defaults/
-	cp "$CURDIR"/files/dot.*		"$SRCDIR"/share/skel/
-	cp "$CURDIR"/files/sysctl.conf		"$SRCDIR"/sbin/sysctl/
-	cp "$CURDIR"/files/pf.conf		"$SRCDIR"/sbin/pfctl/
-	cp "$CURDIR"/files/etcupdate.conf	"$SRCDIR"/usr.sbin/etcupdate/
-	cp "$CURDIR"/files/service.sh		"$SRCDIR"/usr.sbin/service/
+	cp -R "$CURDIR"/mksh				"$SRCDIR"/bin/
+	cp -R "$CURDIR"/rc/*				"$SRCDIR"/libexec/rc/
+	cp "$CURDIR"/livecd/*				"$SRCDIR"/release/
+	cp "$CURDIR"/kernel/*				"$SRCDIR"/sys/amd64/conf/
+	cp "$CURDIR"/files/loader*			"$SRCDIR"/stand/defaults/
+	cp "$CURDIR"/files/dot.*			"$SRCDIR"/share/skel/
+	cp "$CURDIR"/files/sysctl.conf			"$SRCDIR"/sbin/sysctl/
+	cp "$CURDIR"/files/pf.conf			"$SRCDIR"/sbin/pfctl/
+	cp "$CURDIR"/files/etcupdate.conf		"$SRCDIR"/usr.sbin/etcupdate/
+	cp "$CURDIR"/files/FreeBSD.conf.quarterly	"$SRCDIR"/usr.sbin/pkg/
+	cp "$CURDIR"/files/service.sh			"$SRCDIR"/usr.sbin/service/
 
 	ln "$SRCDIR"/sys/amd64/conf/COREBSD.hints "$SRCDIR"/sys/amd64/conf/DESKTOP.hints
 	cat "$CURDIR"/kernel/COREBSD.hints "$CURDIR"/kernel/LAPTOP.hints > "$SRCDIR"/sys/amd64/conf/LAPTOP.hints
@@ -156,7 +157,7 @@ set_environment() {
 			export KERNCONF="DESKTOP"
 			export MODULES_OVERRIDE="libiconv cd9660_iconv msdosfs_iconv ath ath_hal_ar9300 ath_rate coretemp \
 				i2c/controllers/ichsmb i2c/smbus sound/driver/emu10k1 wlan wlan_ccmp wlan_amrr \
-				i2c/iic i2c/iicbb i2c/iicbus linuxkpi linuxkpi_video backlight lindebugfs pseudofs"
+				i2c/iic i2c/iicbb i2c/iicbus linuxkpi linuxkpi_hdmi linuxkpi_video backlight lindebugfs pseudofs"
 		fi
 		;;
 	*) echo "Profile for $HWMODEL is not defined"; exit 1 ;;
@@ -225,6 +226,12 @@ unmount_boot_environment() {
 	bectl activate -t be"$DATE" || exit 1
 }
 
+upgrade_pkgs() {
+	pkg -c "$DESTDIR" upgrade -f || exit 1
+	pkg -c "$DESTDIR" autoremove || exit 1
+	pkg -c "$DESTDIR" clean || exit 1
+}
+
 usage() {
 	cat <<- INFO
 	usage: "${0##*/}" <command>
@@ -260,6 +267,7 @@ case "$COMMAND" in
 		install_kernel
 		install_world
 		delete_old
+		upgrade_pkgs
 		unmount_boot_environment
 		clean_directory "$OBJDIR"
 		shutdown -r now

@@ -3,7 +3,7 @@
 # /etc/rc.d/ldconfig: configure the shared library cache
 #
 
-for dir in /lib /usr/lib /usr/local/lib /usr/local/lib/compat/pkg; do
+for dir in /lib /usr/lib /usr/local/lib /usr/local/lib/compat/pkg /usr/local/lib/base; do
         [ -d "$dir" ] && libdirs+=("$dir")
 done
 

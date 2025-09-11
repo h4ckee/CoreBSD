@@ -43,8 +43,6 @@ alias pss='ps -A -o pid,args'
 alias kldstat='kldstat -h'
 alias eject='cdcontrol eject cd0'
 alias pwgen='LC_ALL=C tr -cd "A-Za-z0-9!#$%&*+,-.:=@^_~" < /dev/urandom | head -c 36'
-alias pull='rsync -4rlpogdchzvK --delete --files-from "$XDG_CONFIG_HOME"/.rsynclist backup:. "$HOME"/'
-alias push='rsync -4rlpogdchzv  --delete --files-from "$XDG_CONFIG_HOME"/.rsynclist "$HOME"/ backup:.'
 alias rsrc='$DOAS zfs rollback zroot/usr/src@default'
 alias psrc='$DOAS patch -V none -d /usr <'
 
@@ -52,9 +50,21 @@ function ..  { builtin cd ..    && ls; }
 function ... { builtin cd ../.. && ls; }
 function cd  { builtin cd "$@"  && ls; }
 
+pull() {
+	[ "$1" == '-n' ] && local dry_run='n'
+	rsync -4rlpogdchzvK$dry_run --delete --files-from "$XDG_CONFIG_HOME"/.rsync_home backup:. "$HOME"/
+	rsync -4rlpogdchzvK$dry_run --delete --files-from "$XDG_CONFIG_HOME"/.rsync_root backup:. /
+}
+
+push() {
+	[ "$1" == '-n' ] && local dry_run='n'
+	rsync -4rlpogdchzv$dry_run --delete --files-from "$XDG_CONFIG_HOME"/.rsync_home "$HOME"/ backup:.
+	rsync -4rlpogdchzv$dry_run --delete --files-from "$XDG_CONFIG_HOME"/.rsync_root / backup:.
+}
+
 pkgrm() {
-	if "$DOAS" pkg delete -q "$@"; then
-		"$DOAS" pkg autoremove -qy
+	if "$DOAS" pkg delete -y "$@"; then
+		"$DOAS" pkg autoremove -yq
 	fi
 }
 

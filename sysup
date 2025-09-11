@@ -104,3 +104,6 @@ build_pkgs() {
 }
 
 # pkg install xorg-minimal xset xsetroot xmodmap xrdb xclip setxkbmap mkfontscale cursor-dmz-theme drm-61-kmod libva-intel-driver ungoogled-chromium optipng mpv nsxiv aria2 bspwm xtitle sterm dmenu micro lemonbar-xft opendoas openrsync rdate jetbrains-mono paratype
+# lemonbar-xft sterm aria2 dmenu rdate slock bsdfan setxkbmap xprop
+# mpv libva-intel-driver
+

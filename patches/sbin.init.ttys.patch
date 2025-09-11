@@ -1,31 +1,18 @@
 diff -Naur src.orig/sbin/init/ttys src/sbin/init/ttys
---- src.orig/sbin/init/ttys	2025-06-06 00:04:20.000000000 +0000
-+++ src/sbin/init/ttys	2025-06-29 17:02:30.532139000 +0000
-@@ -34,19 +34,16 @@
+--- src.orig/sbin/init/ttys	2025-06-05 20:04:20.000000000 -0400
++++ src/sbin/init/ttys	2025-09-07 03:44:22.573417000 -0400
+@@ -33,10 +33,10 @@
+ ttyv1	"/usr/libexec/getty Pc"		xterm	onifexists secure
  ttyv2	"/usr/libexec/getty Pc"		xterm	onifexists secure
  ttyv3	"/usr/libexec/getty Pc"		xterm	onifexists secure
- ttyv4	"/usr/libexec/getty Pc"		xterm	onifexists secure
+-ttyv4	"/usr/libexec/getty Pc"		xterm	onifexists secure
 -ttyv5	"/usr/libexec/getty Pc"		xterm	onifexists secure
 -ttyv6	"/usr/libexec/getty Pc"		xterm	onifexists secure
 -ttyv7	"/usr/libexec/getty Pc"		xterm	onifexists secure
--ttyv8	"/usr/local/bin/xdm -nodaemon"	xterm	off secure
-+ttyv5	"/usr/local/bin/xdm -nodaemon"	xterm	off secure
++ttyv4	"/usr/libexec/getty Pc"		xterm	off secure
++ttyv5	"/usr/libexec/getty Pc"		xterm	off secure
++ttyv6	"/usr/libexec/getty Pc"		xterm	off secure
++ttyv7	"/usr/libexec/getty Pc"		xterm	off secure
+ ttyv8	"/usr/local/bin/xdm -nodaemon"	xterm	off secure
  # Serial terminals
  # The 'dialup' keyword identifies dialin lines to login, fingerd etc.
--ttyu0	"/usr/libexec/getty 3wire"	vt100	onifconsole secure
--ttyu1	"/usr/libexec/getty 3wire"	vt100	onifconsole secure
--ttyu2	"/usr/libexec/getty 3wire"	vt100	onifconsole secure
--ttyu3	"/usr/libexec/getty 3wire"	vt100	onifconsole secure
-+#ttyu0	"/usr/libexec/getty 3wire"	vt100	onifconsole secure
-+#ttyu1	"/usr/libexec/getty 3wire"	vt100	onifconsole secure
-+#ttyu2	"/usr/libexec/getty 3wire"	vt100	onifconsole secure
-+#ttyu3	"/usr/libexec/getty 3wire"	vt100	onifconsole secure
- # Dumb console
--dcons	"/usr/libexec/getty std.115200"	vt100	off secure
-+#dcons	"/usr/libexec/getty std.115200"	vt100	off secure
- # Xen Virtual console
--xc0	"/usr/libexec/getty Pc"		xterm	onifconsole secure
-+#xc0	"/usr/libexec/getty Pc"		xterm	onifconsole secure
- # RISC-V HTIF console
--rcons	"/usr/libexec/getty std.115200"	vt100	onifconsole secure
-+#rcons	"/usr/libexec/getty std.115200"	vt100	onifconsole secure
