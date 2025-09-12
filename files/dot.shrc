@@ -20,7 +20,6 @@ else
 	export PS4=$'\1\r\1\033[0;31m\1[${EPOCHREALTIME}]\1\033[m\1 '
 fi
 
-alias pkgin='$DOAS idprio 10 pkg install'
 alias root='$DOAS su -m'
 alias poweroff='$DOAS /sbin/shutdown -p now'
 alias reboot='$DOAS /sbin/shutdown -r now'
@@ -62,21 +61,25 @@ push() {
 	rsync -4rlpogdchzv$dry_run --delete --files-from "$XDG_CONFIG_HOME"/.rsync_root / backup:.
 }
 
+pkgin() {
+	"$DOAS" idprio 10 pkg install "$@"
+}
+
 pkgrm() {
 	if "$DOAS" pkg delete -y "$@"; then
 		"$DOAS" pkg autoremove -yq
 	fi
 }
 
-pkginfo() {
+pkgnf() {
 	case "$1" in
 	-i)	pkg query -a "%n-%v" ;;
-	-l)	pkg info "$@" 2>/dev/null || echo "${2}:"; sed 's/^/	/' /usr/ports/${2}/pkg-plist 2>/dev/null ;;
+	-l)	pkg info "$@" 2>/dev/null ;;
 	-d)	pkg info "$@" 2>/dev/null || pkg rquery "\t%dn-%dv" "$2" ;;
 	-r)	pkg info "$@" 2>/dev/null || pkg rquery "\t%rn-%rv" "$2" ;;
 	-o)	pkg which "$2" ;;
 	''|-*)	cat <<- INFO ;;
-		usage: pkginfo [options] <package>
+		usage: pkgnf [options] <package>
 		   <package>       list <package> information
 		   -i              list installed packages
 		   -l <package>    list files in <package>
@@ -88,11 +91,11 @@ pkginfo() {
 	esac
 }
 
-pkgseek() {
+pkgsr() {
 	case "$1" in
 	-c)	pkg search -c "$@" | sort ;;
 	''|-*)	cat <<- INFO ;;
-		usage: pkgseek [options] <package>
+		usage: pkgsr [options] <package>
 		   <package>       search for <package> in names
 		   -c <package>    search for <package> in comments
 		INFO
@@ -103,7 +106,8 @@ pkgseek() {
 bkup() {
 	TMPDIR=$(mktemp -d)
 	echo -n 'Syncing ...'
-	rsync -rlpogdchzqK --delete --files-from "$XDG_CONFIG_HOME"/.rsync_list backup:. "$TMPDIR"/
+	rsync -rlpogdchzqK --delete --files-from "$XDG_CONFIG_HOME"/.rsync_home backup:. "$TMPDIR"/
+	rsync -rlpogdchzqK --delete --files-from "$XDG_CONFIG_HOME"/.rsync_root backup:. "$TMPDIR"/
 	echo -n ' Compressing ...'
 	tar Jcf "$HOME"/backup-$(date +'%Y-%m-%d').txz -C "$TMPDIR" .
 	\rm -rf "$TMPDIR"

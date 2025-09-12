@@ -1,0 +1,11 @@
+diff -Naur src.orig/kerberos5/Makefile src/kerberos5/Makefile
+--- src.orig/kerberos5/Makefile	2025-06-05 20:04:20.000000000 -0400
++++ src/kerberos5/Makefile	2025-09-12 05:55:15.128968000 -0400
+@@ -1,6 +1,5 @@
+ 
+-SUBDIR=	lib .WAIT \
+-	libexec tools usr.bin usr.sbin
++SUBDIR=	lib .WAIT
+ SUBDIR_PARALLEL=
+ 
+ # These are the programs which depend on Kerberos.
