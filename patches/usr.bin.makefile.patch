@@ -1,6 +1,6 @@
 diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
---- src.orig/usr.bin/Makefile	2025-06-06 03:04:26.000000000 +0300
-+++ src/usr.bin/Makefile	2025-06-15 11:05:18.347010000 +0300
+--- src.orig/usr.bin/Makefile	2025-06-06 04:04:26.000000000 +0400
++++ src/usr.bin/Makefile	2025-09-12 20:29:25.846170000 +0400
 @@ -2,43 +2,29 @@
  
  .include <src.opts.mk>
@@ -182,7 +182,7 @@ diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
  	yes \
  	zstd
  
-@@ -213,14 +136,12 @@
+@@ -213,16 +136,13 @@
  SUBDIR+=		gh-bc
  .else
  SUBDIR.${MK_OPENSSL}+=	bc
@@ -195,9 +195,11 @@ diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
  SUBDIR.${MK_ISCSI}+=	iscsictl
 -SUBDIR.${MK_KDUMP}+=	kdump
  SUBDIR.${MK_KDUMP}+=	truss
- SUBDIR.${MK_KERBEROS_SUPPORT}+=	compile_et
+-SUBDIR.${MK_KERBEROS_SUPPORT}+=	compile_et
  SUBDIR.${MK_LDNS_UTILS}+=	drill
-@@ -235,20 +156,16 @@
+ SUBDIR.${MK_LDNS_UTILS}+=	host
+ SUBDIR.${MK_LIB32}+=	ldd32
+@@ -235,20 +155,16 @@
  SUBDIR.${MK_MAKE}+=	bmake
  SUBDIR.${MK_MAN_UTILS}+=	man
  SUBDIR.${MK_NETCAT}+=	nc
@@ -218,7 +220,7 @@ diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
  SUBDIR.${MK_TFTP}+=	tftp
  .if ${MK_LLVM_BINUTILS} == "no"
  # Only build the elftoolchain tools if we aren't using the LLVM ones.
-@@ -266,26 +183,14 @@
+@@ -266,26 +182,14 @@
  .if ${MK_LLVM_BINUTILS} == "no" || !make(install)
  SUBDIR+=			strings
  .endif

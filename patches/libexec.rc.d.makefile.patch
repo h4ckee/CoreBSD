@@ -1,6 +1,6 @@
 diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
---- src.orig/libexec/rc/rc.d/Makefile	2025-06-06 00:04:20.000000000 +0000
-+++ src/libexec/rc/rc.d/Makefile	2025-09-02 09:50:23.356072000 +0000
+--- src.orig/libexec/rc/rc.d/Makefile	2025-06-06 04:04:20.000000000 +0400
++++ src/libexec/rc/rc.d/Makefile	2025-09-12 19:53:02.318122000 +0400
 @@ -5,109 +5,13 @@
  CONFGROUPS=	CONFS
  CONFSPACKAGE=	rc
@@ -113,7 +113,7 @@ diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
  
  CONFGROUPS+=		DEVD
  DEVD=			devd
-@@ -121,14 +25,6 @@
+@@ -121,236 +25,26 @@
  DHCLIENT=		dhclient
  DHCLIENTPACKAGE=	dhclient
  
@@ -125,10 +125,126 @@ diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
 -RESOLVCONF=		resolv
 -RESOLVCONFPACKAGE=	resolvconf
 -
- .if ${MK_NIS} != "no"
- CONFS+=	ypbind \
- 	ypldap \
-@@ -252,7 +148,6 @@
+-.if ${MK_NIS} != "no"
+-CONFS+=	ypbind \
+-	ypldap \
+-	yppasswdd \
+-	ypserv \
+-	ypset \
+-	ypupdated \
+-	ypxfrd
+-.endif
+-
+-.if ${MK_ACCT} != "no"
+-CONFGROUPS+=	ACCT
+-ACCT+=		accounting
+-ACCTPACKAGE=	acct
+-.endif
+-
+ .if ${MK_ACPI} != "no"
+ CONFGROUPS+=	ACPI
+ ACPI=		power_profile
+ ACPIPACKAGE=	acpi
+ .endif
+ 
+-.if ${MK_APM} != "no"
+-CONFGROUPS+=	APM
+-APM+=		apm
+-.if ${MACHINE} == "i386"
+-APM+=		apmd
+-.endif
+-APMPACKAGE=	apm
+-.endif
+-
+-.if ${MK_AUDIT} != "no"
+-CONFGROUPS+=	AUDIT
+-AUDIT+=		auditd
+-AUDIT+=		auditdistd
+-AUDITPACKAGE=	rc
+-.endif
+-
+-.if ${MK_AUTOFS} != "no"
+-CONFS+=		automount
+-CONFS+=		automountd
+-CONFS+=		autounmountd
+-.endif
+-
+-.if ${MK_BLACKLIST} != "no"
+-_blacklistd+=	blacklistd
+-.endif
+-
+-.if ${MK_BLUETOOTH} != "no"
+-CONFGROUPS+=	BLUETOOTH
+-BLUETOOTH+=	bluetooth \
+-		bthidd \
+-		hcsecd \
+-		rfcomm_pppd_server \
+-		sdpd \
+-		ubthidhci
+-BLUETOOTHPACKAGE=	bluetooth
+-.endif
+-
+-.if ${MK_BOOTPARAMD} != "no"
+-CONFS+=		bootparams
+-.endif
+-
+-.if ${MK_BSNMP} != "no"
+-CONFGROUPS+=	BSNMP
+-BSNMP+=		bsnmpd
+-BSNMPPACKAGE=	bsnmp
+-.endif
+-
+-.if ${MK_CCD} != "no"
+-CONFS+=		ccd
+-.endif
+-
+-.if ${MK_FTP} != "no"
+-CONFS+=		ftpd
+-.endif
+-
+-.if ${MK_GSSAPI} != "no"
+-CONFGROUPS+=	GSSD
+-GSSD=		gssd
+-GSSDPACKAGE=	kerberos
+-.endif
+-
+-.if ${MK_HAST} != "no"
+-CONFGROUPS+=	HAST
+-HAST=		hastd
+-HASTPACKAGE=	hast
+-.endif
+-
+-.if ${MK_INETD} != "no"
+-CONFS+=		inetd
+-.endif
+-
+-.if ${MK_IPFILTER} != "no"
+-CONFS+=	ipfilter \
+-	ipfs \
+-	ipmon \
+-	ipnat \
+-	ippool
+-.endif
+-
+-.if ${MK_IPFW} != "no"
+-CONFS+=		ipfw \
+-		dnctl
+-.if ${MK_NETGRAPH} != "no"
+-CONFS+=		ipfw_netflow
+-.endif
+-.endif
+-
+-.if ${MK_ISCSI} != "no"
+-CONFS+=		iscsictl
+-CONFS+=		iscsid
+-.endif
+-
+-.if ${MK_JAIL} != "no"
+-CONFGROUPS+=	JAIL
+-JAIL+=		jail
+-JAILPACKAGE=	jail
+-.endif
+-
  .if ${MK_LEGACY_CONSOLE} != "no"
  CONFGROUPS+=	CONSOLE
  CONSOLE+=	moused
@@ -136,10 +252,35 @@ diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
  CONSOLEPACKAGE=	console-tools
  .endif
  
-@@ -285,24 +180,12 @@
- _opensm=	opensm
- .endif
- 
+-.if ${MK_LPR} != "no"
+-CONFS+=		lpd
+-.endif
+-
+-.if ${MK_KERBEROS} != "no"
+-CONFS+=		ipropd_master
+-CONFS+=		ipropd_slave
+-_kadmind=	kadmind
+-_kdc=		kdc
+-_kfd=		kfd
+-_kpasswdd=	kpasswdd
+-
+-DIRS+=	VAR_HEMIDAL
+-VAR_HEMIDAL=	/var/heimdal
+-VAR_HEMIDAL_MODE=	700
+-.endif
+-
+-.if ${MK_NS_CACHING} != "no"
+-_nscd=		nscd
+-.endif
+-
+-.if ${MK_NTP} != "no"
+-CONFS+=		ntpd
+-.endif
+-
+-.if ${MK_OFED} != "no"
+-_opensm=	opensm
+-.endif
+-
 -.if ${MK_OPENSSL} != "no"
 -CONFS+=		keyserv
 -.if ${MK_OPENSSL_KTLS} != "no"
@@ -158,17 +299,38 @@ diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
 -CONFS+=		ftp-proxy
 -.endif
 -
- .if ${MK_ROUTED} != "no"
- CONFS+=		routed
- .endif
-@@ -331,26 +214,11 @@
- 
- .if ${MK_VI} != "no"
- CONFGROUPS+=	VI
+-.if ${MK_ROUTED} != "no"
+-CONFS+=		routed
+-.endif
+-
+-.if ${MK_SENDMAIL} != "no"
+-CONFGROUPS+=	SMRCD
+-SMRCD=		sendmail
+-SMRCDPACKAGE=	sendmail
+-.endif
+-
+-.if ${MK_NUAGEINIT} != "no"
+-CONFGROUPS+=	NIUAGEINIT
+-NIUAGEINIT=		nuageinit
+-NIUAGEINITPACKAGE=	nuageinit
+-.endif
+-
+-.if ${MK_UNBOUND} != "no"
+-CONFGROUPS+=	UNBOUND
+-UNBOUND+=	local_unbound
+-UNBOUNDPACKAGE=	unbound
+-.endif
+-
+-.if ${MK_UTMPX} != "no"
+-_utx=		utx
+-.endif
+-
+-.if ${MK_VI} != "no"
+-CONFGROUPS+=	VI
 -VI+=		virecover
- VIPACKAGE=	vi
- .endif
- 
+-VIPACKAGE=	vi
+-.endif
+-
  .if ${MK_WIRELESS} != "no"
 -CONFS+=		hostapd
  CONFS+=		wpa_supplicant

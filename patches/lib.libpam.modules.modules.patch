@@ -1,7 +1,7 @@
 diff -Naur src.orig/lib/libpam/modules/modules.inc src/lib/libpam/modules/modules.inc
---- src.orig/lib/libpam/modules/modules.inc	2024-11-29 03:03:42.000000000 +0300
-+++ src/lib/libpam/modules/modules.inc	2025-06-04 11:49:32.000532000 +0300
-@@ -2,13 +2,8 @@
+--- src.orig/lib/libpam/modules/modules.inc	2025-06-06 04:04:20.000000000 +0400
++++ src/lib/libpam/modules/modules.inc	2025-09-12 20:54:51.710166000 +0400
+@@ -2,32 +2,20 @@
  .include <src.opts.mk>
  
  MODULES		 =
@@ -12,10 +12,10 @@ diff -Naur src.orig/lib/libpam/modules/modules.inc src/lib/libpam/modules/module
 -MODULES		+= pam_ftpusers
  MODULES		+= pam_group
 -MODULES		+= pam_guest
- .if ${MK_KERBEROS} != "no"
- MODULES		+= pam_krb5
- MODULES		+= pam_ksu
-@@ -16,18 +11,15 @@
+-.if ${MK_KERBEROS} != "no"
+-MODULES		+= pam_krb5
+-MODULES		+= pam_ksu
+-.endif
  MODULES		+= pam_lastlog
  MODULES		+= pam_login_access
  MODULES		+= pam_nologin
