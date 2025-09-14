@@ -271,7 +271,7 @@ case "$COMMAND" in
 		clean_directory "${DESTDIR}${OBJDIR}"
 		unmount_boot_environment
 		clean_directory "$OBJDIR"
-#		shutdown -r now
+		shutdown -r now
 		;;
 	image)	check_patched
 		clean_directory "$OBJDIR"
