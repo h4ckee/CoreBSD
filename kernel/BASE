@@ -12,7 +12,6 @@ options		PREEMPTION
 options		INET
 options		TCP_OFFLOAD
 options		TCP_RFC7413
-options		TCP_BBR
 options		KERN_TLS
 options		MSDOSFS
 options		CD9660

@@ -20,11 +20,11 @@ packages=(
 	mkfontscale
 	mpv
 	nsxiv
-	openrsync
 	optipng
 	paratype
 	pkg
 	rdate
+	rsync
 	setxkbmap
 	slock
 	sterm
@@ -40,22 +40,22 @@ packages=(
 )
 #	openntpd
 
-dependencies=(
-	curl
-	desktop-file-utils
-	llvm19
-)
+# dependencies=(
+# 	curl
+# 	desktop-file-utils
+# 	llvm19
+# )
 
-pkg update
+# pkg update
 
 mkdir -p /usr/local/etc/pkg/repos /usr/local/pkgs
 cp configs/local.conf /usr/local/etc/pkg/repos/
 cp ~/llvm19/llvm19*.pkg /usr/local/pkgs/
 pkg repo /usr/local/pkgs
 
-for dependency in "${dependencies[@]}"; do
-	sqlite3 /var/db/pkg/local.sqlite "delete from deps where name='$dependency';"
-done
+# for dependency in "${dependencies[@]}"; do
+# 	sqlite3 /var/db/pkg/local.sqlite "delete from deps where name='$dependency';"
+# done
 
 for package in "${packages[@]}"; do
 	pkg info -e "$package" || pkg install -y "$package"

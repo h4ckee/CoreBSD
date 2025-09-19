@@ -21,7 +21,11 @@ trap "echo 'Boot interrupted'; exit 1" 3
 
 export RC_BOOT='1'
 export HOME='/'
-export PATH='/sbin:/bin:/usr/sbin:/usr/bin'
+
+PATH='/sbin:/bin:/usr/sbin:/usr/bin'
+[ -d /usr/local/sbin ] && PATH="${PATH}:/usr/local/sbin"
+[ -d /usr/local/bin ] && PATH="${PATH}:/usr/local/bin"
+export PATH
 
 if (( ${#modules[@]} )); then
 	devctl freeze
@@ -142,8 +146,18 @@ if (( ${#services[@]} )); then
 	for service in "${services[@]}"; do
 		case "$service" in
 			\!*)	continue ;;
-			\@*)	( /etc/rc.d/"${service#@}" start ) &> /dev/ttyv0 & ;;
-			*)	/etc/rc.d/"$service" start ;;
+			\@*)	if [ -x /etc/rc.d/"${service#@}" ]; then
+					( /etc/rc.d/"${service#@}" start ) &> /dev/ttyv0 &
+				elif [ -x /usr/local/etc/rc.d/"${service#@}" ]; then
+					( /usr/local/etc/rc.d/"${service#@}" start ) &> /dev/ttyv0 &
+				fi
+				;;
+			*)	if [ -x /etc/rc.d/"$service" ]; then
+					/etc/rc.d/"$service" start
+				elif [ -x /usr/local/etc/rc.d/"$service" ]; then
+					/usr/local/etc/rc.d/"$service" start
+				fi
+				;;
 		esac
 	done
 fi

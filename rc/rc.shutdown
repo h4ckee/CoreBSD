@@ -8,14 +8,23 @@ source /etc/rc.conf
 trap : 2 3
 
 export HOME='/'
-export PATH='/sbin:/bin:/usr/sbin:/usr/bin'
+
+PATH='/sbin:/bin:/usr/sbin:/usr/bin'
+[ -d /usr/local/sbin ] && PATH="${PATH}:/usr/local/sbin"
+[ -d /usr/local/bin ] && PATH="${PATH}:/usr/local/bin"
+export PATH
 
 if (( ${#services[@]} )); then
 	i=${#services[@]}
 	while (( --i >= 0 )); do
 		case "${services[$i]}" in
 		\!*)	;;
-		*)	/etc/rc.d/"${services[$i]#@}" stop ;;
+		*)	if [ -x /etc/rc.d/"${services[$i]#@}" ]; then
+				/etc/rc.d/"${services[$i]#@}" stop
+			elif [ -x /usr/local/etc/rc.d/"${services[$i]#@}" ]; then
+				/usr/local/etc/rc.d/"${services[$i]#@}" stop
+			fi
+			;;
 		esac
 	done
 fi

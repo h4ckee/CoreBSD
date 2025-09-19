@@ -182,7 +182,6 @@ install_world() {
 	etcupdate resolve -p -D "$DESTDIR"
 	chflags -R noschg "$DESTDIR"
 	find "$DESTDIR" -mindepth 1 \( \
-		-path "$DESTDIR"/entropy -o \
 		-path "$DESTDIR"/boot/\*hints -o \
 		-path "$DESTDIR"/boot/kernel\* -o \
 		-path "$DESTDIR"/boot/loader.conf\* -o \
@@ -190,14 +189,14 @@ install_world() {
 		-path "$DESTDIR"/home\* -o \
 		-path "$DESTDIR"/root\* -o \
 		-path "$DESTDIR"/usr/local\* -o \
-		-path "$DESTDIR"/usr/obj\* -o \
 		-path "$DESTDIR"/sys\* -o \
 		-path "$DESTDIR"/var/cache\* -o \
 		-path "$DESTDIR"/var/db\* -o \
-		-path "$DESTDIR"/var/empty\* -o \
-		-path "$DESTDIR"/var/run\* -o \
-		-path "$DESTDIR"/zroot\* \) \
+		-path "$DESTDIR"/var/run\* \) \
 		-prune -o -delete
+#		-path "$DESTDIR"/usr/obj\* -o \
+#		-path "$DESTDIR"/var/empty\* -o \
+#		-path "$DESTDIR"/zroot\* \) \
 	make -C "$SRCDIR" installworld || exit 1
 	for dir in geom libutil libpam/modules; do
 		make -C "$SRCDIR"/lib/"$dir" all-man maninstall || exit 1
@@ -268,7 +267,7 @@ case "$COMMAND" in
 		install_world
 		delete_old
 #		upgrade_pkgs
-		clean_directory "${DESTDIR}${OBJDIR}"
+#		clean_directory "${DESTDIR}${OBJDIR}"
 		unmount_boot_environment
 		clean_directory "$OBJDIR"
 		shutdown -r now
