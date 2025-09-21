@@ -48,50 +48,59 @@ packages=(
 
 # pkg update
 
-mkdir -p /usr/local/etc/pkg/repos /usr/local/pkgs
-cp configs/local.conf /usr/local/etc/pkg/repos/
-cp ~/llvm19/llvm19*.pkg /usr/local/pkgs/
-pkg repo /usr/local/pkgs
+#mkdir -p /usr/local/etc/pkg/repos /usr/local/pkgs
+#cp configs/local.conf /usr/local/etc/pkg/repos/
+#cp ~/llvm19/llvm19*.pkg /usr/local/pkgs/
+#pkg repo /usr/local/pkgs
 
 # for dependency in "${dependencies[@]}"; do
 # 	sqlite3 /var/db/pkg/local.sqlite "delete from deps where name='$dependency';"
 # done
 
-for package in "${packages[@]}"; do
-	pkg info -e "$package" || pkg install -y "$package"
+# for package in "${packages[@]}"; do
+# 	pkg info -e "$package" || pkg install -y "$package"
+# done
+
+for i in "${!packages[@]}"; do
+	pkg info -e "${packages[i]}" && unset "packages[i]"
 done
 
-echo "0 */4 * * * root rdate -nav ru.pool.ntp.org" | crontab -
+packages=( "${packages[@]}" )
 
-build_pkgs() {
-	if [ ! -f /etc/wpa_supplicant.conf ]; then
-		cat <<- 'END' | unexpand > /etc/wpa_supplicant.conf
-			ctrl_interface=/var/run/wpa_supplicant
-			eapol_version=2
-			ap_scan=1
-			fast_reauth=1
+(( ${#packages[@]} )) && pkg install -y "${packages[@]}"
 
-			network={
-			        ssid="KPECT"
-			        psk=<SET KEYPASS HERE>
-			}
-		END
-	fi
-
-	if [ ! -f ${DSTDIR}/etc/ntpd.conf ]; then
-		cat <<- 'END' > ${DSTDIR}/etc/ntpd.conf
-			servers by.pool.ntp.org
-			sensor *
-			constraints from "https://ya.ru"
-		END
-	fi
-
-	# if ! sysrc -qc sndiod_enable; then
-	# 	sysrc sndiod_enable="YES"
-	# 	sysrc sndiod_flags="-f rsnd/0 -c 0:7 -j on -m play -s default -m mon -s monitor"
-	# fi
-	if ! sysrc -qc openntpd_enable; then
-		sysrc openntpd_enable="YES"
-		sysrc openntpd_flags="-s"
-	fi
-}
+if ! crontab -u root -l | fgrep -q rdate; then
+	echo "0 */4 * * * root rdate -nav ru.pool.ntp.org" | crontab -
+fi
+# build_pkgs() {
+# 	if [ ! -f /etc/wpa_supplicant.conf ]; then
+# 		cat <<- 'END' | unexpand > /etc/wpa_supplicant.conf
+# 			ctrl_interface=/var/run/wpa_supplicant
+# 			eapol_version=2
+# 			ap_scan=1
+# 			fast_reauth=1
+#
+# 			network={
+# 			        ssid="KPECT"
+# 			        psk=<SET KEYPASS HERE>
+# 			}
+# 		END
+# 	fi
+#
+# 	if [ ! -f ${DSTDIR}/etc/ntpd.conf ]; then
+# 		cat <<- 'END' > ${DSTDIR}/etc/ntpd.conf
+# 			servers by.pool.ntp.org
+# 			sensor *
+# 			constraints from "https://ya.ru"
+# 		END
+# 	fi
+#
+# 	if ! sysrc -qc sndiod_enable; then
+# 		sysrc sndiod_enable="YES"
+# 		sysrc sndiod_flags="-f rsnd/0 -c 0:7 -j on -m play -s default -m mon -s monitor"
+# 	fi
+# 	if ! sysrc -qc openntpd_enable; then
+# 		sysrc openntpd_enable="YES"
+# 		sysrc openntpd_flags="-s"
+# 	fi
+# }
