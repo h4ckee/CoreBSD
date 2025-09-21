@@ -1,6 +1,6 @@
 cpu		HAMMER
 ident		BASE
-#maxusers	64
+maxusers	128
 
 options		BOOT_TAG=\"-------COREBSD-------\"
 options		EARLY_AP_STARTUP
@@ -15,22 +15,22 @@ options		TCP_RFC7413
 options		KERN_TLS
 options		MSDOSFS
 options		CD9660
-#options	LIBICONV
-#options	MSDOSFS_ICONV
-#options	CD9660_ICONV
+# options	LIBICONV
+# options	MSDOSFS_ICONV
+# options	CD9660_ICONV
 options		TMPFS
 options		GEOM_LABEL
 options		SCSI_NO_SENSE_STRINGS
 options		SCSI_NO_OP_STRINGS
 options		SCSI_DELAY=1000
-options		SYSVSHM
-options		SYSVMSG
-options		SYSVSEM
+# options	SYSVSHM
+# options	SYSVMSG
+# options	SYSVSEM
 options		_KPOSIX_PRIORITY_SCHEDULING
 options		PRINTF_BUFR_SIZE=128
 options		KBD_INSTALL_CDEV
-options		CAPABILITY_MODE
-options		CAPABILITIES
+# options	CAPABILITY_MODE
+# options	CAPABILITIES
 options		INCLUDE_CONFIG_FILE
 options		NO_SYSCTL_DESCR
 options		TERMINAL_NORM_ATTR=(FG_LIGHTGREY|BG_BLACK)
@@ -38,6 +38,8 @@ options		TERMINAL_KERN_ATTR=(FG_RED|BG_BLACK)
 
 nooptions	GEOM_PART_BSD
 nooptions	GEOM_PART_EBR
+nooptions	NETLINK
+nodevice	uart_ns8250
 
 device		pf
 device		pflog
@@ -45,9 +47,9 @@ options		ZFS
 options		ZSTDIO
 device		xdr
 device		cpufreq
-#device		coretemp
+# device	coretemp
 device		acpi
-#device		smbios
+# device	smbios
 options		IOMMU
 device		pci
 device		ahci
@@ -68,11 +70,11 @@ options		VT_FB_MAX_HEIGHT=600
 device		agp
 device		iflib
 device		em
-#device		wlan
-#device		wlan_ccmp
-#device		wlan_amrr
+# device	wlan
+# device	wlan_ccmp
+# device	wlan_amrr
 device		crypto
-device		cryptodev
+# device	cryptodev
 device		loop
 device		rdrand_rng
 device		ether

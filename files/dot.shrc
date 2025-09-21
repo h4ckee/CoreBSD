@@ -71,7 +71,7 @@ pkgrm() {
 	fi
 }
 
-pkgnf() {
+info() {
 	case "$1" in
 	-i)	pkg query -a "%n-%v" ;;
 	-l)	pkg info "$@" 2>/dev/null ;;
@@ -79,7 +79,7 @@ pkgnf() {
 	-r)	pkg info "$@" 2>/dev/null || pkg rquery "\t%rn-%rv" "$2" ;;
 	-o)	pkg which "$2" ;;
 	''|-*)	cat <<- INFO ;;
-		usage: pkgnf [options] <package>
+		usage: info [options] <package>
 		   <package>       list <package> information
 		   -i              list installed packages
 		   -l <package>    list files in <package>
@@ -91,11 +91,11 @@ pkgnf() {
 	esac
 }
 
-pkgsr() {
+seek() {
 	case "$1" in
 	-c)	pkg search -c "$@" | sort ;;
 	''|-*)	cat <<- INFO ;;
-		usage: pkgsr [options] <package>
+		usage: seek [options] <package>
 		   <package>       search for <package> in names
 		   -c <package>    search for <package> in comments
 		INFO
