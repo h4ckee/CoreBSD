@@ -228,10 +228,17 @@ upgrade_pkgs() {
 	pkg -c "$DESTDIR" clean || exit 1
 }
 
+show_stats() {
+	for dir in /bin /sbin /usr/bin /usr/sbin /usr/libexec /lib /usr/lib; do
+		printf "${dir}: %d\n" "$(find $dir -type f -depth 1 | wc -l)"
+	done | column -t
+}
+
 usage() {
 	cat <<- INFO
 	usage: "${0##*/}" <command>
 
+	    stats	- show current stats
 	    fetch	- fetch sources
 	    patch	- patch sources
 	    kernel	- update kernel
@@ -280,5 +287,6 @@ case "$COMMAND" in
 		echo '--------------------------------------------------------------'
 		echo "===> ${CURDIR}/CoreBSD-${CPUTYPE}-${VERSION}.iso"
 		;;
+	stats)	show_stats ;;
 	*)	usage ;;
 esac
