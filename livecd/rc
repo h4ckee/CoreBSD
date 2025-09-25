@@ -22,8 +22,8 @@ ln -sf cd0 /dev/cdrom
 mount -a
 swapon -aq
 mtree -deiU -f /etc/mtree/BSD.var.dist -p /var > /dev/null
-hostname livecd
 adjkerntz -i
+hostname livecd
 for ttyv in /dev/ttyv*; do
 	kbdcontrol -F -l ru -r normal -b off < "$ttyv" &> "$ttyv"
 	vidcontrol -t 300 -h 1000 < "$ttyv" &> "$ttyv"

@@ -11,6 +11,4 @@ else
 	export EDITOR='vi'
 fi
 export PAGER='less'
-export TERM='xterm'
 export ENV="${HOME}/.shrc"
-
