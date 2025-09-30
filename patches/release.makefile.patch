@@ -1,6 +1,6 @@
 diff -Naur src.orig/release/Makefile src/release/Makefile
 --- src.orig/release/Makefile	2025-06-06 04:04:20.000000000 +0400
-+++ src/release/Makefile	2025-09-25 10:30:52.561384000 +0400
++++ src/release/Makefile	2025-09-30 12:59:44.319167000 +0400
 @@ -180,16 +180,19 @@
  	mkdir -p ${.TARGET}
  	( cd ${WORLDDIR} && ${IMAKE} installworld installkernel distribution \
@@ -26,7 +26,7 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
  	done
  .if defined(NO_ROOT)
  	echo "./usr/freebsd-dist type=dir uname=root gname=wheel mode=0755" >> ${.TARGET}/METALOG
-@@ -202,13 +205,72 @@
+@@ -202,13 +205,45 @@
  	${PKG_INSTALL} wifi-firmware-kmod-release || true
  .endif
  # Set up installation environment
@@ -40,7 +40,8 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
  	echo kernels_autodetect=\"NO\" >> ${.TARGET}/boot/loader.conf
 -	echo loader_menu_multi_user_prompt=\"Installer\" >> ${.TARGET}/boot/loader.conf
 -	cp ${.CURDIR}/rc.local ${.TARGET}/etc
-+	echo hw.vga.textmode=\"0\" >> ${.TARGET}/boot/loader.conf
++	echo screen.font=\"8x14\" >> ${.TARGET}/boot/loader.conf
++	echo vbe_max_resolution=\"640x480\" >> ${.TARGET}/boot/loader.conf
 +	echo loader_brand_y=\"2\" >> ${.TARGET}/boot/loader.conf
 +	echo loader_logo_x=\"51\" >> ${.TARGET}/boot/loader.conf
 +	echo loader_logo_y=\"8\" >> ${.TARGET}/boot/loader.conf
@@ -57,49 +58,21 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
 +	cp ${.CURDIR}/corebsd.install ${.TARGET}/root
 +	mv ${.TARGET}/usr/share/zoneinfo/Etc/UTC ${.TARGET}/etc/localtime
 +	find ${.TARGET}/boot ${.TARGET}/etc ${.TARGET}/usr ${.TARGET}/var -mindepth 1 -type d -empty -delete
-+	rm -rf ${.TARGET}/etc/crontab \
-+	    ${.TARGET}/etc/devd* \
-+	    ${.TARGET}/etc/dhclient.conf \
-+	    ${.TARGET}/etc/etcupdate.conf \
-+	    ${.TARGET}/etc/fbtab \
-+	    ${.TARGET}/etc/hosts.* \
-+	    ${.TARGET}/etc/libmap.conf \
-+	    ${.TARGET}/etc/login.access \
-+	    ${.TARGET}/etc/mtree/BSD.include.dist \
-+	    ${.TARGET}/etc/mtree/BSD.root.dist \
-+	    ${.TARGET}/etc/mtree/BSD.usr.dist \
-+	    ${.TARGET}/etc/networks \
-+	    ${.TARGET}/etc/pam.d/cron \
-+	    ${.TARGET}/etc/pam.d/sshd \
-+	    ${.TARGET}/etc/pam.d/xdm \
-+	    ${.TARGET}/etc/ssl \
-+	    ${.TARGET}/etc/*syslog.conf \
-+	    ${.TARGET}/etc/rc.d \
-+	    ${.TARGET}/etc/rc.conf \
-+	    ${.TARGET}/etc/rc.suspend \
-+	    ${.TARGET}/sbin/devd \
-+	    ${.TARGET}/sbin/nologin \
++	rm -rf \
++	    ${.TARGET}/boot/fonts/!(8x14.fnt.gz) \
++	    ${.TARGET}/etc/{crontab,devd,fbtab,login.access,networks,ssl} \
++	    ${.TARGET}/etc/{devd,dhclient,etcupdate,libmap,rc,{,new}syslog}.conf \
++	    ${.TARGET}/etc/mtree/!(BSD.var.dist) \
++	    ${.TARGET}/etc/pam.d/{cron,sshd,xdm} \
++	    ${.TARGET}/etc/rc.{d,suspend} \
++	    ${.TARGET}/sbin/{devd,nologin} \
 +	    ${.TARGET}/usr/lib/libxo \
 +	    ${.TARGET}/usr/libdata \
 +	    ${.TARGET}/usr/libexec/flua \
-+	    ${.TARGET}/usr/bin/crontab \
-+	    ${.TARGET}/usr/bin/iconv \
-+	    ${.TARGET}/usr/sbin/cron \
-+	    ${.TARGET}/usr/sbin/etcupdate \
-+	    ${.TARGET}/usr/sbin/mixer \
-+	    ${.TARGET}/usr/sbin/moused \
-+	    ${.TARGET}/usr/sbin/newsyslog \
-+	    ${.TARGET}/usr/sbin/nologin \
-+	    ${.TARGET}/usr/sbin/powerd \
-+	    ${.TARGET}/usr/sbin/syslogd \
-+	    ${.TARGET}/usr/share/certs \
-+	    ${.TARGET}/usr/share/keys \
-+	    ${.TARGET}/usr/share/man \
-+	    ${.TARGET}/usr/share/mk \
-+	    ${.TARGET}/usr/share/skel \
-+	    ${.TARGET}/usr/share/zoneinfo \
-+	    ${.TARGET}/sys \
-+	    ${.TARGET}/tmp
++	    ${.TARGET}/usr/bin/{crontab,iconv} \
++	    ${.TARGET}/usr/sbin/{cron,etcupdate,mixer,moused,newsyslog,nologin,powerd,syslogd} \
++	    ${.TARGET}/usr/share/{certs,keys,man,mk,skel,zoneinfo} \
++	    ${.TARGET}/{sys,tmp}
 +	ln -sf /var/tmp ${.TARGET}/tmp
 +	ln -sf /var/run/resolv.conf ${.TARGET}/etc/resolv.conf
  .if defined(NO_ROOT)

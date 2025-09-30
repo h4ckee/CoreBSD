@@ -1,0 +1,215 @@
+diff -Naur src.orig/stand/common/gfx_fb.c src/stand/common/gfx_fb.c
+--- src.orig/stand/common/gfx_fb.c	2025-06-06 04:04:21.000000000 +0400
++++ src/stand/common/gfx_fb.c	2025-09-27 12:04:19.671891000 +0400
+@@ -222,6 +222,69 @@
+ 	return (true);
+ }
+ 
++/*
++ * Returns true if we set the color from pre-existing environment, false if
++ * just used existing defaults.
++ */
++static bool
++gfx_fb_evalcolor(const char *envname, teken_color_t *cattr,
++    ev_sethook_t sethook, ev_unsethook_t unsethook)
++{
++	const char *ptr;
++	char env[10];
++	int eflags = EV_VOLATILE | EV_NOKENV;
++	bool from_env = false;
++
++	ptr = getenv(envname);
++	if (ptr != NULL) {
++		*cattr = strtol(ptr, NULL, 10);
++
++		/*
++		 * If we can't unset the value, then it's probably hooked
++		 * properly and we can just carry on.  Otherwise, we want to
++		 * reinitialize it so that we can hook it for the console that
++		 * we're resetting defaults for.
++		 */
++		if (unsetenv(envname) != 0)
++			return (true);
++		from_env = true;
++
++		/*
++		 * If we're carrying over an existing value, we *do* want that
++		 * to propagate to the kenv.
++		 */
++		eflags &= ~EV_NOKENV;
++	}
++
++	snprintf(env, sizeof(env), "%d", *cattr);
++	env_setenv(envname, eflags, env, sethook, unsethook);
++
++	return (from_env);
++}
++
++void
++gfx_fb_setcolors(teken_attr_t *attr, ev_sethook_t sethook,
++     ev_unsethook_t unsethook)
++{
++	const char *ptr;
++	bool need_setattr = false;
++
++	/*
++	 * On first run, we setup an environment hook to process any color
++	 * changes.  If the env is already set, we pick up fg and bg color
++	 * values from the environment.
++	 */
++	if (gfx_fb_evalcolor("teken.fg_color", &attr->ta_fgcolor,
++	    sethook, unsethook))
++		need_setattr = true;
++	if (gfx_fb_evalcolor("teken.bg_color", &attr->ta_bgcolor,
++	    sethook, unsethook))
++		need_setattr = true;
++
++	if (need_setattr)
++		teken_set_defattr(&gfx_state.tg_teken, attr);
++}
++
+ static uint32_t
+ rgb_color_map(uint8_t index, uint32_t rmax, int roffset,
+     uint32_t gmax, int goffset, uint32_t bmax, int boffset)
+diff -Naur src.orig/stand/common/gfx_fb.h src/stand/common/gfx_fb.h
+--- src.orig/stand/common/gfx_fb.h	2025-06-06 04:04:21.000000000 +0400
++++ src/stand/common/gfx_fb.h	2025-09-27 11:56:51.250651000 +0400
+@@ -277,6 +277,7 @@
+ 
+ int gfx_fb_putimage(png_t *, uint32_t, uint32_t, uint32_t, uint32_t, uint32_t);
+ bool gfx_parse_mode_str(char *, int *, int *, int *);
++void gfx_fb_setcolors(teken_attr_t *, ev_sethook_t, ev_unsethook_t);
+ void term_image_display(teken_gfx_t *, const teken_rect_t *);
+ 
+ void reset_font_flags(void);
+diff -Naur src.orig/stand/common/modinfo.c src/stand/common/modinfo.c
+--- src.orig/stand/common/modinfo.c	2025-06-06 04:04:21.000000000 +0400
++++ src/stand/common/modinfo.c	2025-09-27 12:04:19.672854000 +0400
+@@ -167,6 +167,8 @@
+ 
+ 	/* Traverse the environment. */
+ 	for (ep = environ; ep != NULL; ep = ep->ev_next) {
++		if ((ep->ev_flags & EV_NOKENV) != 0)
++			continue;
+ 		len = strlen(ep->ev_name);
+ 		if ((size_t)archsw.arch_copyin(ep->ev_name, addr, len) != len)
+ 			break;
+diff -Naur src.orig/stand/efi/libefi/efi_console.c src/stand/efi/libefi/efi_console.c
+--- src.orig/stand/efi/libefi/efi_console.c	2025-06-06 04:04:21.000000000 +0400
++++ src/stand/efi/libefi/efi_console.c	2025-09-27 11:56:51.251753000 +0400
+@@ -1041,28 +1041,7 @@
+ 			a = teken_get_defattr(&gfx_state.tg_teken);
+ 			attr = *a;
+ 
+-			/*
+-			 * On first run, we set up the efi_set_colors()
+-			 * callback. If the env is already set, we
+-			 * pick up fg and bg color values from the environment.
+-			 */
+-			ptr = getenv("teken.fg_color");
+-			if (ptr != NULL) {
+-				attr.ta_fgcolor = strtol(ptr, NULL, 10);
+-				ptr = getenv("teken.bg_color");
+-				attr.ta_bgcolor = strtol(ptr, NULL, 10);
+-
+-				teken_set_defattr(&gfx_state.tg_teken, &attr);
+-			} else {
+-				snprintf(env, sizeof(env), "%d",
+-				    attr.ta_fgcolor);
+-				env_setenv("teken.fg_color", EV_VOLATILE, env,
+-				    efi_set_colors, env_nounset);
+-				snprintf(env, sizeof(env), "%d",
+-				    attr.ta_bgcolor);
+-				env_setenv("teken.bg_color", EV_VOLATILE, env,
+-				    efi_set_colors, env_nounset);
+-			}
++			gfx_fb_setcolors(&attr, efi_set_colors, env_nounset);
+ 		}
+ 	}
+ 
+diff -Naur src.orig/stand/i386/libi386/vidconsole.c src/stand/i386/libi386/vidconsole.c
+--- src.orig/stand/i386/libi386/vidconsole.c	2025-06-06 04:04:21.000000000 +0400
++++ src/stand/i386/libi386/vidconsole.c	2025-09-27 11:56:51.253212000 +0400
+@@ -956,26 +956,7 @@
+ 	a = teken_get_defattr(&gfx_state.tg_teken);
+ 	attr = *a;
+ 
+-	/*
+-	 * On first run, we set up the vidc_set_colors()
+-	 * callback. If the env is already set, we
+-	 * pick up fg and bg color values from the environment.
+-	 */
+-	ptr = getenv("teken.fg_color");
+-	if (ptr != NULL) {
+-		attr.ta_fgcolor = strtol(ptr, NULL, 10);
+-		ptr = getenv("teken.bg_color");
+-		attr.ta_bgcolor = strtol(ptr, NULL, 10);
+-
+-		teken_set_defattr(&gfx_state.tg_teken, &attr);
+-	} else {
+-		snprintf(env, sizeof(env), "%d", attr.ta_fgcolor);
+-		env_setenv("teken.fg_color", EV_VOLATILE, env,
+-		    vidc_set_colors, env_nounset);
+-		snprintf(env, sizeof(env), "%d", attr.ta_bgcolor);
+-		env_setenv("teken.bg_color", EV_VOLATILE, env,
+-		    vidc_set_colors, env_nounset);
+-	}
++	gfx_fb_setcolors(&attr, vidc_set_colors, env_nounset);
+ 
+ 	/* Improve visibility */
+ 	if (attr.ta_bgcolor == TC_WHITE)
+diff -Naur src.orig/stand/libsa/environment.c src/stand/libsa/environment.c
+--- src.orig/stand/libsa/environment.c	2025-06-06 04:04:21.000000000 +0400
++++ src/stand/libsa/environment.c	2025-09-27 12:04:19.673587000 +0400
+@@ -66,6 +66,17 @@
+ 
+ 	if ((ev = env_getenv(name)) != NULL) {
+ 		/*
++		 * If the new value doesn't have NOKENV set, we'll drop the flag
++		 * if it's set on the entry so that the override propagates
++		 * correctly.  We do this *before* sending it to the hook in
++		 * case the hook declines to operate on it (e.g., because the
++		 * value matches what was already set) -- we would still want
++		 * the explicitly set value to propagate.
++		 */
++		if (!(flags & EV_NOKENV))
++			ev->ev_flags &= ~EV_NOKENV;
++
++		/*
+ 		 * If there's a set hook, let it do the work
+ 		 * (unless we are working for one already).
+ 		 */
+@@ -77,7 +88,6 @@
+ 			free(ev->ev_value);
+ 		ev->ev_value = NULL;
+ 		ev->ev_flags &= ~EV_DYNAMIC;
+-
+ 	} else {
+ 
+ 		/*
+@@ -123,11 +133,12 @@
+ 	/* If we have a new value, use it */
+ 	if (flags & EV_VOLATILE) {
+ 		ev->ev_value = strdup(value);
+-		ev->ev_flags |= EV_DYNAMIC;
++		flags |= EV_DYNAMIC;
+ 	} else {
+ 		ev->ev_value = (char *)value;
+-		ev->ev_flags |= flags & EV_DYNAMIC;
+ 	}
++
++	ev->ev_flags |= flags & (EV_DYNAMIC | EV_NOKENV);
+ 
+ 	return (0);
+ }
+diff -Naur src.orig/stand/libsa/stand.h src/stand/libsa/stand.h
+--- src.orig/stand/libsa/stand.h	2025-06-06 04:04:21.000000000 +0400
++++ src/stand/libsa/stand.h	2025-09-27 12:04:19.674556000 +0400
+@@ -339,6 +339,7 @@
+ #define EV_DYNAMIC	(1<<0)		/* value was dynamically allocated, free if changed/unset */
+ #define EV_VOLATILE	(1<<1)		/* value is volatile, make a copy of it */
+ #define EV_NOHOOK	(1<<2)		/* don't call hook when setting */
++#define EV_NOKENV	(1<<3)		/* don't add to kenv (loader-only) */
+ 
+ struct env_var;
+ typedef char	*(ev_format_t)(struct env_var *ev);

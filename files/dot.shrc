@@ -11,8 +11,7 @@ if (( USER_ID )); then
 	export PS2='  '
 	export PS3=$'\1\r\1\033[0;32m\1?\1\033[m\1 '
 	export PS4=$'\1\r\1\033[0;32m\1[${EPOCHREALTIME}]\1\033[m\1 '
-
-	[ -x /usr/local/bin/doas ] && DOAS='/usr/local/bin/doas'
+	DOAS=$(whence -p doas)
 else
 	export PS1='$(printf "\1\r\1\033[0;31m\1%${COLUMNS}s\1\033[m\1\n" "[ ${PWD} ]")'$'\1\r\1\033[0;31m\1#\1\033[m\1 '
 	export PS2='  '
@@ -20,10 +19,11 @@ else
 	export PS4=$'\1\r\1\033[0;31m\1[${EPOCHREALTIME}]\1\033[m\1 '
 fi
 
+alias p='$DOAS pkg'
 alias root='$DOAS su -m'
 alias poweroff='$DOAS /sbin/shutdown -p now'
 alias reboot='$DOAS /sbin/shutdown -r now'
-alias p='$PAGER'
+alias m='$PAGER'
 alias e='$EDITOR'
 alias h='fc -rl 1 | $PAGER'
 alias r='fc -s'
@@ -59,48 +59,6 @@ push() {
 	[ "$1" == '-n' ] && local dry_run='n'
 	rsync -4rlpogdchzv$dry_run --delete --files-from "$XDG_CONFIG_HOME"/.rsync_home "$HOME"/ backup:.
 	rsync -4rlpogdchzv$dry_run --delete --files-from "$XDG_CONFIG_HOME"/.rsync_root / backup:.
-}
-
-pkgin() {
-	"$DOAS" idprio 10 pkg install "$@"
-}
-
-pkgrm() {
-	if "$DOAS" pkg delete -y "$@"; then
-		"$DOAS" pkg autoremove -yq
-	fi
-}
-
-info() {
-	case "$1" in
-	-i)	pkg query -a "%n-%v" ;;
-	-l)	pkg info "$@" 2>/dev/null ;;
-	-d)	pkg info "$@" 2>/dev/null || pkg rquery "\t%dn-%dv" "$2" ;;
-	-r)	pkg info "$@" 2>/dev/null || pkg rquery "\t%rn-%rv" "$2" ;;
-	-o)	pkg which "$2" ;;
-	''|-*)	cat <<- INFO ;;
-		usage: info [options] <package>
-		   <package>       list <package> information
-		   -i              list installed packages
-		   -l <package>    list files in <package>
-		   -d <package>    list dependencies of <package>
-		   -r <package>    list packages that require <package>
-		   -o <pattern>    list owner of file matching <pattern>
-		INFO
-	*)	pkg info "$@" 2>/dev/null || pkg rquery "Name\t\t: %n\nVersion\t\t: %v\nOrigin\t\t: %o\nArchitecture\t: %q\nPrefix\t\t: %p\nMaintainer\t: %m\nWWW\t\t: %w\nComment\t\t: %c\nFlat size\t: %sh" "$@" ;;
-	esac
-}
-
-seek() {
-	case "$1" in
-	-c)	pkg search -c "$@" | sort ;;
-	''|-*)	cat <<- INFO ;;
-		usage: seek [options] <package>
-		   <package>       search for <package> in names
-		   -c <package>    search for <package> in comments
-		INFO
-	*)	pkg search "$@" | sort ;;
-	esac
 }
 
 bkup() {

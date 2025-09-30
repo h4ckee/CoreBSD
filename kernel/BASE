@@ -65,8 +65,6 @@ device		vt
 device		vt_vga
 device		vt_vbefb
 options		VT_MAXWINDOWS=8
-options		VT_FB_MAX_WIDTH=800
-options		VT_FB_MAX_HEIGHT=600
 device		agp
 device		iflib
 device		em

@@ -166,6 +166,7 @@ set_environment() {
 
 build_kernel() {
 	make -C "$SRCDIR" buildkernel || exit 1
+	strip -p "${OBJDIR}${SRCDIR}"/amd64.amd64/sys/"$KERNCONF"/kernel || exit 1
 }
 
 install_kernel() {

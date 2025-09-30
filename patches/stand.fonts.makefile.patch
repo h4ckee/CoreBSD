@@ -1,0 +1,25 @@
+diff -Naur src.orig/stand/fonts/Makefile src/stand/fonts/Makefile
+--- src.orig/stand/fonts/Makefile	2025-06-06 04:04:21.000000000 +0400
++++ src/stand/fonts/Makefile	2025-09-29 12:49:28.342663000 +0400
+@@ -4,20 +4,12 @@
+ .PATH: ${SRCTOP}/contrib/terminus
+ 
+ FONTS=	\
+-	6x12.fnt.gz \
+ 	8x14.fnt.gz \
+ 	8x14v.fnt.gz \
+ 	8x16.fnt.gz \
+-	8x16b.fnt.gz \
+ 	8x16v.fnt.gz \
+-	10x18.fnt.gz \
+-	10x20.fnt.gz \
+-	11x22.fnt.gz \
+-	12x24.fnt.gz \
+-	14x28.fnt.gz \
+-	16x32.fnt.gz \
+ 
+-FILES=	${FONTS} INDEX.fonts
++FILES=	${FONTS}
+ FILESDIR=	/boot/fonts
+ 
+ CLEANFILES+=	${FONTS} ${FONTS:T:S/${COMPRESS_EXT}//g}
