@@ -1,6 +1,6 @@
 diff -Naur src.orig/release/Makefile src/release/Makefile
 --- src.orig/release/Makefile	2025-06-06 04:04:20.000000000 +0400
-+++ src/release/Makefile	2025-09-30 12:59:44.319167000 +0400
++++ src/release/Makefile	2025-10-01 16:09:15.190083000 +0400
 @@ -180,16 +180,19 @@
  	mkdir -p ${.TARGET}
  	( cd ${WORLDDIR} && ${IMAKE} installworld installkernel distribution \
@@ -26,7 +26,7 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
  	done
  .if defined(NO_ROOT)
  	echo "./usr/freebsd-dist type=dir uname=root gname=wheel mode=0755" >> ${.TARGET}/METALOG
-@@ -202,13 +205,45 @@
+@@ -202,13 +205,44 @@
  	${PKG_INSTALL} wifi-firmware-kmod-release || true
  .endif
  # Set up installation environment
@@ -40,7 +40,6 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
  	echo kernels_autodetect=\"NO\" >> ${.TARGET}/boot/loader.conf
 -	echo loader_menu_multi_user_prompt=\"Installer\" >> ${.TARGET}/boot/loader.conf
 -	cp ${.CURDIR}/rc.local ${.TARGET}/etc
-+	echo screen.font=\"8x14\" >> ${.TARGET}/boot/loader.conf
 +	echo vbe_max_resolution=\"640x480\" >> ${.TARGET}/boot/loader.conf
 +	echo loader_brand_y=\"2\" >> ${.TARGET}/boot/loader.conf
 +	echo loader_logo_x=\"51\" >> ${.TARGET}/boot/loader.conf
@@ -59,7 +58,7 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
 +	mv ${.TARGET}/usr/share/zoneinfo/Etc/UTC ${.TARGET}/etc/localtime
 +	find ${.TARGET}/boot ${.TARGET}/etc ${.TARGET}/usr ${.TARGET}/var -mindepth 1 -type d -empty -delete
 +	rm -rf \
-+	    ${.TARGET}/boot/fonts/!(8x14.fnt.gz) \
++	    ${.TARGET}/boot/fonts/!(8x16.fnt.gz) \
 +	    ${.TARGET}/etc/{crontab,devd,fbtab,login.access,networks,ssl} \
 +	    ${.TARGET}/etc/{devd,dhclient,etcupdate,libmap,rc,{,new}syslog}.conf \
 +	    ${.TARGET}/etc/mtree/!(BSD.var.dist) \
