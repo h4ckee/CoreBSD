@@ -12,8 +12,9 @@ BASESRC='src.txz'
 MKSHSRC='mksh-R59c.tgz'
 CURDIR="$PWD"
 OBJDIR='/usr/obj'
-SRCDIR='/usr/src'
 TMPDIR='/tmp'
+SRCDIR='/usr/src'
+SRCPOOL="$(zfs list -H -o name $SRCDIR)"
 DATE="$(date '+%y%m%d%H%M')"
 HWMODEL="$(sysctl -n hw.model)"
 
@@ -41,8 +42,8 @@ extract_sources() {
 	LC_ALL=C bsdtar -C "$SRCDIR"/contrib --uid 0 --gid 0 -xf "$TMPDIR"/"$MKSHSRC" || exit 1
 	echo "$VERSION" > "$SRCDIR"/VERSION
 	rm -f "$TMPDIR"/"$BASESRC" "$TMPDIR"/"$MKSHSRC"
-	zfs snapshot zroot"$SRCDIR"@default
-	zfs clone zroot"$SRCDIR"@default zroot"$SRCDIR".orig
+	zfs snapshot "$SRCPOOL"@default
+	zfs clone "$SRCPOOL"@default "$SRCPOOL".orig
 }
 
 check_sources() {
@@ -54,14 +55,14 @@ check_sources() {
 		fi
 	fi
 	fetch_sources
-	zfs list -H -r -d 1 -t snap -o name zroot"$SRCDIR" | xargs -n 1 zfs destroy -R
+	zfs list -H -r -d 1 -t snap -o name "$SRCPOOL" | xargs -n 1 zfs destroy -R
 	clean_directory "$SRCDIR"
 	extract_sources
 }
 
 patch_sources() {
 	check_sources
-	zfs rollback zroot"$SRCDIR"@default
+	zfs rollback "$SRCPOOL"@default
 
 	echo "===> Patching $SRCDIR"
 	for patch in "$CURDIR"/patches/*.patch; do
@@ -111,12 +112,12 @@ set_environment() {
 	export NOSRC="YES"
 
 	MODULES='aac aacraid accf_data accf_dns accf_http acl_nfs4 acl_posix1e ae aesni age agp ahci aic7xxx alc ale \
-		amd_ecc_inject amdsbwd amdtemp arcmsr ata ath_hal axgbe backlight bce bfe bge bios bnxt bxe cam \
+		amd_ecc_inject amdsbwd amdtemp arcmsr ata ath_hal axgbe bce bfe bge bios bnxt bxe cam \
 		cardbus cas cbb cc cd9660 ciss coretemp cpufreq crypto cryptodev cxgbe dc dcons dcons_crom em ena \
 		et evdev exca ext2fs fdc firewire firmware fxp gem geom hid hpt27xx hptiop hptmv hptnr hptrr hwpmc \
 		hyperv iavf ice ida if_gif if_tuntap if_vlan iflib igc imgact_binmisc io ip6_mroute_mod ipfw \
 		ipfw_nat ipfw_nat64 ipfw_nptv6 ipfw_pmod ipmi ips ipw isci isp iwi iwn ix ixl ixv jme kbdmux kgssapi \
-		kgssapi_krb5 khelp krpc le lge libalias linprocfs linsysfs linux linux64 linux_common linuxkpi \
+		kgssapi_krb5 khelp krpc le lge libalias linprocfs linsysfs linux linux64 linux_common \
 		linuxkpi_wlan lpt malo mana md mem mfi mii miibus mlx mlx5 mlx5en mlxfw mmc mmcsd mpi3mr mpr mps mpt \
 		mrsas msdosfs msk mvs mwl netlink nfe nfscl nfscommon nfsd nfslockd nfssvc nge nvd nvme ocs_fc \
 		padlock_rng pfsync plip ppbus ppc ppi pps procfs pseudofs puc qlnx ral random_fortuna random_other \
@@ -127,7 +128,7 @@ set_environment() {
 	case "$HWMODEL" in
 	*Core\(TM\)\ i[57]*)
 		export CPUTYPE="ivybridge"
-		export COPTFLAGS="-O2 -pipe -march=core2 -fomit-frame-pointer"
+		export COPTFLAGS="-O2 -pipe -march=ivybridge -fomit-frame-pointer"
 		export CFLAGS="$COPTFLAGS -fno-plt"
 		export LDFLAGS="-Wl,-O2 -Wl,--sort-common -Wl,--strip-debug"
 		if [ "$COMMAND" = "image" ]; then
@@ -138,8 +139,9 @@ set_environment() {
 				export DESTDIR="/mnt"
 			fi
 			export KERNCONF="LAPTOP"
-			export MODULES_OVERRIDE="acpi_ibm acpi_video coretemp i2c iwn iwn6000g2afw linuxkpi sound snd_hda wlan \
-				wlan_ccmp wlan_amrr"
+			export MODULES_OVERRIDE="i2c/controllers/ichsmb i2c/smbus i2c/iic i2c/iicbb i2c/iicbus iwn \
+				iwnfw/iwn6000g2a wlan wlan_ccmp wlan_amrr backlight linuxkpi linuxkpi_hdmi linuxkpi_video \
+				lindebugfs pseudofs fusefs usb/uhid"
 		fi
 		;;
 	*Core\(TM\)2*)
@@ -156,8 +158,8 @@ set_environment() {
 			fi
 			export KERNCONF="DESKTOP"
 			export MODULES_OVERRIDE="libiconv cd9660_iconv msdosfs_iconv ath ath_hal_ar9300 ath_rate coretemp \
-				i2c/controllers/ichsmb i2c/smbus sound/driver/emu10k1 wlan wlan_ccmp wlan_amrr \
-				i2c/iic i2c/iicbb i2c/iicbus linuxkpi linuxkpi_hdmi linuxkpi_video backlight lindebugfs pseudofs"
+				i2c/controllers/ichsmb i2c/smbus i2c/iic i2c/iicbb i2c/iicbus sound/driver/emu10k1 wlan \
+				wlan_ccmp wlan_amrr backlight linuxkpi linuxkpi_hdmi linuxkpi_video lindebugfs pseudofs fusefs"
 		fi
 		;;
 	*) echo "Profile for $HWMODEL is not defined"; exit 1 ;;
@@ -223,12 +225,6 @@ unmount_boot_environment() {
 	bectl activate -t be"$DATE" || exit 1
 }
 
-upgrade_pkgs() {
-	pkg -c "$DESTDIR" upgrade -f || exit 1
-	pkg -c "$DESTDIR" autoremove || exit 1
-	pkg -c "$DESTDIR" clean || exit 1
-}
-
 show_stats() {
 	for dir in /bin /sbin /usr/bin /usr/sbin /usr/libexec /lib /usr/lib; do
 		printf "${dir}: %d\n" "$(find $dir -type f -depth 1 | wc -l)"
@@ -271,7 +267,6 @@ case "$COMMAND" in
 		install_kernel
 		install_world
 		delete_old
-#		upgrade_pkgs
 		unmount_boot_environment
 		clean_directory "$OBJDIR"
 		shutdown -r now

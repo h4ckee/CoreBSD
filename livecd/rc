@@ -20,9 +20,7 @@ if [ -r /etc/devfs.rules ]; then
 fi
 ln -sf cd0 /dev/cdrom
 mount -a
-swapon -aq
 mtree -deiU -f /etc/mtree/BSD.var.dist -p /var > /dev/null
-sleep 0.5
 adjkerntz -i
 hostname livecd
 for ttyv in /dev/ttyv*; do

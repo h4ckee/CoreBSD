@@ -227,7 +227,7 @@ echo '===> Setting /boot/entropy file'
 dd if=/dev/random of="$mountdir"/boot/entropy bs=4096 count=1 2> /dev/null || exit 1
 chown 0:0 "$mountdir"/boot/entropy || exit 1
 
-echo '===> Edit /boot/loader.conf, /etc/rc.conf, etc. Press Ctrl+D when finished'
+echo '===> Edit /boot/loader.conf, /etc/sysctl.conf, /etc/rc.conf, etc. Press Ctrl+D when finished'
 chroot "$mountdir" /bin/sh -l 2>&1
 
 echo '===> Unmounting filesystems'

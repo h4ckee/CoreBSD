@@ -17,15 +17,15 @@ case "$1" in
 	done
 	;;
 0x80)	# Battery state
-	level=$(sysctl -n hw.acpi.battery.life)
-	state=$(sysctl -n hw.acpi.battery.state)
-	if (( level < 10 && state == 1 )); then
-		lifetime=$(sysctl -n hw.acpi.battery.time)
+	level=$(sysctl -nq hw.acpi.battery.life)
+	state=$(sysctl -nq hw.acpi.battery.state)
+	if (( level < 6 && state == 1 )); then
+		lifetime=$(sysctl -nq hw.acpi.battery.time)
 		wall <<- EOF
 			Battery is running low:	"$level"%
 			Estimated lifetime:	"$lifetime" min.
 		EOF
-	elif (( level < 5 && ( state == 4 || state == 5 ))); then
+	elif (( level < 3 && state != 2 )); then
 		logger -t battery -p daemon.notice "Battery running low. Shutting down"
 		wall <<- EOF
 			Battery is running low:	"$level"%

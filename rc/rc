@@ -123,7 +123,7 @@ hostname "$hostname"
 
 for mixer in /dev/mixer[0-9]; do
 	if [[ -c "$mixer" && -r /var/db/"${mixer##*/}"-state ]]; then
-		mixer -f "$mixer" $(< /var/db/"${mixer##*/}"-state)
+		mixer -s -f "$mixer" $(< /var/db/"${mixer##*/}"-state) > /dev/null
 	fi
 done
 

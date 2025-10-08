@@ -6,5 +6,4 @@ route -n flush -inet > /dev/null
 ifconfig lo0 inet delete 2> /dev/null
 ifconfig lo0 down
 sync
-swapoff -aq
 umount -a

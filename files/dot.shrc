@@ -39,10 +39,11 @@ alias top='top -Szs1'
 alias iotop='top -Szs1 -m io'
 alias psl='ps auxww'
 alias pss='ps -A -o pid,args'
+alias pst='pstree -g3'
 alias kldstat='kldstat -h'
 alias eject='cdcontrol eject cd0'
 alias pwgen='LC_ALL=C tr -cd "A-Za-z0-9!#$%&*+,-.:=@^_~" < /dev/urandom | head -c 36'
-alias rsrc='$DOAS zfs rollback zroot/usr/src@default'
+alias rsrc='$DOAS zfs rollback $(zfs list -H -o name /usr/src)@default'
 alias psrc='$DOAS patch -V none -d /usr <'
 
 function ..  { builtin cd ..    && ls; }

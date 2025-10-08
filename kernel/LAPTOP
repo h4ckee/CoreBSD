@@ -1,10 +1,11 @@
 include         BASE
 ident		LAPTOP
 
-# device	acpi_ibm
-# device	acpi_video
-# device	sound
-# device	snd_hda
+device		acpi_ibm
+device		acpi_video
+device		acpi_wmi
+device		sound
+device		snd_hda
 # device	iwn
 # device	iwn6000g2afw
 device		xhci
