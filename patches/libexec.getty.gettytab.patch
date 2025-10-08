@@ -1,0 +1,35 @@
+diff -Naur src.orig/libexec/getty/gettytab src/libexec/getty/gettytab
+--- src.orig/libexec/getty/gettytab	2025-06-06 03:04:20.000000000 +0300
++++ src/libexec/getty/gettytab	2025-10-08 19:20:25.375765000 +0300
+@@ -1,10 +1,5 @@
+ #	from: @(#)gettytab	5.14 (Berkeley) 3/27/91
+ #
+-# Most of the table entries here are just copies of the old getty table,
+-# it is by no means certain, or even likely, that any of them are optimal
+-# for any purpose whatever.  Nor is it likely that more than a couple are
+-# even correct.
+-#
+ # The default gettytab entry, used to set defaults for all other
+ # entries, and in cases where getty is called with no table name.
+ #
+@@ -202,7 +197,6 @@
+ #
+ # autologin - automatically log in as root
+ #
+-
+ autologin|al.9600:\
+ 	:al=root:tc=std.9600:
+ al.19200:\
+@@ -217,6 +211,12 @@
+ 	:al=root:tc=std.230400:
+ al.Pc:\
+ 	:al=root:tc=Pc
++
++#
++# autologin - automatically log in as user x
++#
++x:\
++        :al=x:tc=Pc
+ 
+ #
+ # Entries for 3-wire serial terminals.  These don't supply carrier, so
