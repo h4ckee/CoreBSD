@@ -1,0 +1,28 @@
+# Very basic and secure ruleset: Hide everything. Used as a basis for other rules.
+[devfsrules_hide_all=1]
+add hide
+
+# Basic devices typically necessary. Requires: devfsrules_hide_all
+[devfsrules_unhide_basic=2]
+add path null unhide
+add path zero unhide
+add path crypto unhide
+add path random unhide
+add path urandom unhide
+
+# Devices typically needed to support logged-in users. Requires: devfsrules_hide_all
+[devfsrules_unhide_login=3]
+add path '[pt]ty[l-sL-S]*' unhide
+add path ptmx unhide
+add path pts unhide
+add path 'pts/*' unhide
+add path fd unhide
+add path 'fd/*' unhide
+add path stdin unhide
+add path stdout unhide
+add path stderr unhide
+
+# Ruleset for removable devices.
+[removable=10]
+add path 'da[0-9]*' mode 0660
+add path 'usb/*' mode 0660

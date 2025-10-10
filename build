@@ -75,8 +75,10 @@ patch_sources() {
 	cp "$CURDIR"/files/devd/*			"$SRCDIR"/sbin/devd/
 	cp "$CURDIR"/livecd/*				"$SRCDIR"/release/
 	cp "$CURDIR"/kernel/*				"$SRCDIR"/sys/amd64/conf/
+	cp "$CURDIR"/files/shells			"$SRCDIR"/etc/
 	cp "$CURDIR"/files/loader*			"$SRCDIR"/stand/defaults/
 	cp "$CURDIR"/files/dot.*			"$SRCDIR"/share/skel/
+	cp "$CURDIR"/files/devfs.rules			"$SRCDIR"/sbin/devfs/
 	cp "$CURDIR"/files/sysctl.conf			"$SRCDIR"/sbin/sysctl/
 	cp "$CURDIR"/files/pf.conf			"$SRCDIR"/sbin/pfctl/
 	cp "$CURDIR"/files/etcupdate.conf		"$SRCDIR"/usr.sbin/etcupdate/
