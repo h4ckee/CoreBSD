@@ -1,9 +1,9 @@
 include         BASE
 ident		LAPTOP
 
-device		acpi_ibm
-device		acpi_video
-device		acpi_wmi
+# device	acpi_ibm
+# device	acpi_video
+# device	acpi_wmi
 device		sound
 device		snd_hda
 # device	iwn

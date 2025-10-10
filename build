@@ -70,8 +70,9 @@ patch_sources() {
 		patch -s -V none -d /usr < "$patch" || exit 1
 	done
 
-	cp -R "$CURDIR"/mksh				"$SRCDIR"/bin/
-	cp -R "$CURDIR"/rc/*				"$SRCDIR"/libexec/rc/
+	cp -R "$CURDIR"/files/mksh			"$SRCDIR"/bin/
+	cp -R "$CURDIR"/files/rc/*			"$SRCDIR"/libexec/rc/
+	cp "$CURDIR"/files/devd/*			"$SRCDIR"/sbin/devd/
 	cp "$CURDIR"/livecd/*				"$SRCDIR"/release/
 	cp "$CURDIR"/kernel/*				"$SRCDIR"/sys/amd64/conf/
 	cp "$CURDIR"/files/loader*			"$SRCDIR"/stand/defaults/
@@ -139,9 +140,9 @@ set_environment() {
 				export DESTDIR="/mnt"
 			fi
 			export KERNCONF="LAPTOP"
-			export MODULES_OVERRIDE="i2c/controllers/ichsmb i2c/smbus i2c/iic i2c/iicbb i2c/iicbus iwn \
-				iwnfw/iwn6000g2a wlan wlan_ccmp wlan_amrr backlight linuxkpi linuxkpi_hdmi linuxkpi_video \
-				lindebugfs pseudofs fusefs usb/uhid"
+			export MODULES_OVERRIDE="acpi/acpi_ibm acpi/acpi_video acpi/acpi_wmi i2c/controllers/ichsmb \
+				i2c/smbus i2c/iic i2c/iicbb i2c/iicbus iwn iwnfw/iwn6000g2a wlan wlan_ccmp wlan_amrr \
+				backlight linuxkpi linuxkpi_hdmi linuxkpi_video lindebugfs pseudofs fusefs usb/uhid"
 		fi
 		;;
 	*Core\(TM\)2*)

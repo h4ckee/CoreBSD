@@ -1,15 +1,15 @@
 #!/bin/sh
 #
-# /etc/rc.d/devd: device state change daemon
+# /etc/rc.d/syslogd: system log daemon
 #
 
-command='devd'
-flags='-q'
-pidfile=$(sed -rn '/pid-file/s/.+\"(.+)\";/\1/p' /etc/devd.conf)
+command='syslogd'
+flags='-ss'
+pidfile="/var/run/${command}.pid"
 
 case "$1" in
 start)		if [ "$RC_BOOT" ] || ! pgrep -q "$command"; then
-			if ! limits -C daemon "$command" "$flags"; then
+			if ! limits -C daemon "$command" $flags -P "$pidfile"; then
 				echo >&2 "$command failed"
 				exit 1
 			fi

@@ -15,7 +15,7 @@ start)		for algorithm in rsa ecdsa ed25519; do
 			fi
 		done
 		if [ "$RC_BOOT" ] || ! pgrep -q "$command"; then
-			if ! limits -C daemon /usr/sbin/"$command" "$flags"; then
+			if ! limits -C daemon /usr/sbin/"$command" $flags; then
 				echo >&2 "$command failed"
 				exit 1
 			fi
