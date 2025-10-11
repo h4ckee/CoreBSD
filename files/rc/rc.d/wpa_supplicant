@@ -10,18 +10,18 @@ confile="/etc/${command}.conf"
 pidfile="/var/run/${command}/${interface}.pid"
 
 if [ -z "$interface" ]; then
-	exit
+	exit 1
 elif [ ! -f "$confile" ]; then
 	echo >&2 "$confile not found"
 	exit 1
 fi
 
 case "$1" in
-start)		if ! ifconfig wlan0 &> /dev/null; then
-			ifconfig wlan0 create wlandev "$interface"
-		fi
-		if ! pgrep -q "$command"; then
-			if ! limits -C daemon "$command" $flags -c "$confile" -P "$pidfile" -i "$interface"; then
+start)		if ! pgrep -q "$command"; then
+			if ! ifconfig wlan0 &> /dev/null; then
+				ifconfig wlan0 create wlandev "$interface" country RU
+			fi
+			if ! limits -C daemon "$command" $flags -c "$confile" -P "$pidfile" -i wlan0; then
 				echo >&2 "$command failed"
 				exit 1
 			fi
@@ -30,7 +30,7 @@ start)		if ! ifconfig wlan0 &> /dev/null; then
 		fi
 		;;
 stop)		if [ -f "$pidfile" ]; then
-			kill $(< "$pidfile")
+			pkill -F "$pidfile"
 			rm -f "$pidfile"
 		fi
 		if ifconfig wlan0 &> /dev/null; then
@@ -40,7 +40,7 @@ stop)		if [ -f "$pidfile" ]; then
 restart)	"$0" stop
 		"$0" start
 		;;
-*)		echo "${0##*/} [start|stop]"
+*)		echo "${0##*/} [start|stop|restart] <interface>"
 		exit
 		;;
 esac

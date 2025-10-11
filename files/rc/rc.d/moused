@@ -4,28 +4,35 @@
 #
 
 command='moused'
-port="$2"
+device="$2"
 flags='-F 300 -r high -A 1.5,1.5 -a 0.8 -V -L 3 -t auto -m 1=3 -m 3=1'
-pidfile="/var/run/${command}.${port}.pid"
+pidfile="/var/run/${command}.${device}.pid"
 
 case "$1" in
-start)		if [ "$RC_BOOT" ] || ! pgrep -q "$command"; then
-			if ! limits -C daemon "$command" $flags -I "$pidfile" -p /dev/"$port"; then
+start)		if ! pgrep -q "$command"; then
+			if ! limits -C daemon "$command" $flags -I "$pidfile" -p /dev/"$device"; then
 				echo >&2 "$command failed"
 				exit 1
 			fi
+			for ttyv in /dev/ttyv[0-7]; do
+				vidcontrol -m on < "$ttyv"
+			done
 		fi
-		vidcontrol -m on
 		;;
 stop)		if [ -f "$pidfile" ]; then
+			if pgrep -qF "$pidfile" 2> /dev/null; then
+				pkill -F "$pidfile"
+			fi
 			rm -f "$pidfile"
 		fi
-		vidcontrol -m off
+		for ttyv in /dev/ttyv[0-7]; do
+			vidcontrol -m off < "$ttyv"
+		done
 		;;
 restart)	"$0" stop
 		"$0" start
 		;;
-*)		echo "${0##*/} [start|stop|restart] <port>"
+*)		echo "${0##*/} [start|stop|restart] <device>"
 		exit
 		;;
 esac

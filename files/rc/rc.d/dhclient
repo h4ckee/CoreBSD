@@ -10,11 +10,13 @@ interface="$2"
 flags='-nq'
 pidfile="/var/run/${command}/${interface}.pid"
 
+[ -z "$interface" ] && exit 1
+
 nameref interface
 address="$interface"
 interface="${!interface}"
 
-[[ "$address" != "dhcp" || -z "$interface" ]] && exit
+[ "$address" != "dhcp" ] && exit 1
 
 case "$1" in
 start)		if ! pgrep -q "$command"; then
@@ -27,7 +29,7 @@ start)		if ! pgrep -q "$command"; then
 		fi
 		;;
 stop)		if [ -f "$pidfile" ]; then
-			kill $(< "$pidfile")
+			pkill -F "$pidfile"
 			rm -f "$pidfile"
 		fi
 		;;

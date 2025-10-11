@@ -24,7 +24,7 @@ start)		for algorithm in rsa ecdsa ed25519; do
 		fi
 		;;
 stop)		if [ -f "$pidfile" ]; then
-			kill $(< "$pidfile")
+			pkill -F "$pidfile"
 			rm -f "$pidfile"
 		fi
 		;;

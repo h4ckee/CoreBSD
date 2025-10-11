@@ -143,8 +143,8 @@ set_environment() {
 			fi
 			export KERNCONF="LAPTOP"
 			export MODULES_OVERRIDE="acpi/acpi_ibm acpi/acpi_video acpi/acpi_wmi i2c/controllers/ichsmb \
-				i2c/smbus i2c/iic i2c/iicbb i2c/iicbus iwn iwnfw/iwn6000g2a wlan wlan_ccmp wlan_amrr \
-				backlight linuxkpi linuxkpi_hdmi linuxkpi_video lindebugfs pseudofs fusefs usb/uhid"
+				i2c/smbus i2c/iic i2c/iicbb i2c/iicbus iwn iwnfw/iwn6000g2a backlight linuxkpi \
+				linuxkpi_hdmi linuxkpi_video lindebugfs pseudofs fusefs usb/uhid"
 		fi
 		;;
 	*Core\(TM\)2*)
@@ -160,9 +160,9 @@ set_environment() {
 				export DESTDIR="/mnt"
 			fi
 			export KERNCONF="DESKTOP"
-			export MODULES_OVERRIDE="libiconv cd9660_iconv msdosfs_iconv ath ath_hal_ar9300 ath_rate coretemp \
-				i2c/controllers/ichsmb i2c/smbus i2c/iic i2c/iicbb i2c/iicbus sound/driver/emu10k1 wlan \
-				wlan_ccmp wlan_amrr backlight linuxkpi linuxkpi_hdmi linuxkpi_video lindebugfs pseudofs fusefs"
+			export MODULES_OVERRIDE="libiconv cd9660_iconv msdosfs_iconv coretemp i2c/controllers/ichsmb \
+				i2c/smbus i2c/iic i2c/iicbb i2c/iicbus sound/driver/emu10k1 backlight linuxkpi \
+				linuxkpi_hdmi linuxkpi_video lindebugfs pseudofs fusefs"
 		fi
 		;;
 	*) echo "Profile for $HWMODEL is not defined"; exit 1 ;;

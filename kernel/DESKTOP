@@ -9,10 +9,12 @@ ident		DESKTOP
 # device	virtio_scsi
 # device	virtio_balloon
 # device	kvm_clock
-
 # device	sound
 # device	snd_emu10k1
+# device	wlan
+# device	wlan_ccmp
+# device	wlan_amrr
 # device	ath
-# device	ath_hal
-# device	ath_rate_sample
+# device	ath_hal_ar9300
+# device	ath_rate
 device		uhci

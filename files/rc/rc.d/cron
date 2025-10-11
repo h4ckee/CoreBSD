@@ -16,7 +16,7 @@ start)		if [ "$RC_BOOT" ] || ! pgrep -q "$command"; then
 		fi
 		;;
 stop)		if [ -f "$pidfile" ]; then
-			kill $(< "$pidfile")
+			pkill -F "$pidfile"
 			rm -f "$pidfile"
 		fi
 		;;
