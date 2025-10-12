@@ -132,6 +132,9 @@ mkdir -p "$mountdir"/boot/zfs || exit 1
 echo "===> Creating ${rootpool}/usr filesystem"
 zfs create -o mountpoint=/usr -o canmount=off "$rootpool"/usr || exit 1
 
+echo "===> Creating ${rootpool}/usr/src filesystem"
+zfs create -o mountpoint=/usr/src -o setuid=off "$rootpool"/usr/src || exit 1
+
 echo "===> Creating ${rootpool}/var filesystem"
 zfs create -o mountpoint=/var -o canmount=off "$rootpool"/var || exit 1
 
@@ -154,9 +157,6 @@ if (( ${#datapooldevs[@]} )); then
 	echo "===> Creating ${datapool}/usr/ports filesystem"
 	zfs create -o mountpoint=/usr/ports -o setuid=off "$datapool"/usr/ports || exit 1
 
-	echo "===> Creating ${datapool}/usr/src filesystem"
-	zfs create -o mountpoint=/usr/src -o setuid=off "$datapool"/usr/src || exit 1
-
 	echo "===> Creating ${datapool}/var filesystem"
 	zfs create -o mountpoint=/var -o canmount=off "$datapool"/var || exit 1
 
@@ -174,9 +174,6 @@ else
 
 	echo "===> Creating ${rootpool}/usr/ports filesystem"
 	zfs create -o mountpoint=/usr/ports -o setuid=off "$rootpool"/usr/ports || exit 1
-
-	echo "===> Creating ${rootpool}/usr/src filesystem"
-	zfs create -o mountpoint=/usr/src -o setuid=off "$rootpool"/usr/src || exit 1
 
 	echo "===> Creating ${rootpool}/var/cache filesystem"
 	zfs create -o mountpoint=/var/cache -o setuid=off -o exec=off -o sync=disabled "$rootpool"/var/cache || exit 1

@@ -84,6 +84,7 @@ patch_sources() {
 	cp "$CURDIR"/files/etcupdate.conf		"$SRCDIR"/usr.sbin/etcupdate/
 	cp "$CURDIR"/files/FreeBSD.conf.quarterly	"$SRCDIR"/usr.sbin/pkg/
 	cp "$CURDIR"/files/service.sh			"$SRCDIR"/usr.sbin/service/
+	cp "$CURDIR"/files/zzz.sh			"$SRCDIR"/usr.sbin/zzz/
 
 	ln "$SRCDIR"/sys/amd64/conf/COREBSD.hints "$SRCDIR"/sys/amd64/conf/DESKTOP.hints
 	cat "$CURDIR"/kernel/COREBSD.hints "$CURDIR"/kernel/LAPTOP.hints > "$SRCDIR"/sys/amd64/conf/LAPTOP.hints

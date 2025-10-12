@@ -1,6 +1,6 @@
 diff -Naur src.orig/release/Makefile src/release/Makefile
---- src.orig/release/Makefile	2025-06-06 04:04:20.000000000 +0400
-+++ src/release/Makefile	2025-10-01 16:09:15.190083000 +0400
+--- src.orig/release/Makefile	2025-06-06 03:04:20.000000000 +0300
++++ src/release/Makefile	2025-10-12 13:51:29.379254000 +0300
 @@ -180,16 +180,19 @@
  	mkdir -p ${.TARGET}
  	( cd ${WORLDDIR} && ${IMAKE} installworld installkernel distribution \
@@ -26,7 +26,7 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
  	done
  .if defined(NO_ROOT)
  	echo "./usr/freebsd-dist type=dir uname=root gname=wheel mode=0755" >> ${.TARGET}/METALOG
-@@ -202,13 +205,44 @@
+@@ -202,13 +205,45 @@
  	${PKG_INSTALL} wifi-firmware-kmod-release || true
  .endif
  # Set up installation environment
@@ -47,9 +47,10 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
 +	echo loader_menu_title=\"LiveCD\" >> ${.TARGET}/boot/loader.conf
 +	echo vfs.mountroot.timeout=\"10\" >> ${.TARGET}/boot/loader.conf
 +	echo "console none unknown off secure" > ${.TARGET}/etc/ttys
-+	for i in 0 1 2 3; do \
-+	    echo "ttyv$${i} \"/usr/libexec/getty autologin\" xterm onifexists secure" >> ${.TARGET}/etc/ttys; \
-+	done
++	echo "ttyv0 \"/usr/libexec/getty al.Pc\" xterm onifexists secure" >> ${.TARGET}/etc/ttys
++	echo "ttyv1 \"/usr/libexec/getty Pc\"    xterm onifexists secure" >> ${.TARGET}/etc/ttys
++	echo "ttyv2 \"/usr/libexec/getty Pc\"    xterm onifexists secure" >> ${.TARGET}/etc/ttys
++	pw -R ${.TARGET} usermod -n root -w none
 +	chflags -R noschg ${.TARGET}/
 +	cp ${.CURDIR}/rc ${.TARGET}/etc
 +	cp ${.CURDIR}/rc.shutdown ${.TARGET}/etc

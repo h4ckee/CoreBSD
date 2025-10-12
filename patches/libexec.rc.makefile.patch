@@ -1,6 +1,6 @@
 diff -Naur src.orig/libexec/rc/Makefile src/libexec/rc/Makefile
---- src.orig/libexec/rc/Makefile	2025-06-06 00:04:20.000000000 +0000
-+++ src/libexec/rc/Makefile	2025-08-15 14:05:39.353993000 +0000
+--- src.orig/libexec/rc/Makefile	2025-06-06 03:04:20.000000000 +0300
++++ src/libexec/rc/Makefile	2025-10-12 15:55:47.148626000 +0300
 @@ -1,22 +1,19 @@
  
  .include <src.opts.mk>
@@ -17,7 +17,7 @@ diff -Naur src.orig/libexec/rc/Makefile src/libexec/rc/Makefile
  .endif
  CONFETCMODE=	644
 -CONFETCEXEC=	netstart pccard_ether rc.resume rc.suspend
-+CONFETCEXEC=	rc rc.shutdown rc.suspend
++CONFETCEXEC=	rc rc.shutdown
  CONFETCEXECDIR=	/etc
  CONFETCEXECMODE=	755
  CONFETCEXECPACKAGE=	rc

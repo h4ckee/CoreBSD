@@ -10,6 +10,7 @@ confile="/etc/${command}.conf"
 pidfile="/var/run/${command}/${interface}.pid"
 
 if [ -z "$interface" ]; then
+	echo >&2 "interface not provided"
 	exit 1
 elif [ ! -f "$confile" ]; then
 	echo >&2 "$confile not found"
