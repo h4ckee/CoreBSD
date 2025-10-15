@@ -52,21 +52,18 @@ function cd  { builtin cd "$@"  && ls; }
 
 pull() {
 	[ "$1" == '-n' ] && local dry_run='n'
-	rsync -4rlpogdchzvK$dry_run --delete --files-from "$XDG_CONFIG_HOME"/.rsync_home backup:. "$HOME"/
-	rsync -4rlpogdchzvK$dry_run --delete --files-from "$XDG_CONFIG_HOME"/.rsync_root backup:. /
+	rsync -4rlpogdchzvK$dry_run --delete --files-from "$XDG_CONFIG_HOME"/rsynclist backup:. /
 }
 
 push() {
 	[ "$1" == '-n' ] && local dry_run='n'
-	rsync -4rlpogdchzv$dry_run --delete --files-from "$XDG_CONFIG_HOME"/.rsync_home "$HOME"/ backup:.
-	rsync -4rlpogdchzv$dry_run --delete --files-from "$XDG_CONFIG_HOME"/.rsync_root / backup:.
+	rsync -4rlpogdchzv$dry_run --delete --files-from "$XDG_CONFIG_HOME"/rsynclist / backup:.
 }
 
 bkup() {
 	TMPDIR=$(mktemp -d)
 	echo -n 'Syncing ...'
-	rsync -rlpogdchzqK --delete --files-from "$XDG_CONFIG_HOME"/.rsync_home backup:. "$TMPDIR"/
-	rsync -rlpogdchzqK --delete --files-from "$XDG_CONFIG_HOME"/.rsync_root backup:. "$TMPDIR"/
+	rsync -4rlpogdchzqK --delete --files-from "$XDG_CONFIG_HOME"/rsynclist backup:. "$TMPDIR"/
 	echo -n ' Compressing ...'
 	tar Jcf "$HOME"/backup-$(date +'%Y-%m-%d').txz -C "$TMPDIR" .
 	\rm -rf "$TMPDIR"
@@ -74,15 +71,13 @@ bkup() {
 }
 
 uu() {
-	local MOUNTPOINT
-	for MOUNTPOINT in $(mount -p | awk '$2 ~ /mnt\/.+/ && $3 == "msdosfs" {print $2}'); do
-		if [ -n "$MOUNTPOINT" ]; then
-			if "$DOAS" umount "$MOUNTPOINT"; then
-				"$DOAS" rmdir "$MOUNTPOINT"
-				echo "$MOUNTPOINT has been unmounted"
-			else
-				echo "Failed to unmount $MOUNTPOINT"
-			fi
+	mntdir=$(mount -p | awk '$2 ~ /mnt\/.+/ && $3 ~ "(fuse|msdos)fs" {print $2}')
+	if [ -n "$mntdir" ]; then
+		if "$DOAS" umount "$mntdir"; then
+			"$DOAS" rmdir "$mntdir"
+			notify-send -t 3000 "$mntdir is unmounted"
+		else
+			notify-send -t 3000 "Failed to unmount $mntdir"
 		fi
-	done
+	fi
 }
