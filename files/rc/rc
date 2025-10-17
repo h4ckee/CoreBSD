@@ -19,12 +19,12 @@ typeset -u timezone="${timezone:-utc}"
 trap : 2
 trap "echo 'Boot interrupted'; exit 1" 3
 
-export RC_BOOT='1'
-export HOME='/'
+export RC_BOOT=1
+export HOME=/
 
-PATH='/sbin:/bin:/usr/sbin:/usr/bin'
-[ -d /usr/local/sbin ] && PATH="${PATH}:/usr/local/sbin"
-[ -d /usr/local/bin ] && PATH="${PATH}:/usr/local/bin"
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+[ -d /usr/local/sbin ] && PATH="$PATH":/usr/local/sbin
+[ -d /usr/local/bin ] && PATH="$PATH":/usr/local/bin
 export PATH
 
 if (( ${#modules[@]} )); then

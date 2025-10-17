@@ -3,11 +3,11 @@
 # /etc/rc.d/wpa_supplicant: wireless network devices daemon
 #
 
-command='wpa_supplicant'
+command=wpa_supplicant
 interface="$2"
 flags='-s -B -D bsd'
-confile="/etc/${command}.conf"
-pidfile="/var/run/${command}/${interface}.pid"
+confile=/etc/"$command".conf
+pidfile=/var/run/"$command"/"$interface".pid
 
 if [ -z "$interface" ]; then
 	echo >&2 "interface not provided"

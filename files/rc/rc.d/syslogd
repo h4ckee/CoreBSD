@@ -3,9 +3,9 @@
 # /etc/rc.d/syslogd: system log daemon
 #
 
-command='syslogd'
-flags='-ss'
-pidfile="/var/run/${command}.pid"
+command=syslogd
+flags=-ss
+pidfile=/var/run/"$command".pid
 
 case "$1" in
 start)		if [ "$RC_BOOT" ] || ! pgrep -q "$command"; then

@@ -3,9 +3,9 @@
 # /etc/rc.d/powerd: system power control daemon
 #
 
-command='powerd'
+command=powerd
 flags='-n hadp'
-pidfile="/var/run/${command}.pid"
+pidfile=/var/run/"$command".pid
 
 case "$1" in
 start)		if [ "$RC_BOOT" ] || ! pgrep -q "$command"; then

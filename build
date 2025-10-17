@@ -145,7 +145,7 @@ set_environment() {
 			export KERNCONF="LAPTOP"
 			export MODULES_OVERRIDE="acpi/acpi_ibm acpi/acpi_video acpi/acpi_wmi i2c/controllers/ichsmb \
 				i2c/smbus i2c/iic i2c/iicbb i2c/iicbus iwn iwnfw/iwn6000g2a backlight linuxkpi \
-				linuxkpi_hdmi linuxkpi_video lindebugfs pseudofs fusefs usb/uhid"
+				linuxkpi_hdmi linuxkpi_video lindebugfs pseudofs fusefs usb/uhid usb/ums"
 		fi
 		;;
 	*Core\(TM\)2*)
@@ -191,7 +191,9 @@ install_world() {
 	find "$DESTDIR" -mindepth 1 \( \
 		-path "$DESTDIR"/boot/\*hints -o \
 		-path "$DESTDIR"/boot/kernel\* -o \
+		-path "$DESTDIR"/boot/modules\* -o \
 		-path "$DESTDIR"/boot/loader.conf\* -o \
+		-path "$DESTDIR"/boot/zfs\* -o \
 		-path "$DESTDIR"/etc\* -o \
 		-path "$DESTDIR"/home\* -o \
 		-path "$DESTDIR"/root\* -o \

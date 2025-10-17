@@ -3,13 +3,13 @@
 # /etc/rc.d/sshd: secure shell daemon
 #
 
-command='sshd'
-flags='-4'
-pidfile="/var/run/${command}.pid"
+command=sshd
+flags=-4
+pidfile=/var/run/"$command".pid
 
 case "$1" in
 start)		for algorithm in rsa ecdsa ed25519; do
-			keyfile="/etc/ssh/ssh_host_${algorithm}_key"
+			keyfile=/etc/ssh/ssh_host_"$algorithm"_key
 			if [ ! -f "$keyfile" ]; then
 				/usr/bin/ssh-keygen -q -t "$algorithm" -N "" -f "$keyfile"
 			fi

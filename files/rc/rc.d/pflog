@@ -3,11 +3,11 @@
 # /etc/rc.d/pflog: packet filter logging interface
 #
 
-command='pflogd'
-interface='pflog0'
+command=pflogd
+interface=pflog0
 flags='-d 300'
-logfile='/var/log/pflog'
-pidfile="/var/run/${command}.pid"
+logfile=/var/log/pflog
+pidfile=/var/run/"$command".pid
 
 case "$1" in
 start)		if [ "$RC_BOOT" ] || ! pgrep -q "$command"; then

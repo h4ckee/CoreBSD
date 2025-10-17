@@ -5,10 +5,10 @@
 
 source /etc/rc.conf
 
-command='dhclient'
+command=dhclient
 interface="$2"
-flags='-nq'
-pidfile="/var/run/${command}/${interface}.pid"
+flags=-nq
+pidfile=/var/run/"$command"/"$interface".pid
 
 if [ -z "$interface" ]; then
 	echo >&2 "interface not provided"

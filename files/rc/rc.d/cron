@@ -3,9 +3,9 @@
 # /etc/rc.d/cron: execute scheduled commands
 #
 
-command='cron'
-flags='-s'
-pidfile="/var/run/${command}.pid"
+command=cron
+flags=-s
+pidfile=/var/run/"$command".pid
 
 case "$1" in
 start)		if [ "$RC_BOOT" ] || ! pgrep -q "$command"; then

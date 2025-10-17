@@ -3,7 +3,7 @@
 # /etc/rc.d/pf: packet filter
 #
 
-rules='/etc/pf.conf'
+rules=/etc/pf.conf
 
 if [ ! -f "$rules" ]; then
 	echo >&2 "$rules not found"

@@ -28,8 +28,6 @@ options		SYSVSEM
 options		_KPOSIX_PRIORITY_SCHEDULING
 options		PRINTF_BUFR_SIZE=128
 options		KBD_INSTALL_CDEV
-# options	CAPABILITY_MODE
-# options	CAPABILITIES
 options		INCLUDE_CONFIG_FILE
 options		NO_SYSCTL_DESCR
 options		TERMINAL_NORM_ATTR=(FG_LIGHTGREY|BG_BLACK)
@@ -70,7 +68,6 @@ device		em
 # device	wlan_ccmp
 # device	wlan_amrr
 device		crypto
-# device	cryptodev
 device		loop
 device		rdrand_rng
 device		ether
@@ -83,11 +80,10 @@ options		EVDEV_SUPPORT
 device		evdev
 device		uinput
 device		ehci
-device		ums
+device		usb
 device		hkbd
 device		ukbd
 device		umass
-device		usb
 device		usbhid
 device		hid
 device		hidbus

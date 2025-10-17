@@ -7,11 +7,11 @@ source /etc/rc.conf
 
 trap : 2 3
 
-export HOME='/'
+export HOME=/
 
-PATH='/sbin:/bin:/usr/sbin:/usr/bin'
-[ -d /usr/local/sbin ] && PATH="${PATH}:/usr/local/sbin"
-[ -d /usr/local/bin ] && PATH="${PATH}:/usr/local/bin"
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+[ -d /usr/local/sbin ] && PATH="$PATH":/usr/local/sbin
+[ -d /usr/local/bin ] && PATH="$PATH":/usr/local/bin
 export PATH
 
 if (( ${#services[@]} )); then

@@ -51,12 +51,12 @@ function ... { builtin cd ../.. && ls; }
 function cd  { builtin cd "$@"  && ls; }
 
 pull() {
-	[ "$1" == '-n' ] && local dry_run='n'
+	[ "$1" == '-n' ] && local dry_run=n
 	rsync -4rlpogdchzvK$dry_run --delete --files-from "$XDG_CONFIG_HOME"/rsynclist backup:. /
 }
 
 push() {
-	[ "$1" == '-n' ] && local dry_run='n'
+	[ "$1" == '-n' ] && local dry_run=n
 	rsync -4rlpogdchzv$dry_run --delete --files-from "$XDG_CONFIG_HOME"/rsynclist / backup:.
 }
 
@@ -73,8 +73,8 @@ bkup() {
 uu() {
 	mntdir=$(mount -p | awk '$2 ~ /mnt\/.+/ && $3 ~ "(fuse|msdos)fs" {print $2}')
 	if [ -n "$mntdir" ]; then
-		if "$DOAS" umount "$mntdir"; then
-			"$DOAS" rmdir "$mntdir"
+		if $DOAS umount "$mntdir"; then
+			$DOAS rmdir "$mntdir"
 			notify-send -t 3000 "$mntdir is unmounted"
 		else
 			notify-send -t 3000 "Failed to unmount $mntdir"
