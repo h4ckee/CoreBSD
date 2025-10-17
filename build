@@ -189,19 +189,14 @@ install_world() {
 	etcupdate resolve -p -D "$DESTDIR"
 	chflags -R noschg "$DESTDIR"
 	find "$DESTDIR" -mindepth 1 \( \
-		-path "$DESTDIR"/boot/\*hints -o \
-		-path "$DESTDIR"/boot/kernel\* -o \
-		-path "$DESTDIR"/boot/modules\* -o \
-		-path "$DESTDIR"/boot/loader.conf\* -o \
-		-path "$DESTDIR"/boot/zfs\* -o \
+		-path "$DESTDIR"/boot\* -o \
 		-path "$DESTDIR"/etc\* -o \
 		-path "$DESTDIR"/home\* -o \
 		-path "$DESTDIR"/root\* -o \
 		-path "$DESTDIR"/usr/local\* -o \
+		-path "$DESTDIR"/usr/src\* -o \
 		-path "$DESTDIR"/sys\* -o \
-		-path "$DESTDIR"/var/cache\* -o \
-		-path "$DESTDIR"/var/db\* -o \
-		-path "$DESTDIR"/var/run\* \) \
+		-path "$DESTDIR"/var\* \) \
 		-prune -o -delete
 	make -C "$SRCDIR" installworld || exit 1
 	for dir in geom libutil libpam/modules; do
