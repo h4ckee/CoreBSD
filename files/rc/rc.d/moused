@@ -9,7 +9,7 @@ flags='-F 300 -r high -A 1.5,1.5 -a 0.8 -V -L 3 -t auto -m 1=3 -m 3=1'
 pidfile=/var/run/"$command"."$device".pid
 
 if [ -z "$device" ]; then
-	echo >&2 "device not provided"
+	echo >&2 'device not provided'
 	exit 1
 fi
 

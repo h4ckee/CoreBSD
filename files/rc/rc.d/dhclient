@@ -11,7 +11,7 @@ flags=-nq
 pidfile=/var/run/"$command"/"$interface".pid
 
 if [ -z "$interface" ]; then
-	echo >&2 "interface not provided"
+	echo >&2 'interface not provided'
 	exit 1
 fi
 

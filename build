@@ -145,7 +145,7 @@ set_environment() {
 			export KERNCONF="LAPTOP"
 			export MODULES_OVERRIDE="acpi/acpi_ibm acpi/acpi_video acpi/acpi_wmi i2c/controllers/ichsmb \
 				i2c/smbus i2c/iic i2c/iicbb i2c/iicbus iwn iwnfw/iwn6000g2a backlight linuxkpi \
-				linuxkpi_hdmi linuxkpi_video lindebugfs pseudofs fusefs usb/uhid usb/ums"
+				linuxkpi_hdmi linuxkpi_video lindebugfs pseudofs fusefs usb/uhid usb/ums cuse"
 		fi
 		;;
 	*Core\(TM\)2*)

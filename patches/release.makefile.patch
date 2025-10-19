@@ -1,6 +1,6 @@
 diff -Naur src.orig/release/Makefile src/release/Makefile
 --- src.orig/release/Makefile	2025-06-06 03:04:20.000000000 +0300
-+++ src/release/Makefile	2025-10-12 13:51:29.379254000 +0300
++++ src/release/Makefile	2025-10-18 12:30:19.391203000 +0300
 @@ -180,16 +180,19 @@
  	mkdir -p ${.TARGET}
  	( cd ${WORLDDIR} && ${IMAKE} installworld installkernel distribution \
@@ -9,8 +9,8 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
 +	    MK_INCLUDES=no MK_PF=no \
  	    ${_ALL_LIBCOMPATS:@v@MK_LIB$v=no@} \
 +	    MK_INSTALLLIB=no MK_KDUMP=no \
-+	    MK_LDNS_UTILS=no MK_MAKE=no \
-+	    MK_MAN=no MK_NETCAT=no \
++	    MK_LDNS_UTILS=no MK_NETCAT=no \
++	    MK_CUSE=no MK_MAKE=no MK_MAN=no \
 +	    MK_GSSAPI=no MK_KERBEROS=no \
 +	    MK_OPENSSH=no MK_PKGBOOTSTRAP=no \
  	    MK_TOOLCHAIN=no MK_PROFILE=no \
