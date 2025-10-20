@@ -1,4 +1,6 @@
 # Build System for CoreBSD
-Custom built compact FreeBSD based OS for personal use.
-- System init scripts were modified.
+Custom built FreeBSD based OS for personal use.
+- Trimmed down base and kernel.
+- Rewritten installer.
+- Rewritten system init scripts.
 - Default shell changed to mksh.
