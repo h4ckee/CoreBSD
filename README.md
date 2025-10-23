@@ -4,3 +4,4 @@ Custom built FreeBSD based OS for personal use.
 - Rewritten installer.
 - Rewritten system init scripts.
 - Default shell changed to mksh.
+- ZFS and PF by default.
