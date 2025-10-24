@@ -1,0 +1,12 @@
+diff -Naur src.orig/sbin/devfs/Makefile src/sbin/devfs/Makefile
+--- src.orig/sbin/devfs/Makefile	2025-06-06 00:04:20.000000000 +0000
++++ src/sbin/devfs/Makefile	2025-07-20 10:48:05.259398000 +0000
+@@ -1,7 +1,5 @@
+ 
+-CONFS=	devfs.conf devfs.rules
+-CONFSDIR_devfs.rules=	/etc/defaults
+-CONFSMODE_devfs.rules=	600
++CONFS=	devfs.rules
+ PACKAGE=runtime
+ PROG=	devfs
+ SRCS=	devfs.c rule.c

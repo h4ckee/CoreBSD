@@ -1,0 +1,30 @@
+#!/bin/sh
+
+export HOME='/'
+export PATH='/sbin:/bin:/usr/sbin:/usr/bin'
+sysctl -f /etc/sysctl.conf > /dev/null
+if [ -r /etc/devfs.rules ]; then
+	while read line; do
+		case "$line" in
+		\#*|'')	continue ;;
+		\[*\])	number="${line//[!0-9]/}"
+			rulename="${line//[=\[\]0-9]/}"
+			eval "$rulename"="$number"
+			devfs rule -s "$number" delset || exit 1
+			;;
+		*)	eval devfs rule -s "$number" "$line" || exit 1 ;;
+		esac
+	done < /etc/devfs.rules
+	devfs -m /dev ruleset "$removable"
+	devfs -m /dev rule -s "$removable" applyset
+fi
+ln -sf cd0 /dev/cdrom
+mount -a
+mtree -deiU -f /etc/mtree/BSD.var.dist -p /var > /dev/null
+adjkerntz -i
+hostname livecd
+for ttyv in /dev/ttyv*; do
+	kbdcontrol -F -l ru -r normal -b off < "$ttyv" &> "$ttyv"
+	vidcontrol -t 300 -h 1000 < "$ttyv" &> "$ttyv"
+done
+ifconfig lo0 inet 127.0.0.1/8 alias up

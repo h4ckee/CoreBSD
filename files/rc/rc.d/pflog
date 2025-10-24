@@ -1,0 +1,31 @@
+#!/bin/sh
+#
+# /etc/rc.d/pflog: packet filter logging interface
+#
+
+command=pflogd
+interface=pflog0
+flags='-d 300'
+logfile=/var/log/pflog
+pidfile=/var/run/"$command".pid
+
+case "$1" in
+start)		if [ "$RC_BOOT" ] || ! pgrep -q "$command"; then
+			if ! limits -C daemon "$command" $flags -f "$logfile" -i "$interface"; then
+				echo >&2 "$command failed"
+				exit 1
+			fi
+		fi
+		;;
+stop)		if [ -f "$pidfile" ]; then
+			pkill -F "$pidfile"
+			rm -f "$pidfile"
+		fi
+		;;
+restart)	"$0" stop
+		"$0" start
+		;;
+*)		echo "${0##*/} [start|stop|restart]"
+		exit
+		;;
+esac

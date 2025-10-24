@@ -1,0 +1,25 @@
+diff -Naur src.orig/usr.sbin/cron/cron/crontab src/usr.sbin/cron/cron/crontab
+--- src.orig/usr.sbin/cron/cron/crontab	2025-06-06 00:04:27.000000000 +0000
++++ src/usr.sbin/cron/cron/crontab	2025-07-23 14:33:31.002967000 +0000
+@@ -6,17 +6,11 @@
+ #
+ #minute	hour	mday	month	wday	who	command
+ #
+-# Save some entropy so that /dev/random can re-seed on boot.
+-*/11	*	*	*	*	operator /usr/libexec/save-entropy
+-#
+ # Rotate log files every hour, if necessary.
+ 0	*	*	*	*	root	newsyslog
+ #
+-# Perform daily/weekly/monthly maintenance.
+-1	3	*	*	*	root	periodic daily
+-15	4	*	*	6	root	periodic weekly
+-30	5	1	*	*	root	periodic monthly
+-#
+-# Adjust the time zone if the CMOS clock keeps local time, as opposed to
+-# UTC time.  See adjkerntz(8) for details.
++# Adjust the time zone if the CMOS clock keeps local time, as opposed to UTC time.
+ 1,31	0-5	*	*	*	root	adjkerntz -a
++#
++# Examine data in all pools to verify that it checksums correctly
++30	15	1	*	*	root	zpool scrub $(zpool list -Ho name)

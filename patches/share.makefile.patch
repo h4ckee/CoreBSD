@@ -1,0 +1,35 @@
+diff -Naur src.orig/share/Makefile src/share/Makefile
+--- src.orig/share/Makefile	2024-11-29 03:03:42.000000000 +0300
++++ src/share/Makefile	2025-06-01 21:07:37.493902000 +0300
+@@ -23,7 +23,6 @@
+ 	skel \
+ 	${_snmp} \
+ 	${_syscons} \
+-	tabset \
+ 	termcap \
+ 	${_timedef} \
+ 	${_vt} \
+@@ -35,7 +34,7 @@
+ _snmp=		snmp
+ .endif
+ 
+-.if ${MK_CDDL} != "no"
++.if ${MK_DTRACE} != "no"
+ _dtrace=	dtrace
+ .endif
+ 
+@@ -52,10 +51,10 @@
+ .endif
+ 
+ .if ${MK_LOCALES} != "no"
+-_colldef=	colldef colldef_unicode
+-_monetdef=	monetdef monetdef_unicode
+-_msgdef=	msgdef msgdef_unicode
+-_numericdef=	numericdef numericdef_unicode
++_colldef=	colldef_unicode
++_monetdef=	monetdef_unicode
++_msgdef=	msgdef_unicode
++_numericdef=	numericdef_unicode
+ _timedef=	timedef
+ .endif
+ 

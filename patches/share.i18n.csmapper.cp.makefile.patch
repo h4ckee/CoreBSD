@@ -1,0 +1,19 @@
+diff -Naur src.orig/share/i18n/csmapper/CP/Makefile src/share/i18n/csmapper/CP/Makefile
+--- src.orig/share/i18n/csmapper/CP/Makefile	2024-11-29 03:03:42.000000000 +0300
++++ src/share/i18n/csmapper/CP/Makefile	2025-06-07 14:42:34.448960000 +0300
+@@ -14,7 +14,6 @@
+ 		printf '%-32s%-16s%s\n' UCS/CP$$i \
+ 		    mapper_std CP/UCS%CP$$f'.mps';\
+ 	    done;\
+-	    cat ${.CURDIR}/mapper.dir.CP.src;\
+ 	    echo;\
+ 	) > ${.TARGET}
+ 
+@@ -25,7 +24,6 @@
+ 		printf "%-32s%-32s%d\n" CP$$i UCS 1;\
+ 		printf "%-32s%-32s%d\n" UCS CP$$i 1;\
+ 	    done;\
+-	    cat ${.CURDIR}/charset.pivot.CP.src;\
+ 	    echo;\
+ 	) > ${.TARGET}
+ 

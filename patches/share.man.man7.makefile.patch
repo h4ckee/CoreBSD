@@ -1,0 +1,16 @@
+diff -Naur src.orig/share/man/man7/Makefile src/share/man/man7/Makefile
+--- src.orig/share/man/man7/Makefile	2025-06-06 00:04:21.000000000 +0000
++++ src/share/man/man7/Makefile	2025-08-10 14:09:38.778685000 +0000
+@@ -13,12 +13,10 @@
+ 	development.7 \
+ 	environ.7 \
+ 	ffs.7 \
+-	firewall.7 \
+ 	growfs.7 \
+ 	hier.7 \
+ 	hostname.7 \
+ 	intro.7 \
+-	maclabel.7 \
+ 	mitigations.7 \
+ 	operator.7 \
+ 	orders.7 \

@@ -1,0 +1,31 @@
+#!/bin/sh
+#
+# /etc/rc.d/syslogd: system log daemon
+#
+
+command=syslogd
+flags=-ss
+pidfile=/var/run/"$command".pid
+
+case "$1" in
+start)		if [ "$RC_BOOT" ] || ! pgrep -q "$command"; then
+			if ! limits -C daemon "$command" $flags -P "$pidfile"; then
+				echo >&2 "$command failed"
+				exit 1
+			fi
+			sleep 0.2
+			protect -p $(< "$pidfile")
+		fi
+		;;
+stop)		if [ -f "$pidfile" ]; then
+			pkill -F "$pidfile"
+			rm -f "$pidfile"
+		fi
+		;;
+restart)	"$0" stop
+		"$0" start
+		;;
+*)		echo "${0##*/} [start|stop|restart]"
+		exit
+		;;
+esac

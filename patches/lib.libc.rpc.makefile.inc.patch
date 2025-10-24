@@ -1,0 +1,11 @@
+diff -Naur src.orig/lib/libc/rpc/Makefile.inc src/lib/libc/rpc/Makefile.inc
+--- src.orig/lib/libc/rpc/Makefile.inc	2025-06-06 00:04:20.000000000 +0000
++++ src/lib/libc/rpc/Makefile.inc	2025-06-25 14:59:03.062436000 +0000
+@@ -1,7 +1,6 @@
+ #	@(#)Makefile    5.11 (Berkeley) 9/6/90
+ 
+ .PATH: ${LIBC_SRCTOP}/rpc ${LIBC_SRCTOP}/.
+-CONFS+=	rpc/netconfig rpc/rpc
+ SRCS+=	auth_none.c auth_unix.c authunix_prot.c bindresvport.c clnt_bcast.c \
+ 	clnt_dg.c clnt_generic.c clnt_perror.c clnt_raw.c clnt_simple.c \
+ 	clnt_vc.c rpc_dtablesize.c getnetconfig.c getnetpath.c getrpcent.c \

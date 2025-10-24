@@ -1,0 +1,13 @@
+diff -Naur src.orig/share/i18n/esdb/Makefile src/share/i18n/esdb/Makefile
+--- src.orig/share/i18n/esdb/Makefile	2024-11-29 03:03:42.000000000 +0300
++++ src/share/i18n/esdb/Makefile	2025-06-07 16:23:26.365986000 +0300
+@@ -2,8 +2,7 @@
+ 
+ FILESDIR= ${ESDBDIR}
+ 
+-SUBDIR=	APPLE AST BIG5 CP DEC EUC EBCDIC GB GEORGIAN ISO-2022 ISO-8859 \
+-	ISO646 KAZAKH KOI MISC TCVN UTF
++SUBDIR=	CP UTF
+ SUBDIR_PARALLEL=
+ 
+ FILES+=	esdb.dir esdb.dir.db esdb.alias esdb.alias.db

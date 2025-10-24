@@ -1,0 +1,163 @@
+diff -Naur src.orig/usr.sbin/Makefile src/usr.sbin/Makefile
+--- src.orig/usr.sbin/Makefile	2025-06-06 04:04:27.000000000 +0400
++++ src/usr.sbin/Makefile	2025-09-12 20:32:14.954540000 +0400
+@@ -2,108 +2,40 @@
+ 
+ .include <src.opts.mk>
+ 
+-SUBDIR=	adduser \
+-	arp \
+-	binmiscctl \
+-	boottrace \
+-	camdd \
+-	cdcontrol \
++SUBDIR=	arp \
+ 	chkgrp \
+ 	chown \
+ 	chroot \
+-	ckdist \
+-	clear_locks \
+-	crashinfo \
+ 	cron \
+ 	daemon \
+-	dconschat \
+ 	devctl \
+ 	devinfo \
+ 	diskinfo \
+-	dumpcis \
+ 	etcupdate \
+-	extattr \
+-	extattrctl \
+-	fifolog \
+ 	fstyp \
+-	fwcontrol \
+-	fwget \
+-	getfmac \
+-	getpmac \
+ 	gstat \
+-	i2c \
+-	ifmcstat \
+ 	iostat \
+-	iovctl \
+ 	kldxref \
+-	mailwrapper \
+ 	makefs \
+-	memcontrol \
+-	mergemaster \
+-	mfiutil \
+ 	mixer \
+-	mlxcontrol \
+-	mountd \
+-	mount_smbfs \
+-	mpsutil \
+-	mptutil \
+-	mtest \
+ 	newsyslog \
+-	nfscbd \
+-	nfsd \
+-	nfsdumpstate \
+-	nfsrevoke \
+-	nfsuserd \
+ 	nmtree \
+ 	nologin \
+ 	pciconf \
+-	periodic \
+-	pnfsdscopymr \
+-	pnfsdsfile \
+-	pnfsdskill \
+ 	powerd \
+-	prometheus_sysctl_exporter \
+ 	pstat \
+ 	pw \
+ 	pwd_mkdb \
+-	pwm \
+-	quot \
+-	rarpd \
+-	rmt \
+-	rpcbind \
+-	rpc.lockd \
+-	rpc.statd \
+-	rpc.umntall \
+ 	rtprio \
+-	rwhod \
+ 	service \
+ 	services_mkdb \
+-	sesutil \
+-	setfib \
+-	setfmac \
+-	setpmac \
+-	smbmsg \
+-	snapinfo \
+-	spi \
+-	spray \
+ 	syslogd \
+-	sysrc \
+ 	tcpdrop \
+ 	tcpdump \
+-	tcpsso \
+ 	traceroute \
+ 	trim \
+-	tzsetup \
+-	ugidfw \
+-	valectl \
+ 	vigr \
+-	vipw \
+-	wake \
+-	watch \
+-	watchdogd \
+-	zdump \
+-	zic \
+-	zonectl
++	vipw
+ 
+ # NB: keep these sorted by MK_* knobs
+ 
+@@ -138,7 +70,6 @@
+ SUBDIR.${MK_FLOPPY}+=	fdread
+ SUBDIR.${MK_FLOPPY}+=	fdwrite
+ SUBDIR.${MK_FREEBSD_UPDATE}+=	freebsd-update
+-SUBDIR.${MK_GSSAPI}+=	gssd
+ SUBDIR.${MK_GPIO}+=	gpioctl
+ SUBDIR.${MK_HYPERV}+=	hyperv
+ SUBDIR.${MK_INET6}+=	ip6addrctl
+@@ -152,14 +83,12 @@
+ SUBDIR.${MK_INET6}+=	rtsold
+ SUBDIR.${MK_INET6}+=	traceroute6
+ SUBDIR.${MK_INETD}+=	inetd
+-SUBDIR.${MK_IPFW}+=	ipfwpcap
+ SUBDIR.${MK_ISCSI}+=	ctladm ctld iscsid
+ SUBDIR.${MK_JAIL}+=	jail
+ SUBDIR.${MK_JAIL}+=	jexec
+ SUBDIR.${MK_JAIL}+=	jls
+ # XXX MK_SYSCONS
+ SUBDIR.${MK_LEGACY_CONSOLE}+=	kbdcontrol
+-SUBDIR.${MK_LEGACY_CONSOLE}+=	kbdmap
+ SUBDIR.${MK_LEGACY_CONSOLE}+=	moused
+ SUBDIR.${MK_LEGACY_CONSOLE}+=	vidcontrol
+ SUBDIR.${MK_PPP}+=	pppctl
+@@ -181,10 +110,6 @@
+ SUBDIR.${MK_NIS}+=	ypserv
+ SUBDIR.${MK_NIS}+=	ypset
+ SUBDIR.${MK_NTP}+=	ntp
+-SUBDIR.${MK_OPENSSL}+=	keyserv
+-SUBDIR.${MK_OPENSSL_KTLS}+=	rpc.tlsclntd
+-SUBDIR.${MK_OPENSSL_KTLS}+=	rpc.tlsservd
+-SUBDIR.${MK_PF}+=	ftp-proxy
+ SUBDIR.${MK_PKGBOOTSTRAP}+=	pkg
+ SUBDIR.${MK_PMC}+=	pmc pmcannotate pmccontrol pmcstat pmcstudy
+ SUBDIR.${MK_PPP}+=	ppp
+@@ -201,14 +126,10 @@
+ SUBDIR.${MK_TOOLCHAIN}+=	config
+ SUBDIR.${MK_TOOLCHAIN}+=	crunch
+ SUBDIR.${MK_UNBOUND}+=	unbound
+-SUBDIR.${MK_USB}+=	uathload
+-SUBDIR.${MK_USB}+=	uhsoctl
+ SUBDIR.${MK_USB}+=	usbconfig
+-SUBDIR.${MK_USB}+=	usbdump
+ SUBDIR.${MK_UTMPX}+=	ac
+ SUBDIR.${MK_UTMPX}+=	lastlogin
+ SUBDIR.${MK_UTMPX}+=	utx
+-SUBDIR.${MK_WIRELESS}+=	wlandebug
+ SUBDIR.${MK_WIRELESS}+=	wpa
+ 
+ SUBDIR.${MK_TESTS}+=	tests

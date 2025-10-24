@@ -1,0 +1,84 @@
+#
+# user profile (non-privileged interactive shells)
+#
+
+set -o emacs
+
+bind '^L=clear-screen'
+
+if (( USER_ID )); then
+	export PS1='$(printf "\1\r\1\033[0;32m\1%${COLUMNS}s\1\033[m\1\n" "[ ${PWD} ]")'$'\1\r\1\033[0;32m\1$\1\033[m\1 '
+	export PS2='  '
+	export PS3=$'\1\r\1\033[0;32m\1?\1\033[m\1 '
+	export PS4=$'\1\r\1\033[0;32m\1[${EPOCHREALTIME}]\1\033[m\1 '
+	DOAS=$(whence -p doas)
+else
+	export PS1='$(printf "\1\r\1\033[0;31m\1%${COLUMNS}s\1\033[m\1\n" "[ ${PWD} ]")'$'\1\r\1\033[0;31m\1#\1\033[m\1 '
+	export PS2='  '
+	export PS3=$'\1\r\1\033[0;31m\1?\1\033[m\1 '
+	export PS4=$'\1\r\1\033[0;31m\1[${EPOCHREALTIME}]\1\033[m\1 '
+fi
+
+alias p='$DOAS pkg'
+alias root='$DOAS su -m'
+alias poweroff='$DOAS /sbin/shutdown -p now'
+alias reboot='$DOAS /sbin/shutdown -r now'
+alias m='$PAGER'
+alias e='$EDITOR'
+alias h='fc -rl 1 | $PAGER'
+alias r='fc -s'
+alias lk='lock -vnp'
+alias ls='ls -A'
+alias ll='ls -lh'
+alias mkdir='mkdir -p'
+alias mv='mv -v'
+alias rm='rm -rv'
+alias df='df -h'
+alias du='du -shA'
+alias top='top -Szs1'
+alias iotop='top -Szs1 -m io'
+alias psl='ps auxww'
+alias pss='ps -A -o pid,args'
+alias pst='pstree -g3'
+alias kldstat='kldstat -h'
+alias eject='cdcontrol eject cd0'
+alias pwgen='LC_ALL=C tr -cd "A-Za-z0-9!#$%&*+,-.:=@^_~" < /dev/urandom | head -c 36'
+alias rsrc='$DOAS zfs rollback $(zfs list -H -o name /usr/src)@default'
+alias psrc='$DOAS patch -V none -d /usr <'
+
+function ..  { builtin cd ..    && ls; }
+function ... { builtin cd ../.. && ls; }
+function cd  { builtin cd "$@"  && ls; }
+
+pull() {
+	[ "$1" == '-n' ] && local dry_run=n
+	rsync -4rlpogdchzvK$dry_run --delete --files-from "$XDG_CONFIG_HOME"/rsynclist backup:. /
+}
+
+push() {
+	[ "$1" == '-n' ] && local dry_run=n
+	rsync -4rlpogdchzv$dry_run --delete --files-from "$XDG_CONFIG_HOME"/rsynclist / backup:.
+}
+
+bkup() {
+	TMPDIR=$(mktemp -d)
+	echo -n 'Syncing ...'
+	rsync -4rlpogdchzqK --delete --files-from "$XDG_CONFIG_HOME"/rsynclist backup:. "$TMPDIR"/
+	echo -n ' Compressing ...'
+	tar Jcf "$HOME"/backup-$(date +'%Y-%m-%d').txz -C "$TMPDIR" .
+	command rm -rf "$TMPDIR"
+	echo ' Done'
+}
+
+uu() {
+	mntdir=$(mount -p | awk '$2 ~ /mnt\/.+/ && $3 ~ "(fuse|msdos)fs" {print $2}')
+	if [ -n "$mntdir" ]; then
+		sync
+		if $DOAS umount "$mntdir"; then
+			$DOAS rmdir "$mntdir"
+			notify-send -t 3000 "$mntdir is unmounted"
+		else
+			notify-send -t 3000 "Failed to unmount $mntdir"
+		fi
+	fi
+}

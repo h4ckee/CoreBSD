@@ -1,0 +1,13 @@
+diff -Naur src.orig/share/i18n/csmapper/Makefile src/share/i18n/csmapper/Makefile
+--- src.orig/share/i18n/csmapper/Makefile	2024-11-29 03:03:42.000000000 +0300
++++ src/share/i18n/csmapper/Makefile	2025-06-07 16:31:20.136590000 +0300
+@@ -2,8 +2,7 @@
+ 
+ FILESDIR= ${CSMAPPERDIR}
+ 
+-SUBDIR=	APPLE AST BIG5 CNS CP EBCDIC GB GEORGIAN ISO646 ISO-8859 JIS \
+-	KAZAKH KOI KS MISC TCVN
++SUBDIR=	CP
+ SUBDIR_PARALLEL=
+ 
+ mapper.dir: ${SUBDIR}

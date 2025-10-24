@@ -1,0 +1,28 @@
+diff -Naur src.orig/lib/libclang_rt/Makefile src/lib/libclang_rt/Makefile
+--- src.orig/lib/libclang_rt/Makefile	2025-06-06 00:04:20.000000000 +0000
++++ src/lib/libclang_rt/Makefile	2025-06-17 14:02:32.942032000 +0000
+@@ -49,16 +49,6 @@
+ SUBDIR+=	${SD_UBSAN}
+ SUBDIR+=	${SD_XRAY}
+ .elif ${MACHINE_CPUARCH} == "amd64"
+-SUBDIR+=	${SD_ASAN}
+-SUBDIR+=	${SD_CFI}
+-SUBDIR+=	${SD_DD}
+-SUBDIR+=	${SD_FUZZER}
+-SUBDIR+=	${SD_MSAN}
+-SUBDIR+=	${SD_SAFESTACK}
+-SUBDIR+=	${SD_STATS}
+-SUBDIR+=	${SD_TSAN}
+-SUBDIR+=	${SD_UBSAN}
+-SUBDIR+=	${SD_XRAY}
+ .elif ${MACHINE_CPUARCH} == "arm"
+ # nothing for 32-bit arm yet
+ .elif ${MACHINE_CPUARCH} == "i386"
+@@ -91,7 +81,6 @@
+ .endif
+ 
+ SUBDIR+=	${SD_INCLUDE}
+-SUBDIR+=	${SD_PROFILE}
+ 
+ SUBDIR_PARALLEL=
+ 

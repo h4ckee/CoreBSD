@@ -1,0 +1,15 @@
+diff -Naur src.orig/usr.bin/login/Makefile src/usr.bin/login/Makefile
+--- src.orig/usr.bin/login/Makefile	2025-06-06 00:04:27.000000000 +0000
++++ src/usr.bin/login/Makefile	2025-07-01 07:41:27.206396000 +0000
+@@ -5,10 +5,9 @@
+ 
+ PACKAGE=	runtime
+ 
+-CONFS=	fbtab login.conf motd.template login.access
++CONFS=	fbtab login.conf login.access
+ PROG=	login
+ SRCS=	login.c login_fbtab.c
+-CFLAGS+=-DLOGALL
+ LIBADD=	util pam
+ 
+ WARNS?=	5

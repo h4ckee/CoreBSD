@@ -1,0 +1,36 @@
+diff -Naur src.orig/usr.bin/gzip/Makefile src/usr.bin/gzip/Makefile
+--- src.orig/usr.bin/gzip/Makefile	2024-11-29 03:03:48.000000000 +0300
++++ src/usr.bin/gzip/Makefile	2025-05-14 18:11:38.097792000 +0300
+@@ -3,7 +3,7 @@
+ .include <src.opts.mk>
+ 
+ PROG=		gzip
+-MAN=		gzip.1 gzexe.1 zdiff.1 zforce.1 zmore.1 znew.1
++MAN=		gzip.1 gzexe.1
+ 
+ LIBADD=		z lzma zstd
+ 
+@@ -15,20 +15,15 @@
+ 
+ CFLAGS+=	-I${SRCTOP}/sys/contrib/zstd/lib
+ 
+-SCRIPTS=	gzexe zdiff zforce zmore znew
++SCRIPTS=	gzexe
+ 
+ MLINKS+=	gzip.1 gunzip.1 \
+ 		gzip.1 gzcat.1 \
+-		gzip.1 zcat.1 \
+-		zdiff.1 zcmp.1 \
+-		zdiff.1 xzdiff.1 \
+-		zmore.1 zless.1
++		gzip.1 zcat.1
+ 
+ LINKS+=		${BINDIR}/gzip ${BINDIR}/gunzip \
+ 		${BINDIR}/gzip ${BINDIR}/gzcat \
+-		${BINDIR}/gzip ${BINDIR}/zcat \
+-		${BINDIR}/zdiff ${BINDIR}/xzdiff \
+-		${BINDIR}/zdiff ${BINDIR}/zcmp
++		${BINDIR}/gzip ${BINDIR}/zcat
+ 
+ HAS_TESTS=
+ SUBDIR.${MK_TESTS}+= tests

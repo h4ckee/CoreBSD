@@ -1,0 +1,55 @@
+diff -Naur src.orig/usr.sbin/etcupdate/etcupdate.sh src/usr.sbin/etcupdate/etcupdate.sh
+--- src.orig/usr.sbin/etcupdate/etcupdate.sh	2025-08-12 15:13:42.839368000 +0000
++++ src/usr.sbin/etcupdate/etcupdate.sh	2025-08-12 15:13:29.107389000 +0000
+@@ -1,33 +1,5 @@
+ #!/bin/sh
+ #
+-# SPDX-License-Identifier: BSD-2-Clause
+-#
+-# Copyright (c) 2010-2013 Hudson River Trading LLC
+-# Written by: John H. Baldwin <jhb@FreeBSD.org>
+-# All rights reserved.
+-#
+-# Redistribution and use in source and binary forms, with or without
+-# modification, are permitted provided that the following conditions
+-# are met:
+-# 1. Redistributions of source code must retain the above copyright
+-#    notice, this list of conditions and the following disclaimer.
+-# 2. Redistributions in binary form must reproduce the above copyright
+-#    notice, this list of conditions and the following disclaimer in the
+-#    documentation and/or other materials provided with the distribution.
+-#
+-# THIS SOFTWARE IS PROVIDED BY THE AUTHOR AND CONTRIBUTORS ``AS IS'' AND
+-# ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
+-# IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
+-# ARE DISCLAIMED.  IN NO EVENT SHALL THE AUTHOR OR CONTRIBUTORS BE LIABLE
+-# FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL
+-# DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS
+-# OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION)
+-# HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT
+-# LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY
+-# OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF
+-# SUCH DAMAGE.
+-#
+-
+ # This is a tool to manage updating files that are not updated as part
+ # of 'make installworld' such as files in /etc.  Unlike other tools,
+ # this one is specifically tailored to assisting with mass upgrades.
+@@ -127,7 +99,7 @@
+ # $1 - file pathname
+ ignore()
+ {
+-	local pattern -
++	local pattern
+ 
+ 	set -o noglob
+ 	for pattern in $IGNORE_FILES; do
+@@ -162,7 +134,7 @@
+ # $1 - file pathname
+ always_install()
+ {
+-	local pattern -
++	local pattern
+ 
+ 	set -o noglob
+ 	for pattern in $ALWAYS_INSTALL; do

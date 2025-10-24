@@ -1,0 +1,15 @@
+diff -Naur src.orig/cddl/usr.bin/Makefile src/cddl/usr.bin/Makefile
+--- src.orig/cddl/usr.bin/Makefile	2024-11-29 03:03:36.000000000 +0300
++++ src/cddl/usr.bin/Makefile	2025-06-06 16:13:46.620821000 +0300
+@@ -8,11 +8,6 @@
+ 
+ SUBDIR.${MK_TESTS}+= tests
+ 
+-SUBDIR.${MK_ZFS}+= \
+-	zinject \
+-	ztest \
+-	zstream
+-
+ SUBDIR_PARALLEL=
+ 
+ .include <bsd.subdir.mk>

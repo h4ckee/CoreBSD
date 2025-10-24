@@ -1,0 +1,14 @@
+#!/bin/sh
+#
+# /etc/rc.d/devmatch: loads kernel modules
+#
+
+[[ $1 = '? at '* ]] && list=( $(devmatch -p "$1" | sort -u) ) || exit 1
+
+if (( ${#list[@]} )); then
+	devctl freeze
+	for module in "${list[@]}"; do
+		kldload -q -n "$module" &> /dev/null
+	done
+	devctl thaw
+fi

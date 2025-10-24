@@ -1,0 +1,4 @@
+# List of acceptable shells for chpass(1).
+
+/bin/sh
+/bin/mksh

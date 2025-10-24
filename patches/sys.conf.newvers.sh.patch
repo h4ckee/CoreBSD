@@ -1,0 +1,25 @@
+diff -Naur src.orig/sys/conf/newvers.sh src/sys/conf/newvers.sh
+--- src.orig/sys/conf/newvers.sh	2024-11-29 03:03:43.000000000 +0300
++++ src/sys/conf/newvers.sh	2025-05-25 12:22:53.370512000 +0300
+@@ -117,7 +117,7 @@
+ while getopts crRvV: opt; do
+ 	case "$opt" in
+ 	c)
+-		echo "$COPYRIGHT"
++		echo ""
+ 		exit 0
+ 		;;
+ 	r)
+@@ -297,11 +297,10 @@
+ 	VERSTR="${VERINFO}\\n"
+ else
+ 	VERINFO="${VERSION} #${v}${svn}${git}${gitup}${hg}: ${t}"
+-	VERSTR="${VERINFO}\\n    ${u}@${h}:${d}\\n"
++	VERSTR="${VERINFO}\\n    ${u}@${h}\\n"
+ fi
+ 
+ vers_content_new=$(cat << EOF
+-$COPYRIGHT
+ #define SCCSSTR "@(#)${VERINFO}"
+ #define VERSTR "${VERSTR}"
+ #define RELSTR "${RELEASE}"

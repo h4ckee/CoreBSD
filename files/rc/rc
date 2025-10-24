@@ -1,0 +1,169 @@
+#!/bin/sh
+#
+# /etc/rc: system boot script
+#
+
+source /etc/rc.conf
+
+typeset -u timezone="${timezone:-utc}"
+: "${hostname:=corebsd}"
+: "${keymap:=ru}"
+: "${keyrate:=normal}"
+: "${keybell:=off}"
+: "${blanktime:=300}"
+: "${idletime:=300}"
+: "${standbytime:=900}"
+: "${scrollback:=1000}"
+: "${securelevel:=-1}"
+
+trap : 2
+trap "echo 'Boot interrupted'; exit 1" 3
+
+export RC_BOOT=1
+export HOME=/
+
+PATH=/sbin:/bin:/usr/sbin:/usr/bin
+[ -d /usr/local/sbin ] && PATH="$PATH":/usr/local/sbin
+[ -d /usr/local/bin ] && PATH="$PATH":/usr/local/bin
+export PATH
+
+if (( ${#modules[@]} )); then
+	devctl freeze
+	for module in "${modules[@]}"; do
+		kldload -q -n "$module"
+	done
+	devctl thaw
+fi
+
+if [ -r /etc/sysctl.conf ]; then
+	sysctl -f /etc/sysctl.conf > /dev/null
+fi
+
+if [[ " ${services[@]} " != *" devd "* ]]; then
+	sysctl -n hw.bus.devctl_queue=0 > /dev/null
+fi
+
+if [ -r /etc/devfs.rules ]; then
+	while read line; do
+		case "$line" in
+		\#*|'')	continue ;;
+		\[*\])	number="${line//[!0-9]/}"
+			rulename="${line//[=\[\]0-9]/}"
+			eval "$rulename"="$number"
+			devfs rule -s "$number" delset || exit 1
+			;;
+		*)	eval devfs rule -s "$number" "$line" || exit 1 ;;
+		esac
+	done < /etc/devfs.rules
+	devfs -m /dev ruleset "$removable"
+	devfs -m /dev rule -s "$removable" applyset
+fi
+
+for device in /dev/{mdctl,speaker}; do
+	if [ -c "$device" ]; then
+		chown root:operator "$device"
+		chmod 0660 "$device"
+	fi
+done
+
+for device in /dev/{cd,da,pass,smb,video,xpt}[0-9]; do
+	if [ -c "$device" ]; then
+		chmod 0660 "$device"
+	fi
+done
+
+ln -sf cd0 /dev/cdrom
+
+for disk in $(printf '%s\n' $(sysctl -n kern.disks) | egrep 'a?da[0-9]+'); do
+	if camcontrol identify "$disk" | egrep -q "^advanced power management[ ]+yes"; then
+		camcontrol cmd "$disk" -a "EF 85 00 00 00 00 00 00 00 00 00 00"
+		camcontrol idle "$disk" -t "$idletime"
+		camcontrol standby "$disk" -t "$standbytime"
+	fi
+done
+
+for cachefile in /boot/zfs/*.cache; do
+	if [ -r "$cachefile" ] && ! zpool import -c "$cachefile" -a -N; then
+		echo >&2 "Importing $cachefile failed"
+	fi
+done
+
+if ! mount -uw /; then
+	echo >&2 'Mounting / read-write failed'
+	kill -TERM "$$"
+	exit 1
+fi
+
+zfs mount -a || echo >&2 'Mounting ZFS filesystems failed'
+
+mount -a -t nonfs,nosmbfs || echo >&2 'Mounting fstab filesystems failed'
+
+swapon -aq || echo >&2 'Enabling swap failed'
+
+source /etc/rc.d/ldconfig
+
+if [ -r /boot/nextboot.conf ]; then
+	nextboot -D
+fi
+
+if [ ! -f /boot/kernel/linker.hints ]; then
+	kldxref /boot/kernel
+fi
+
+if [ -s /var/db/entropy ]; then
+	cat /var/db/entropy > /dev/random
+	rm -f /var/db/entropy
+fi
+
+newsyslog -CN
+
+adjkerntz -i
+
+hostname "$hostname"
+
+for mixer in /dev/mixer[0-9]; do
+	if [[ -c "$mixer" && -r /var/db/"${mixer##*/}"-state ]]; then
+		mixer -s -f "$mixer" $(< /var/db/"${mixer##*/}"-state) > /dev/null
+	fi
+done
+
+if [ -f /usr/share/zoneinfo/Etc/"$timezone" ]; then
+	if [ "$(readlink /etc/localtime)" != /usr/share/zoneinfo/Etc/"$timezone" ]; then
+		ln -sf /usr/share/zoneinfo/Etc/"$timezone" /etc/localtime
+	fi
+else
+	if [ "$(readlink /etc/localtime)" != /usr/share/zoneinfo/Etc/UTC ]; then
+		ln -sf /usr/share/zoneinfo/Etc/UTC /etc/localtime
+	fi
+fi
+
+for ttyv in /dev/ttyv*; do
+	kbdcontrol -F -l "$keymap" -r "$keyrate" -b "$keybell" < "$ttyv" &> "$ttyv"
+	vidcontrol -t "$blanktime" -h "$scrollback" < "$ttyv" &> "$ttyv"
+done
+
+if (( ${#services[@]} )); then
+	for service in "${services[@]}"; do
+		case "$service" in
+			\!*)	continue ;;
+			\@*)	if [ -x /etc/rc.d/"${service#@}" ]; then
+					( /etc/rc.d/"${service#@}" start ) &> /dev/ttyv0 &
+				elif [ -x /usr/local/etc/rc.d/"${service#@}" ]; then
+					( /usr/local/etc/rc.d/"${service#@}" start ) &> /dev/ttyv0 &
+				fi
+				;;
+			*)	if [ -x /etc/rc.d/"$service" ]; then
+					/etc/rc.d/"$service" start
+				elif [ -x /usr/local/etc/rc.d/"$service" ]; then
+					/usr/local/etc/rc.d/"$service" start
+				fi
+				;;
+		esac
+	done
+fi
+
+if (( securelevel >= 0 )); then
+	echo -n 'Security level:'
+	sysctl -n kern.securelevel="$securelevel" > /dev/null
+	echo " $securelevel"
+fi

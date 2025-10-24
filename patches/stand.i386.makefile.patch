@@ -1,0 +1,23 @@
+diff -Naur src.orig/stand/i386/Makefile src/stand/i386/Makefile
+--- src.orig/stand/i386/Makefile	2025-06-06 00:04:21.000000000 +0000
++++ src/stand/i386/Makefile	2025-08-16 13:43:38.571458000 +0000
+@@ -9,17 +9,15 @@
+ SUBDIR.yes+=	btx libi386
+ SUBDIR.yes+=	.WAIT
+ 
+-SUBDIR.yes+=	mbr pmbr boot0 boot0sio boot2 cdboot gptboot \
+-		isoboot
++SUBDIR.yes+=	pmbr cdboot isoboot
+ 
+ SUBDIR.${MK_FORTH}+= loader_4th
+ SUBDIR.${MK_LOADER_LUA}+= loader_lua
+-SUBDIR.yes+=	loader_simp
+ 
+ # special boot programs, 'self-extracting boot2+loader'
+ SUBDIR.${MK_LOADER_PXEBOOT}+=	pxeldr
+ 
+-SUBDIR.${MK_LOADER_ZFS}+=	zfsboot gptzfsboot
++SUBDIR.${MK_LOADER_ZFS}+=	gptzfsboot
+ 
+ .if defined(PXEBOOT_DEFAULT_INTERP)
+ L=${PXEBOOT_DEFAULT_INTERP}

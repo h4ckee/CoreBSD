@@ -1,0 +1,14 @@
+diff -Naur src.orig/lib/libiconv_modules/Makefile src/lib/libiconv_modules/Makefile
+--- src.orig/lib/libiconv_modules/Makefile	2025-06-06 03:04:20.000000000 +0300
++++ src/lib/libiconv_modules/Makefile	2025-06-15 19:53:20.592745000 +0300
+@@ -1,9 +1,7 @@
+ 
+ .include <bsd.own.mk>
+ 
+-SUBDIR=	BIG5 DECHanyu EUC EUCTW GBK2K HZ ISO2022 JOHAB MSKanji UES UTF1632 \
+-	UTF7 UTF8 VIQR ZW iconv_none iconv_std mapper_646 mapper_none \
+-	mapper_parallel mapper_serial mapper_std mapper_zone
++SUBDIR=	UTF1632 UTF8 iconv_none iconv_std mapper_none mapper_std
+ SUBDIR_PARALLEL=
+ 
+ .include <bsd.subdir.mk>

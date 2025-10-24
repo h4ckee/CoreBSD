@@ -1,0 +1,18 @@
+diff -Naur src.orig/share/i18n/esdb/UTF/UTF.part src/share/i18n/esdb/UTF/UTF.part
+--- src.orig/share/i18n/esdb/UTF/UTF.part	2025-06-06 03:04:21.000000000 +0300
++++ src/share/i18n/esdb/UTF/UTF.part	2025-06-15 19:59:05.060056000 +0300
+@@ -1,14 +1,6 @@
+ # $NetBSD: UTF.part,v 1.2 2005/03/05 18:05:15 tnozaki Exp $
+ 
+-7
+ 8
+ 16
+ 16BE
+ 16LE
+-16-INTERNAL
+-16-SWAPPED
+-32
+-32BE
+-32LE
+-32-INTERNAL
+-32-SWAPPED

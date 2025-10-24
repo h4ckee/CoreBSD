@@ -1,0 +1,30 @@
+diff -Naur src.orig/share/mk/bsd.lib.mk src/share/mk/bsd.lib.mk
+--- src.orig/share/mk/bsd.lib.mk	2025-06-06 00:04:21.000000000 +0000
++++ src/share/mk/bsd.lib.mk	2025-06-18 07:42:52.477508000 +0000
+@@ -333,10 +333,7 @@
+ all: ${_LIBS}
+ .endif
+ 
+-.if ${MK_MAN} != "no" && !defined(LIBRARIES_ONLY)
+-all: all-man
+ .endif
+-.endif
+ 
+ CLEANFILES+=	${_LIBS}
+ 
+@@ -477,15 +474,6 @@
+ LINKTAGS=	dev
+ .include <bsd.links.mk>
+ 
+-.if ${MK_MAN} != "no" && !defined(LIBRARIES_ONLY)
+-realinstall: maninstall
+-.ORDER: beforeinstall maninstall
+-.endif
+-
+-.endif
+-
+-.if ${MK_MAN} != "no" && !defined(LIBRARIES_ONLY)
+-.include <bsd.man.mk>
+ .endif
+ 
+ .if defined(LIB) && !empty(LIB)

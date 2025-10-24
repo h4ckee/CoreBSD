@@ -1,0 +1,22 @@
+diff -Naur src.orig/stand/i386/loader/Makefile src/stand/i386/loader/Makefile
+--- src.orig/stand/i386/loader/Makefile	2025-06-06 04:04:21.000000000 +0400
++++ src/stand/i386/loader/Makefile	2025-09-29 16:45:19.128276000 +0400
+@@ -1,14 +1,14 @@
+ HAVE_ZFS=		${MK_LOADER_ZFS}
+ 
+ LOADER_NET_SUPPORT?=	yes
+-LOADER_NFS_SUPPORT?=	yes
+-LOADER_TFTP_SUPPORT?=	yes
++LOADER_NFS_SUPPORT?=	no
++LOADER_TFTP_SUPPORT?=	no
+ LOADER_CD9660_SUPPORT?=	yes
+ LOADER_EXT2FS_SUPPORT?=	no
+ LOADER_MSDOS_SUPPORT?=	no
+-LOADER_UFS_SUPPORT?=	yes
++LOADER_UFS_SUPPORT?=	no
+ LOADER_GZIP_SUPPORT?=	yes
+-LOADER_BZIP2_SUPPORT?=	yes
++LOADER_BZIP2_SUPPORT?=	no
+ 
+ .include <bsd.init.mk>
+ 

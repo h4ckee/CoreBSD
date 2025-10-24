@@ -1,0 +1,12 @@
+diff -Naur src.orig/cddl/share/zfs/Makefile src/cddl/share/zfs/Makefile
+--- src.orig/cddl/share/zfs/Makefile	2025-06-06 03:04:14.000000000 +0300
++++ src/cddl/share/zfs/Makefile	2025-06-09 20:06:44.951850000 +0300
+@@ -1,7 +1,7 @@
+ 
+ .include <src.opts.mk>
+ 
+-SUBDIR= compatibility.d
++SUBDIR=
+ 
+ SUBDIR_PARALLEL=
+ 

@@ -1,0 +1,40 @@
+#!/bin/sh
+#
+# /etc/rc.d/power_profile: modify system power profile
+#
+
+case "$1" in
+0x00)	# AC offline
+	sysctl -n hw.acpi.cpu.cx_lowest=Cmax > /dev/null
+	for interface in $(printf '%s\n' $(ifconfig -l inet) | egrep 'wlan[0-9]'); do
+		ifconfig "$interface" powersave
+	done
+	;;
+0x01)	# AC online
+	sysctl -n hw.acpi.cpu.cx_lowest=C1 > /dev/null
+	for interface in $(printf '%s\n' $(ifconfig -l inet) | egrep 'wlan[0-9]'); do
+		ifconfig "$interface" -powersave
+	done
+	;;
+0x80)	# Battery state
+	level=$(sysctl -nq hw.acpi.battery.life)
+	state=$(sysctl -nq hw.acpi.battery.state)
+	if (( level < 6 && state == 1 )); then
+		lifetime=$(sysctl -nq hw.acpi.battery.time)
+		wall <<- EOF
+			Battery is running low:	"$level"%
+			Estimated lifetime:	"$lifetime" min.
+		EOF
+	elif (( level < 3 && state != 2 )); then
+		logger -t battery -p daemon.notice "Battery running low. Shutting down"
+		wall <<- EOF
+			Battery is running low:	"$level"%
+			Emergency shutdown initiated.
+		EOF
+		shutdown -p now
+	fi
+	;;
+*)	echo "${0##*/} [0x00|0x01|0x80]"
+	exit
+	;;
+esac

@@ -1,0 +1,49 @@
+#!/bin/sh
+#
+# /etc/rc.d/netif: network interface setup
+#
+
+source /etc/rc.conf
+
+case "$1" in
+start)		for interface in "${interfaces[@]}"; do
+			if [[ " $(ifconfig -l) " != *" $interface "* ]]; then
+				echo >&2 "No interface $interface found"
+				exit 1
+			fi
+			case "$interface" in
+			lo[0-9])	ifconfig "$interface" inet 127.0.0.1/8 alias up ;;
+			pflog[0-9])	ifconfig "$interface" up ;;
+			*[0-9])		nameref interface
+					address="$interface"
+					interface="${!interface}"
+					if [[ $address = +([0-9]).+([0-9]).+([0-9]).+([0-9]) ]]; then
+						ifconfig "${interface}" inet "$address" mtu "${mtu:=1500}" up
+					else
+						ifconfig "${interface}" up
+					fi
+					;;
+			esac
+		done
+		if [ "$gateway" ]; then
+			route add default "$gateway"
+		fi
+		if [ "$route" ]; then # Ex.: 192.168.10.0/24 192.168.1.1
+			net="${route% *}"
+			hop="${route#* }"
+			route add -net "$net" "$hop"
+		fi
+		;;
+stop)		route -n flush -inet > /dev/null
+		for interface in "${interfaces[@]}"; do
+			ifconfig "$interface" inet delete 2> /dev/null
+			ifconfig "$interface" down
+		done
+		;;
+restart)	"$0" stop
+		"$0" start
+		;;
+*)		echo "${0##*/} [start|stop|restart]"
+		exit
+		;;
+esac

@@ -1,0 +1,12 @@
+diff -Naur src.orig/lib/libmagic/Makefile src/lib/libmagic/Makefile
+--- src.orig/lib/libmagic/Makefile	2025-06-06 00:04:20.000000000 +0000
++++ src/lib/libmagic/Makefile	2025-06-17 17:55:02.036846000 +0000
+@@ -11,7 +11,7 @@
+ .if !make(build-tools)
+ LIBADD=	z
+ .endif
+-MAN=	libmagic.3 magic.5
++MAN=	magic.5
+ 
+ SRCS=	apprentice.c apptype.c ascmagic.c buffer.c cdf.c cdf_time.c \
+ 	compress.c der.c encoding.c fsmagic.c funcs.c is_json.c \

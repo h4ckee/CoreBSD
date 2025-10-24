@@ -1,0 +1,289 @@
+#!/bin/sh
+
+if (( USER_ID )); then
+	echo >&2 "===> Run ${0##*/} as root"
+	exit 1
+fi
+
+VERSION='14.3-RELEASE'
+BASEURL="http://ftp2.ru.freebsd.org/pub/FreeBSD/releases/amd64/${VERSION}"
+MKSHURL="http://www.mirbsd.org/MirOS/dist/mir/mksh"
+BASESRC='src.txz'
+MKSHSRC='mksh-R59c.tgz'
+CURDIR="$PWD"
+OBJDIR='/usr/obj'
+TMPDIR='/tmp'
+SRCDIR='/usr/src'
+SRCPOOL="$(zfs list -H -o name $SRCDIR)"
+DATE="$(date '+%y%m%d%H%M')"
+HWMODEL="$(sysctl -n hw.model)"
+
+trap 'exit 2' 1 2 3 13 15
+
+clean_directory() {
+	if [ "$(find $@ -mindepth 1 -print -quit)" ]; then
+		echo "===> Cleaning $@"
+		chflags -R noschg "$@"
+		find "$@" -regex "$@/.*" -delete || exit 1
+	fi
+}
+
+fetch_sources() {
+	echo "===> Fetching $BASESRC"
+	FTP_PASSIVE_MODE=YES fetch --no-verify-peer -q -a -r -o "$TMPDIR" "$BASEURL"/"$BASESRC" || exit 1
+	echo "===> Fetching $MKSHSRC"
+	FTP_PASSIVE_MODE=YES fetch --no-verify-peer -q -a -r -o "$TMPDIR" "$MKSHURL"/"$MKSHSRC" || exit 1
+}
+
+extract_sources() {
+	echo "===> Extracting $BASESRC"
+	LC_ALL=C bsdtar -C / --uid 0 --gid 0 -xf "$TMPDIR"/"$BASESRC" || exit 1
+	echo "===> Extracting $MKSHSRC"
+	LC_ALL=C bsdtar -C "$SRCDIR"/contrib --uid 0 --gid 0 -xf "$TMPDIR"/"$MKSHSRC" || exit 1
+	echo "$VERSION" > "$SRCDIR"/VERSION
+	rm -f "$TMPDIR"/"$BASESRC" "$TMPDIR"/"$MKSHSRC"
+	zfs snapshot "$SRCPOOL"@default
+	zfs clone "$SRCPOOL"@default "$SRCPOOL".orig
+}
+
+check_sources() {
+	if [ -f "$SRCDIR"/VERSION ]; then
+		read SRCVERSION < "$SRCDIR"/VERSION
+		if [ "$SRCVERSION" == "$VERSION" ]; then
+			echo "===> Sources are up to date"
+			return
+		fi
+	fi
+	fetch_sources
+	zfs list -H -r -d 1 -t snap -o name "$SRCPOOL" | xargs -n 1 zfs destroy -R
+	clean_directory "$SRCDIR"
+	extract_sources
+}
+
+patch_sources() {
+	check_sources
+	zfs rollback "$SRCPOOL"@default
+
+	echo "===> Patching $SRCDIR"
+	for patch in "$CURDIR"/patches/*.patch; do
+		echo " * ${patch##*/}"
+		patch -s -V none -d /usr < "$patch" || exit 1
+	done
+
+	cp -R "$CURDIR"/files/mksh			"$SRCDIR"/bin/
+	cp -R "$CURDIR"/files/rc/*			"$SRCDIR"/libexec/rc/
+	cp "$CURDIR"/files/devd/*			"$SRCDIR"/sbin/devd/
+	cp "$CURDIR"/livecd/*				"$SRCDIR"/release/
+	cp "$CURDIR"/kernel/*				"$SRCDIR"/sys/amd64/conf/
+	cp "$CURDIR"/files/shells			"$SRCDIR"/etc/
+	cp "$CURDIR"/files/loader*			"$SRCDIR"/stand/defaults/
+	cp "$CURDIR"/files/dot.*			"$SRCDIR"/share/skel/
+	cp "$CURDIR"/files/devfs.rules			"$SRCDIR"/sbin/devfs/
+	cp "$CURDIR"/files/sysctl.conf			"$SRCDIR"/sbin/sysctl/
+	cp "$CURDIR"/files/pf.conf			"$SRCDIR"/sbin/pfctl/
+	cp "$CURDIR"/files/etcupdate.conf		"$SRCDIR"/usr.sbin/etcupdate/
+	cp "$CURDIR"/files/FreeBSD.conf.quarterly	"$SRCDIR"/usr.sbin/pkg/
+	cp "$CURDIR"/files/service.sh			"$SRCDIR"/usr.sbin/service/
+	cp "$CURDIR"/files/zzz.sh			"$SRCDIR"/usr.sbin/zzz/
+
+	ln "$SRCDIR"/sys/amd64/conf/COREBSD.hints "$SRCDIR"/sys/amd64/conf/DESKTOP.hints
+	cat "$CURDIR"/kernel/COREBSD.hints "$CURDIR"/kernel/LAPTOP.hints > "$SRCDIR"/sys/amd64/conf/LAPTOP.hints
+	ln "$SRCDIR"/share/numericdef_unicode/uk_UA.UTF-8.src	"$SRCDIR"/share/numericdef_unicode/ru_RU.UTF-8.src
+
+	touch "$SRCDIR"/.patched
+}
+
+check_patched() {
+	if [ -f "$SRCDIR"/.patched ]; then
+		echo "===> Sources are patched"
+	else
+		patch_sources
+	fi
+}
+
+set_environment() {
+	export USER="root"
+	export BOOTWAIT=0
+	export KERNEL_FLAGS="-j$(sysctl -n hw.ncpu)"
+	export WORLD_FLAGS="$KERNEL_FLAGS"
+	export RELEASE_FLAGS="$KERNEL_FLAGS"
+	export SRCCONF="${CURDIR}/files/src.conf"
+	export WRKDIRPREFIX="$OBJDIR"
+	export LOCAL_ITOOLS="printf"
+	export MAN_ARCH="amd64"
+	export NOPKG="YES"
+	export NOPORTS="YES"
+	export NOSRC="YES"
+
+	MODULES='aac aacraid accf_data accf_dns accf_http acl_nfs4 acl_posix1e ae aesni age agp ahci aic7xxx alc ale \
+		amd_ecc_inject amdsbwd amdtemp arcmsr ata ath_hal axgbe bce bfe bge bios bnxt bxe cam \
+		cardbus cas cbb cc cd9660 ciss coretemp cpufreq crypto cryptodev cxgbe dc dcons dcons_crom em ena \
+		et evdev exca ext2fs fdc firewire firmware fxp gem geom hid hpt27xx hptiop hptmv hptnr hptrr hwpmc \
+		hyperv iavf ice ida if_gif if_tuntap if_vlan iflib igc imgact_binmisc io ip6_mroute_mod ipfw \
+		ipfw_nat ipfw_nat64 ipfw_nptv6 ipfw_pmod ipmi ips ipw isci isp iwi iwn ix ixl ixv jme kbdmux kgssapi \
+		kgssapi_krb5 khelp krpc le lge libalias linprocfs linsysfs linux linux64 linux_common \
+		linuxkpi_wlan lpt malo mana md mem mfi mii miibus mlx mlx5 mlx5en mlxfw mmc mmcsd mpi3mr mpr mps mpt \
+		mrsas msdosfs msk mvs mwl netlink nfe nfscl nfscommon nfsd nfslockd nfssvc nge nvd nvme ocs_fc \
+		padlock_rng pfsync plip ppbus ppc ppi pps procfs pseudofs puc qlnx ral random_fortuna random_other \
+		rdrand_rng re rl s3 safexcel sdhci sdhci_acpi sdhci_pci send sge sgx sgx_linux siis sis sk smartpqi \
+		smbfs sound speaker splash ste stge sym syscons sysvipc ti toecore tws uart ufs uinput usb vesa vge \
+		virtio vmd vmware vr wlan wlan_amrr wlan_ccmp wlan_tkip wlan_wep wpi x86bios xdr xl xz zfs zlib'
+
+	case "$HWMODEL" in
+	*Core\(TM\)\ i[57]*)
+		export CPUTYPE="ivybridge"
+		export COPTFLAGS="-O2 -pipe -march=ivybridge -fomit-frame-pointer"
+		export CFLAGS="$COPTFLAGS -fno-plt"
+		export LDFLAGS="-Wl,-O2 -Wl,--sort-common -Wl,--strip-debug"
+		if [ "$COMMAND" = "image" ]; then
+			export KERNCONF="COREBSD"
+			export WITHOUT_MODULES="$MODULES"
+		else
+			if [ "$COMMAND" = "world" ]; then
+				export DESTDIR="/mnt"
+			fi
+			export KERNCONF="LAPTOP"
+			export MODULES_OVERRIDE="acpi/acpi_ibm acpi/acpi_video acpi/acpi_wmi i2c/controllers/ichsmb \
+				i2c/smbus i2c/iic i2c/iicbb i2c/iicbus iwn iwnfw/iwn6000g2a backlight linuxkpi \
+				linuxkpi_hdmi linuxkpi_video lindebugfs pseudofs fusefs usb/uhid usb/ums cuse"
+		fi
+		;;
+	*Core\(TM\)2*)
+		export CPUTYPE="core2"
+		export COPTFLAGS="-O2 -pipe -march=core2 -fomit-frame-pointer"
+		export CFLAGS="$COPTFLAGS -fno-plt"
+		export LDFLAGS="-Wl,-O2 -Wl,--sort-common -Wl,--strip-debug"
+		if [ "$COMMAND" = "image" ]; then
+			export KERNCONF="COREBSD"
+			export WITHOUT_MODULES="$MODULES"
+		else
+			if [ "$COMMAND" = "world" ]; then
+				export DESTDIR="/mnt"
+			fi
+			export KERNCONF="DESKTOP"
+			export MODULES_OVERRIDE="libiconv cd9660_iconv msdosfs_iconv coretemp i2c/controllers/ichsmb \
+				i2c/smbus i2c/iic i2c/iicbb i2c/iicbus sound/driver/emu10k1 backlight linuxkpi \
+				linuxkpi_hdmi linuxkpi_video lindebugfs pseudofs fusefs"
+		fi
+		;;
+	*) echo "Profile for $HWMODEL is not defined"; exit 1 ;;
+	esac
+}
+
+build_kernel() {
+	make -C "$SRCDIR" buildkernel || exit 1
+	strip -p "${OBJDIR}${SRCDIR}"/amd64.amd64/sys/"$KERNCONF"/kernel || exit 1
+}
+
+install_kernel() {
+	make -C "$SRCDIR" installkernel || exit 1
+	kldxref "$DESTDIR"/boot/kernel || exit 1
+}
+
+build_world() {
+	make -C "$SRCDIR" MK_LLVM_BINUTILS=no buildworld || exit 1
+}
+
+install_world() {
+	etcupdate -p -D "$DESTDIR" || exit 1
+	etcupdate resolve -p -D "$DESTDIR"
+	chflags -R noschg "$DESTDIR"
+	find "$DESTDIR" -mindepth 1 \( \
+		-path "$DESTDIR"/boot\* -o \
+		-path "$DESTDIR"/etc\* -o \
+		-path "$DESTDIR"/home\* -o \
+		-path "$DESTDIR"/root\* -o \
+		-path "$DESTDIR"/usr/local\* -o \
+		-path "$DESTDIR"/usr/src\* -o \
+		-path "$DESTDIR"/sys\* -o \
+		-path "$DESTDIR"/var\* \) \
+		-prune -o -delete
+	make -C "$SRCDIR" installworld || exit 1
+	for dir in geom libutil libpam/modules; do
+		make -C "$SRCDIR"/lib/"$dir" all-man maninstall || exit 1
+	done
+	etcupdate -D "$DESTDIR" || exit 1
+	etcupdate resolve -D "$DESTDIR"
+}
+
+delete_old() {
+	make -C "$SRCDIR" -DBATCH_DELETE_OLD_FILES delete-old delete-old-libs || exit 1
+}
+
+build_image() {
+	make -C "$SRCDIR"/release release.iso || exit 1
+	mv "${OBJDIR}${SRCDIR}"/amd64.amd64/release/disc1.iso "$CURDIR"/CoreBSD-"$CPUTYPE"-"$VERSION".iso
+	make -C "$SRCDIR"/release clean
+}
+
+mount_boot_environment() {
+	bectl create be"$DATE" || exit 1
+	bectl mount be"$DATE" "$DESTDIR" || exit 1
+}
+
+unmount_boot_environment() {
+	bectl umount be"$DATE" || exit 1
+	bectl activate -t be"$DATE" || exit 1
+}
+
+show_stats() {
+	for dir in /bin /sbin /usr/bin /usr/sbin /usr/libexec /lib /usr/lib; do
+		printf "${dir}: %d\n" "$(find $dir -type f -depth 1 | wc -l)"
+	done | column -t
+}
+
+usage() {
+	cat <<- INFO
+	usage: "${0##*/}" <command>
+
+	    stats	- show current stats
+	    fetch	- fetch sources
+	    patch	- patch sources
+	    kernel	- update kernel
+	    world	- update world + kernel
+	    image	- build iso image
+
+	INFO
+	exit
+}
+
+COMMAND="$1"
+case "$COMMAND" in
+	fetch)	check_sources ;;
+	patch)	patch_sources ;;
+	kernel)	check_patched
+		clean_directory "$OBJDIR"
+		set_environment
+		build_kernel
+		install_kernel
+		clean_directory "$OBJDIR"
+		shutdown -r now
+		;;
+	world)	check_patched
+		clean_directory "$OBJDIR"
+		set_environment
+		build_world
+		build_kernel
+		mount_boot_environment
+		install_kernel
+		install_world
+		delete_old
+		unmount_boot_environment
+		clean_directory "$OBJDIR"
+		shutdown -r now
+		;;
+	image)	check_patched
+		clean_directory "$OBJDIR"
+		set_environment
+		build_world
+		build_kernel
+		build_image
+		clean_directory "$OBJDIR"
+		echo '--------------------------------------------------------------'
+		echo ">>> Building COREBSD image completed at $( date )"
+		echo '--------------------------------------------------------------'
+		echo "===> ${CURDIR}/CoreBSD-${CPUTYPE}-${VERSION}.iso"
+		;;
+	stats)	show_stats ;;
+	*)	usage ;;
+esac

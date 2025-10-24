@@ -1,0 +1,47 @@
+#!/bin/sh
+#
+# /etc/rc.d/dhclient: DHCP client
+#
+
+source /etc/rc.conf
+
+command=dhclient
+interface="$2"
+flags=-nq
+pidfile=/var/run/"$command"/"$interface".pid
+
+if [ -z "$interface" ]; then
+	echo >&2 'interface not provided'
+	exit 1
+fi
+
+nameref interface
+address="$interface"
+interface="${!interface}"
+
+if [ "$address" != "dhcp" ]; then
+	exit 1
+fi
+
+case "$1" in
+start)		if ! pgrep -q "$command"; then
+			if ! limits -C daemon "$command" $flags -p "$pidfile" "$interface"; then
+				echo >&2 "$command failed"
+				exit 1
+			fi
+			sleep 0.2
+			protect -p $(< "$pidfile")
+		fi
+		;;
+stop)		if [ -f "$pidfile" ]; then
+			pkill -F "$pidfile"
+			rm -f "$pidfile"
+		fi
+		;;
+restart)	"$0" stop "$interface"
+		"$0" start "$interface"
+		;;
+*)		echo "${0##*/} [start|stop|restart] <interface>"
+		exit
+		;;
+esac

@@ -1,0 +1,18 @@
+diff -Naur src.orig/sbin/init/ttys src/sbin/init/ttys
+--- src.orig/sbin/init/ttys	2025-06-05 20:04:20.000000000 -0400
++++ src/sbin/init/ttys	2025-09-07 03:44:22.573417000 -0400
+@@ -33,10 +33,10 @@
+ ttyv1	"/usr/libexec/getty Pc"		xterm	onifexists secure
+ ttyv2	"/usr/libexec/getty Pc"		xterm	onifexists secure
+ ttyv3	"/usr/libexec/getty Pc"		xterm	onifexists secure
+-ttyv4	"/usr/libexec/getty Pc"		xterm	onifexists secure
+-ttyv5	"/usr/libexec/getty Pc"		xterm	onifexists secure
+-ttyv6	"/usr/libexec/getty Pc"		xterm	onifexists secure
+-ttyv7	"/usr/libexec/getty Pc"		xterm	onifexists secure
++ttyv4	"/usr/libexec/getty Pc"		xterm	off secure
++ttyv5	"/usr/libexec/getty Pc"		xterm	off secure
++ttyv6	"/usr/libexec/getty Pc"		xterm	off secure
++ttyv7	"/usr/libexec/getty Pc"		xterm	off secure
+ ttyv8	"/usr/local/bin/xdm -nodaemon"	xterm	off secure
+ # Serial terminals
+ # The 'dialup' keyword identifies dialin lines to login, fingerd etc.

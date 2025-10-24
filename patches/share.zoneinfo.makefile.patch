@@ -1,0 +1,45 @@
+diff -Naur src.orig/share/zoneinfo/Makefile src/share/zoneinfo/Makefile
+--- src.orig/share/zoneinfo/Makefile	2025-06-06 03:04:21.000000000 +0300
++++ src/share/zoneinfo/Makefile	2025-06-09 11:16:12.755930000 +0300
+@@ -53,39 +53,18 @@
+ LEAPFILE=
+ .endif
+ 
+-TZFILES=	africa antarctica asia australasia etcetera europe \
+-		factory northamerica southamerica
+-TZFILES+=	backward
++TZFILES=	etcetera
+ 
+ TZFILES:=	${TZFILES:S/^/${CONTRIBDIR}/}
+ 
+ TZBUILDDIR=	${.OBJDIR}/builddir
+ TZBUILDSUBDIRS=	\
+-		Africa \
+-		America/Argentina \
+-		America/Indiana \
+-		America/Kentucky \
+-		America/North_Dakota \
+-		Antarctica \
+-		Arctic \
+-		Asia \
+-		Atlantic \
+-		Australia \
+-		Etc \
+-		Europe \
+-		Indian \
+-		Pacific
+-TZBUILDSUBDIRS+= US Mexico Chile Canada Brazil
++		Etc
+ 
+ .if !defined(_SKIP_BUILD)
+ all: zonefiles
+ .endif
+ META_TARGETS+=	zonefiles install-zoneinfo
+-
+-#
+-# Produce “fat” zoneinfo files for backward compatibility.
+-#
+-ZICFLAGS?=	-b fat
+ 
+ .if ${MK_DIRDEPS_BUILD} == "yes"
+ ZIC= ${STAGE_HOST_OBJTOP}/usr/sbin/zic

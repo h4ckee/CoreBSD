@@ -1,0 +1,16 @@
+diff -Naur src.orig/usr.sbin/Makefile.amd64 src/usr.sbin/Makefile.amd64
+--- src.orig/usr.sbin/Makefile.amd64	2025-06-05 20:04:27.000000000 -0400
++++ src/usr.sbin/Makefile.amd64	2025-09-03 07:42:29.104564000 -0400
+@@ -12,12 +12,7 @@
+ SUBDIR+=	bhyvectl
+ SUBDIR+=	bhyveload
+ .endif
+-SUBDIR+=	boot0cfg
+ .if ${MK_TOOLCHAIN} != "no"
+ SUBDIR+=	btxld
+ .endif
+-SUBDIR+=	cpucontrol
+-SUBDIR+=	lptcontrol
+-SUBDIR+=	mptable
+-SUBDIR+=	spkrtest
+ SUBDIR+=	zzz

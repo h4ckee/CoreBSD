@@ -1,0 +1,38 @@
+diff -Naur src.orig/bin/Makefile src/bin/Makefile
+--- src.orig/bin/Makefile	2025-06-06 00:04:14.000000000 +0000
++++ src/bin/Makefile	2025-08-02 13:33:36.389451000 +0000
+@@ -7,15 +7,11 @@
+ 	chio \
+ 	chmod \
+ 	cp \
+-	cpuset \
+ 	date \
+ 	dd \
+ 	df \
+-	domainname \
+ 	echo \
+-	ed \
+ 	expr \
+-	freebsd-version \
+ 	getfacl \
+ 	hostname \
+ 	kenv \
+@@ -23,9 +19,9 @@
+ 	ln \
+ 	ls \
+ 	mkdir \
++	mksh \
+ 	mv \
+ 	nproc \
+-	pax \
+ 	pkill \
+ 	ps \
+ 	pwait \
+@@ -34,7 +30,6 @@
+ 	rm \
+ 	rmdir \
+ 	setfacl \
+-	sh \
+ 	sleep \
+ 	stty \
+ 	sync \

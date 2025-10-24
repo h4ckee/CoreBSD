@@ -1,0 +1,132 @@
+diff -Naur src.orig/lib/Makefile src/lib/Makefile
+--- src.orig/lib/Makefile	2025-06-05 20:04:20.000000000 -0400
++++ src/lib/Makefile	2025-09-06 10:23:51.184651000 -0400
+@@ -29,17 +29,10 @@
+ 
+ SUBDIR=	${SUBDIR_BOOTSTRAP} \
+ 	.WAIT \
+-	libsqlite3 \
+ 	geom \
+-	lib9p \
+-	libalias \
+ 	libarchive \
+-	libauditd \
+-	libbegemot \
+ 	libblocksruntime \
+ 	libbsddialog \
+-	libbsdstat \
+-	libbsm \
+ 	libbz2 \
+ 	libcalendar \
+ 	libcam \
+@@ -48,14 +41,12 @@
+ 	libcompat \
+ 	libcrypt \
+ 	libdevctl \
+-	libdevdctl \
+ 	libdevinfo \
+ 	libdevstat \
+ 	libdl \
+ 	libdwarf \
+ 	libedit \
+ 	libelftc \
+-	libevent1 \
+ 	libexecinfo \
+ 	libexpat \
+ 	libfetch \
+@@ -64,7 +55,6 @@
+ 	libgeom \
+ 	libifconfig \
+ 	libipsec \
+-	libiscsiutil \
+ 	libjail \
+ 	libkiconv \
+ 	libkvm \
+@@ -73,49 +63,31 @@
+ 	libmemstat \
+ 	libmd \
+ 	libmixer \
+-	libmt \
+ 	lib80211 \
+ 	libnetbsd \
+-	libnetmap \
+ 	libnv \
+ 	libopenbsd \
+ 	libpam \
+-	libpathconv \
+ 	libpcap \
+-	libpjdlog \
+-	libproc \
+ 	libprocstat \
+ 	libregex \
+-	librpcsvc \
+-	librss \
+ 	librt \
+-	librtld_db \
+ 	libsbuf \
+-	libsmb \
+ 	libstdbuf \
+-	libstdthreads \
+ 	libsysdecode \
+-	libtacplus \
+ 	libthr \
+-	libthread_db \
+ 	libucl \
+-	libufs \
+-	libugidfw \
+ 	libulog \
+ 	libutil \
+-	${_libvgl} \
+-	libwrap \
+ 	libxo \
+ 	liby \
+ 	libz \
+ 	libzstd \
+-	ncurses \
+-	nss_tacplus
++	ncurses
+ 
+ # Inter-library dependencies.  When the makefile for a library contains LDADD
+ # libraries, those libraries should be listed as build order dependencies here.
+ 
+-SUBDIR_DEPEND_geom=	libufs
+ SUBDIR_DEPEND_googletest= libregex
+ SUBDIR_DEPEND_libarchive= libz libbz2 libexpat liblzma libmd libzstd
+ SUBDIR_DEPEND_libauditdm= libbsm
+@@ -134,7 +106,7 @@
+ SUBDIR_DEPEND_librpcsec_gss= libgssapi
+ SUBDIR_DEPEND_libmagic= libz
+ SUBDIR_DEPEND_libmemstat= libkvm
+-SUBDIR_DEPEND_libpam= libcrypt ${_libradius} librpcsvc libtacplus libutil ${_libypclnt} ${_libcom_err}
++SUBDIR_DEPEND_libpam= libcrypt ${_libradius} libutil ${_libypclnt} ${_libcom_err}
+ SUBDIR_DEPEND_libpjdlog= libutil
+ SUBDIR_DEPEND_libprocstat= libkvm libutil
+ SUBDIR_DEPEND_libradius= libmd
+@@ -146,13 +118,7 @@
+ .if ${MK_OFED} != "no"
+ SUBDIR_DEPEND_libpcap= ofed
+ .endif
+-SUBDIR_DEPEND_nss_tacplus= libtacplus
+ 
+-.if !defined(COMPAT_LIBCOMPAT)
+-SUBDIR+=	flua
+-SUBDIR_DEPEND_flua=	libjail
+-.endif
+-
+ # NB: keep these sorted by MK_* knobs
+ 
+ SUBDIR.${MK_BEARSSL}+=	libbearssl libsecureboot
+@@ -204,13 +170,9 @@
+ SUBDIR.${MK_BHYVE}+=	libvmmapi
+ .endif
+ 
+-.if ${MACHINE_ARCH} != "powerpc" && ${MACHINE_CPUARCH} != "arm"
+-SUBDIR.${MK_OPENMP}+=	libomp
+-.endif
+ .if ${MK_USB} != "no"
+ SUBDIR.${MK_OPENSSH}+=	libcbor libfido2
+ .endif
+-SUBDIR.${MK_OPENSSL}+=	libmp
+ SUBDIR.${MK_PF}+=	libpfctl
+ SUBDIR.${MK_PMC}+=	libpmc libpmcstat
+ SUBDIR.${MK_RADIUS_SUPPORT}+=	libradius

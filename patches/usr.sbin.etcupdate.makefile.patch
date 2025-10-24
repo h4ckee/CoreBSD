@@ -1,0 +1,11 @@
+diff -Naur src.orig/usr.sbin/etcupdate/Makefile src/usr.sbin/etcupdate/Makefile
+--- src.orig/usr.sbin/etcupdate/Makefile	2025-06-06 00:04:27.000000000 +0000
++++ src/usr.sbin/etcupdate/Makefile	2025-08-12 15:01:33.712483000 +0000
+@@ -3,6 +3,7 @@
+ 
+ SCRIPTS=etcupdate.sh
+ MAN=	etcupdate.8
++CONFS=	etcupdate.conf
+ 
+ HAS_TESTS=
+ SUBDIR.${MK_TESTS}+= tests

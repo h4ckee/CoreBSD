@@ -1,0 +1,32 @@
+diff -Naur src.orig/usr.sbin/fstyp/Makefile src/usr.sbin/fstyp/Makefile
+--- src.orig/usr.sbin/fstyp/Makefile	2024-11-29 03:03:49.000000000 +0300
++++ src/usr.sbin/fstyp/Makefile	2025-06-04 10:59:58.787868000 +0300
+@@ -3,7 +3,7 @@
+ 
+ PROG=	fstyp
+ SRCS=	apfs.c befs.c cd9660.c exfat.c ext2fs.c fstyp.c geli.c hammer.c	\
+-	hammer2.c hfsplus.c msdosfs.c ntfs.c ufs.c
++	hammer2.c hfsplus.c msdosfs.c ntfs.c
+ 
+ .if ${MK_ZFS} != "no"
+ SRCS +=	zfs.c
+@@ -44,7 +44,7 @@
+ .endfor
+ 
+ 
+-LIBADD=	geom md ufs
++LIBADD=	geom md
+ 
+ .if ${MK_ZFS} != "no"
+ LIBADD+=nvpair zfs spl
+diff -Naur src.orig/usr.sbin/fstyp/fstyp.c src/usr.sbin/fstyp/fstyp.c
+--- src.orig/usr.sbin/fstyp/fstyp.c	2024-11-29 03:03:49.000000000 +0300
++++ src/usr.sbin/fstyp/fstyp.c	2025-06-04 10:59:41.130645000 +0300
+@@ -72,7 +72,6 @@
+ 	{ "hfs+", &fstyp_hfsp, false, NULL },
+ 	{ "msdosfs", &fstyp_msdosfs, false, NULL },
+ 	{ "ntfs", &fstyp_ntfs, false, NTFS_ENC },
+-	{ "ufs", &fstyp_ufs, false, NULL },
+ #ifdef HAVE_ZFS
+ 	{ "zfs", &fstyp_zfs, true, NULL },
+ #endif

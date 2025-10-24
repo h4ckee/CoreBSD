@@ -1,0 +1,4 @@
+hint.hdaa.0.nid20.config="as=1 seq=0 device=Speaker"
+hint.hdaa.0.nid21.config="as=1 seq=15 device=Headphones"
+hint.hdaa.0.nid18.config="as=2 seq=0 device=Mic"
+hint.hdaa.0.nid24.config="as=2 seq=15 device=Mic"

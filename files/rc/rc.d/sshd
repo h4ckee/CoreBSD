@@ -1,0 +1,37 @@
+#!/bin/sh
+#
+# /etc/rc.d/sshd: secure shell daemon
+#
+
+command=sshd
+flags=-4
+pidfile=/var/run/"$command".pid
+
+case "$1" in
+start)		for algorithm in rsa ecdsa ed25519; do
+			keyfile=/etc/ssh/ssh_host_"$algorithm"_key
+			if [ ! -f "$keyfile" ]; then
+				/usr/bin/ssh-keygen -q -t "$algorithm" -N "" -f "$keyfile"
+			fi
+		done
+		if [ "$RC_BOOT" ] || ! pgrep -q "$command"; then
+			if ! limits -C daemon /usr/sbin/"$command" $flags; then
+				echo >&2 "$command failed"
+				exit 1
+			fi
+			sleep 0.2
+			protect -p $(< "$pidfile")
+		fi
+		;;
+stop)		if [ -f "$pidfile" ]; then
+			pkill -F "$pidfile"
+			rm -f "$pidfile"
+		fi
+		;;
+restart)	"$0" stop
+		"$0" start
+		;;
+*)		echo "${0##*/} [start|stop|restart]"
+		exit
+		;;
+esac

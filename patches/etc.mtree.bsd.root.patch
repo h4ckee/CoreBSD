@@ -1,0 +1,119 @@
+diff -Naur src.orig/etc/mtree/BSD.root.dist src/etc/mtree/BSD.root.dist
+--- src.orig/etc/mtree/BSD.root.dist	2025-06-06 00:04:20.000000000 +0000
++++ src/etc/mtree/BSD.root.dist	2025-09-02 09:31:22.972189000 +0000
+@@ -9,16 +9,6 @@
+     boot
+         defaults
+         ..
+-        dtb
+-            allwinner             tags=package=runtime
+-            ..
+-            overlays              tags=package=runtime
+-            ..
+-            rockchip              tags=package=runtime
+-            ..
+-        ..
+-        efi
+-        ..
+         firmware
+         ..
+         loader.conf.d             tags=package=bootloader
+@@ -29,68 +19,24 @@
+         ..
+         modules
+         ..
+-        uboot
+-        ..
+         zfs
+         ..
+     ..
+     dev             mode=0555
+     ..
+     etc
+-        X11
+-        ..
+-        authpf
+-        ..
+-        autofs
+-        ..
+-        bluetooth
+-        ..
+         cron.d
+         ..
+-        defaults
+-        ..
+         devd
+         ..
+-        dma
+-        ..
+-        gss
+-        ..
+-        jail.conf.d
+-        ..
+-        kyua             tags=package=tests
+-        ..
+-        mail
+-        ..
+         mtree
+         ..
+-        newsyslog.conf.d
+-        ..
+-        ntp             mode=0700
+-        ..
+         pam.d
+         ..
+-        periodic
+-            daily
+-            ..
+-            monthly
+-            ..
+-            security
+-            ..
+-            weekly
+-            ..
+-        ..
+         pkg
+         ..
+-        ppp
+-        ..
+-        profile.d
+-        ..
+-        rc.conf.d
+-        ..
+         rc.d
+         ..
+-        security
+-        ..
+         ssh
+         ..
+         ssl
+@@ -99,13 +45,9 @@
+             untrusted
+             ..
+         ..
+-	sysctl.kld.d
+-	..
+         syslog.d
+         ..
+         zfs
+-            compatibility.d
+-            ..
+         ..
+     ..
+     lib
+@@ -118,15 +60,7 @@
+         resolvconf
+         ..
+     ..
+-    media
+-    ..
+     mnt
+-    ..
+-    net
+-    ..
+-    proc            mode=0555
+-    ..
+-    rescue
+     ..
+     root            mode=0750
+     ..

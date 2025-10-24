@@ -1,0 +1,12 @@
+diff -Naur src.orig/lib/libpam/Makefile src/lib/libpam/Makefile
+--- src.orig/lib/libpam/Makefile	2024-11-29 03:03:42.000000000 +0300
++++ src/lib/libpam/Makefile	2025-06-04 12:23:10.931751000 +0300
+@@ -26,8 +26,6 @@
+ # The modules link in libpam.  They build the static modules as well.
+ SUBDIR+=	libpam modules pam.d
+ SUBDIR_DEPEND_modules=	libpam
+-SUBDIR+=	static_libpam
+-SUBDIR_DEPEND_static_libpam= modules
+ SUBDIR_PARALLEL=
+ 
+ .include <bsd.subdir.mk>
