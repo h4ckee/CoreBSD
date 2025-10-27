@@ -1,8 +1,0 @@
-diff -Naur src.orig/secure/lib/libcrypto/modules/Makefile src/secure/lib/libcrypto/modules/Makefile
---- src.orig/secure/lib/libcrypto/modules/Makefile	2025-06-06 03:04:20.000000000 +0300
-+++ src/secure/lib/libcrypto/modules/Makefile	2025-06-12 14:30:42.975523000 +0300
-@@ -1,4 +1,3 @@
--SUBDIR=		legacy
- SUBDIR_PARALLEL=
- 
- .include <bsd.subdir.mk>

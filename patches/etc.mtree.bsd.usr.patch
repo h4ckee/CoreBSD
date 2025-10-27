@@ -1,7 +1,7 @@
 diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
---- src.orig/etc/mtree/BSD.usr.dist	2025-06-06 00:04:20.000000000 +0000
-+++ src/etc/mtree/BSD.usr.dist	2025-09-02 09:24:53.559890000 +0000
-@@ -59,118 +59,22 @@
+--- src.orig/etc/mtree/BSD.usr.dist	2025-06-06 03:04:20.000000000 +0300
++++ src/etc/mtree/BSD.usr.dist	2025-10-27 13:18:00.859251000 +0300
+@@ -59,22 +59,10 @@
                      xray
                      ..
                  ..
@@ -24,11 +24,8 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
          i18n
          ..
          libxo
-             encoder
-             ..
+@@ -85,92 +73,10 @@
          ..
--        ossl-modules
--        ..
      ..
      libdata
 -        ldscripts
@@ -120,7 +117,7 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
      ..
      local
      ..
-@@ -179,274 +83,20 @@
+@@ -179,274 +85,20 @@
      sbin
      ..
      share
@@ -395,7 +392,7 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
                  UTF
                  ..
              ..
-@@ -459,440 +109,44 @@
+@@ -459,440 +111,44 @@
                  ..
              ..
          ..
