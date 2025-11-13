@@ -29,7 +29,6 @@ alias top='top -Szs1'
 alias iotop='top -Szs1 -m io'
 alias psl='ps auxww'
 alias pss='ps -A -o pid,args'
-alias pst='pstree -g3'
 alias kldstat='kldstat -h'
 
 function ..  { builtin cd ..    && ls; }
