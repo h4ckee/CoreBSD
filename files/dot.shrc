@@ -20,7 +20,7 @@ else
 fi
 
 alias p='$DOAS pkg'
-alias root='$DOAS su -m'
+alias root='$DOAS su -l'
 alias poweroff='$DOAS /sbin/shutdown -p now'
 alias reboot='$DOAS /sbin/shutdown -r now'
 alias m='$PAGER'
@@ -35,6 +35,7 @@ alias mv='mv -v'
 alias rm='rm -rv'
 alias df='df -h'
 alias du='du -shA'
+alias lscpu='sysctl -n hw.model'
 alias top='top -Szs1'
 alias iotop='top -Szs1 -m io'
 alias psl='ps auxww'
@@ -43,6 +44,7 @@ alias pst='pstree -g3'
 alias kldstat='kldstat -h'
 alias eject='cdcontrol eject cd0'
 alias pwgen='LC_ALL=C tr -cd "A-Za-z0-9!#$%&*+,-.:=@^_~" < /dev/urandom | head -c 36'
+alias pflog='$DOAS tcpdump -netttvr /var/log/pflog'
 alias rsrc='$DOAS zfs rollback $(zfs list -H -o name /usr/src)@default'
 alias psrc='$DOAS patch -V none -d /usr <'
 
@@ -52,19 +54,18 @@ function cd  { builtin cd "$@"  && ls; }
 
 pull() {
 	[ "$1" == '-n' ] && local dry_run=n
-	rsync -4rlpogdchzvK$dry_run --delete --files-from "$XDG_CONFIG_HOME"/rsynclist backup:. /
+	rsync -4rlpogdchzvK$dry_run --ignore-existing --delete --files-from "$XDG_CONFIG_HOME"/rsynclist backup:. "$HOME"/
 }
 
 push() {
 	[ "$1" == '-n' ] && local dry_run=n
-	rsync -4rlpogdchzv$dry_run --delete --files-from "$XDG_CONFIG_HOME"/rsynclist / backup:.
+	rsync -4rlpogdchzv$dry_run --copy-unsafe-links --delete --files-from "$XDG_CONFIG_HOME"/rsynclist "$HOME"/ backup:.
 }
 
 bkup() {
-	TMPDIR=$(mktemp -d)
-	echo -n 'Syncing ...'
+	TMPDIR="$(mktemp -d)"
+	echo -n 'Backing up ...'
 	rsync -4rlpogdchzqK --delete --files-from "$XDG_CONFIG_HOME"/rsynclist backup:. "$TMPDIR"/
-	echo -n ' Compressing ...'
 	tar Jcf "$HOME"/backup-$(date +'%Y-%m-%d').txz -C "$TMPDIR" .
 	command rm -rf "$TMPDIR"
 	echo ' Done'
