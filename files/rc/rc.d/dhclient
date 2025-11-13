@@ -7,7 +7,7 @@ source /etc/rc.conf
 
 command=dhclient
 interface="$2"
-flags=-nq
+flags=-nqb
 pidfile=/var/run/"$command"/"$interface".pid
 
 if [ -z "$interface" ]; then
