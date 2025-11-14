@@ -213,6 +213,7 @@ delete_old() {
 build_image() {
 	make -C "$SRCDIR"/release release.iso || exit 1
 	mv "${OBJDIR}${SRCDIR}"/amd64.amd64/release/disc1.iso "$CURDIR"/CoreBSD-"$CPUTYPE"-"$VERSION".iso
+	xz -9v "$CURDIR"/CoreBSD-"$CPUTYPE"-"$VERSION".iso
 	make -C "$SRCDIR"/release clean
 }
 
@@ -282,7 +283,7 @@ case "$COMMAND" in
 		echo '--------------------------------------------------------------'
 		echo ">>> Building COREBSD image completed at $( date )"
 		echo '--------------------------------------------------------------'
-		echo "===> ${CURDIR}/CoreBSD-${CPUTYPE}-${VERSION}.iso"
+		echo "===> ${CURDIR}/CoreBSD-${CPUTYPE}-${VERSION}.iso.xz"
 		;;
 	stats)	show_stats ;;
 	*)	usage ;;
