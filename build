@@ -230,7 +230,7 @@ unmount_boot_environment() {
 show_stats() {
 	for dir in /bin /sbin /usr/bin /usr/sbin /usr/libexec /lib /usr/lib; do
 		printf "${dir}: %d\n" "$(find $dir -type f -depth 1 | wc -l)"
-	done | column -t
+	done | column -t | tee ${VERSION}.stats
 }
 
 usage() {
