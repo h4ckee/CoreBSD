@@ -22,9 +22,9 @@ options		GEOM_LABEL
 options		SCSI_NO_SENSE_STRINGS
 options		SCSI_NO_OP_STRINGS
 options		SCSI_DELAY=1000
-options		SYSVSHM
-options		SYSVMSG
-options		SYSVSEM
+# options	SYSVSHM
+# options	SYSVMSG
+# options	SYSVSEM
 options		_KPOSIX_PRIORITY_SCHEDULING
 options		PRINTF_BUFR_SIZE=128
 options		KBD_INSTALL_CDEV
