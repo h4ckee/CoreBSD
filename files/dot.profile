@@ -13,4 +13,4 @@ fi
 export PAGER=less
 export ENV=~/.shrc
 
-rm -f ~/.serverauth.*
+ls -t ~/.serverauth.* 2>/dev/null | tail -n +2 | xargs rm -f --
