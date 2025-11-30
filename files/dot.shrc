@@ -54,12 +54,12 @@ function cd  { builtin cd "$@"  && ls; }
 
 pull() {
 	[ "$1" == '-n' ] && local dry_run=n
-	rsync -4rlpogdchzvK$dry_run --ignore-existing --delete --files-from "$XDG_CONFIG_HOME"/rsynclist backup:. "$HOME"/
+	rsync -4rlpogdchzvK$dry_run --info=STATS0 --ignore-existing --delete --files-from "$XDG_CONFIG_HOME"/rsynclist backup:. "$HOME"/
 }
 
 push() {
 	[ "$1" == '-n' ] && local dry_run=n
-	rsync -4rlpogdchzv$dry_run --copy-unsafe-links --delete --files-from "$XDG_CONFIG_HOME"/rsynclist "$HOME"/ backup:.
+	rsync -4rlpogdchzv$dry_run --info=SYMSAFE0,STATS0 --copy-unsafe-links --delete --files-from "$XDG_CONFIG_HOME"/rsynclist "$HOME"/ backup:.
 }
 
 bkup() {
