@@ -1,6 +1,6 @@
 diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
 --- src.orig/usr.bin/Makefile	2025-06-06 04:04:26.000000000 +0400
-+++ src/usr.bin/Makefile	2025-09-12 20:29:25.846170000 +0400
++++ src/usr.bin/Makefile	2025-12-11 16:20:01.597417000 +0400
 @@ -2,43 +2,29 @@
  
  .include <src.opts.mk>
@@ -57,7 +57,7 @@ diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
  	getent \
  	getopt \
  	grep \
-@@ -58,88 +41,38 @@
+@@ -58,88 +41,39 @@
  	head \
  	hexdump \
  	id \
@@ -80,7 +80,7 @@ diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
  	limits \
  	locale \
 -	localedef \
--	lock \
+ 	lock \
  	lockf \
  	logger \
  	login \
@@ -146,7 +146,7 @@ diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
  	sort \
  	split \
  	stat \
-@@ -148,10 +81,8 @@
+@@ -148,10 +82,8 @@
  	systat \
  	tail \
  	tar \
@@ -157,7 +157,7 @@ diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
  	top \
  	touch \
  	tr \
-@@ -163,24 +94,16 @@
+@@ -163,24 +95,16 @@
  	unexpand \
  	uniq \
  	unzip \
@@ -182,7 +182,7 @@ diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
  	yes \
  	zstd
  
-@@ -213,16 +136,13 @@
+@@ -213,16 +137,13 @@
  SUBDIR+=		gh-bc
  .else
  SUBDIR.${MK_OPENSSL}+=	bc
@@ -199,7 +199,7 @@ diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
  SUBDIR.${MK_LDNS_UTILS}+=	drill
  SUBDIR.${MK_LDNS_UTILS}+=	host
  SUBDIR.${MK_LIB32}+=	ldd32
-@@ -235,20 +155,16 @@
+@@ -235,20 +156,16 @@
  SUBDIR.${MK_MAKE}+=	bmake
  SUBDIR.${MK_MAN_UTILS}+=	man
  SUBDIR.${MK_NETCAT}+=	nc
@@ -220,7 +220,7 @@ diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
  SUBDIR.${MK_TFTP}+=	tftp
  .if ${MK_LLVM_BINUTILS} == "no"
  # Only build the elftoolchain tools if we aren't using the LLVM ones.
-@@ -266,26 +182,14 @@
+@@ -266,26 +183,14 @@
  .if ${MK_LLVM_BINUTILS} == "no" || !make(install)
  SUBDIR+=			strings
  .endif

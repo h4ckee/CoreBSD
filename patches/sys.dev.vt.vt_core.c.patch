@@ -1,13 +1,13 @@
 diff -Naur src.orig/sys/dev/vt/vt_core.c src/sys/dev/vt/vt_core.c
---- src.orig/sys/dev/vt/vt_core.c	2025-06-06 03:04:25.000000000 +0300
-+++ src/sys/dev/vt/vt_core.c	2025-06-12 14:44:03.634063000 +0300
+--- src.orig/sys/dev/vt/vt_core.c	2025-06-06 04:04:25.000000000 +0400
++++ src/sys/dev/vt/vt_core.c	2025-12-11 14:35:40.331397000 +0400
 @@ -919,6 +919,27 @@
  			return (0);
  		}
- 
+
 +		int fkey = c - (FKEY | F(1));
 +		/* checking if function key strings are set (see kbdcontrol(1) manual)*/
-+		if (fkey > 64 && fkey < 97) {
++		if ((fkey >= 0 && fkey < 48) || (fkey >= 64 && fkey < 96)) {
 +			size_t len;
 +			fkey += F_FN;
 +			u_char *raw_str = kbdd_get_fkeystr(kbd, fkey, &len);

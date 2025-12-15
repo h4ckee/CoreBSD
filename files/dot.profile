@@ -14,3 +14,8 @@ export PAGER=less
 export ENV=~/.shrc
 
 ls -t ~/.serverauth.* 2>/dev/null | tail -n +2 | xargs rm -f --
+
+kbdcontrol -f 1 'startx'
+kbdcontrol -f 3 'lock -np'
+kbdcontrol -f 4 '/etc/rc.suspend'
+kbdcontrol -f 12 'shutdown -p now'

@@ -1,6 +1,6 @@
 #!/bin/sh
 #
-# Suspend the system using ACPI
+# /etc/rc.suspend: Suspend the system using ACPI
 #
 
 [ "$(pgrep -aof $0)" != "$$" ] && exit 1

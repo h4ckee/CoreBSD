@@ -1,7 +1,7 @@
 diff -Naur src.orig/usr.sbin/Makefile.amd64 src/usr.sbin/Makefile.amd64
---- src.orig/usr.sbin/Makefile.amd64	2025-06-05 20:04:27.000000000 -0400
-+++ src/usr.sbin/Makefile.amd64	2025-09-03 07:42:29.104564000 -0400
-@@ -12,12 +12,7 @@
+--- src.orig/usr.sbin/Makefile.amd64	2025-06-06 04:04:27.000000000 +0400
++++ src/usr.sbin/Makefile.amd64	2025-12-15 13:32:29.888370000 +0400
+@@ -12,12 +12,6 @@
  SUBDIR+=	bhyvectl
  SUBDIR+=	bhyveload
  .endif
@@ -13,4 +13,4 @@ diff -Naur src.orig/usr.sbin/Makefile.amd64 src/usr.sbin/Makefile.amd64
 -SUBDIR+=	lptcontrol
 -SUBDIR+=	mptable
 -SUBDIR+=	spkrtest
- SUBDIR+=	zzz
+-SUBDIR+=	zzz

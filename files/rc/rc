@@ -145,19 +145,19 @@ done
 if (( ${#services[@]} )); then
 	for service in "${services[@]}"; do
 		case "$service" in
-			\!*)	continue ;;
-			\@*)	if [ -x /etc/rc.d/"${service#@}" ]; then
-					( /etc/rc.d/"${service#@}" start ) &> /dev/ttyv0 &
-				elif [ -x /usr/local/etc/rc.d/"${service#@}" ]; then
-					( /usr/local/etc/rc.d/"${service#@}" start ) &> /dev/ttyv0 &
-				fi
-				;;
-			*)	if [ -x /etc/rc.d/"$service" ]; then
-					/etc/rc.d/"$service" start
-				elif [ -x /usr/local/etc/rc.d/"$service" ]; then
-					/usr/local/etc/rc.d/"$service" start
-				fi
-				;;
+		\!*)	continue ;;
+		\@*)	if [ -x /etc/rc.d/"${service#@}" ]; then
+				( /etc/rc.d/"${service#@}" start ) &> /dev/ttyv0 &
+			elif [ -x /usr/local/etc/rc.d/"${service#@}" ]; then
+				( /usr/local/etc/rc.d/"${service#@}" start ) &> /dev/ttyv0 &
+			fi
+			;;
+		*)	if [ -x /etc/rc.d/"$service" ]; then
+				/etc/rc.d/"$service" start
+			elif [ -x /usr/local/etc/rc.d/"$service" ]; then
+				/usr/local/etc/rc.d/"$service" start
+			fi
+			;;
 		esac
 	done
 fi
