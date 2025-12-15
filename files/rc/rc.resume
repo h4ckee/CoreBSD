@@ -1,0 +1,17 @@
+#!/bin/sh
+#
+# /etc/rc.resume: Resume the system using ACPI
+#
+
+source /etc/rc.conf
+
+if (( ${#services[@]} )); then
+	for service in "${services[@]}"; do
+		service="${service#@}"
+		case "$service" in
+		\!*) continue ;;
+		anacron|bsdfan|ntpd) service "$service" restart ;;
+		esac
+	done
+fi
+logger -t ACPI resume at $(date +'%Y%m%d %H:%M:%S')
