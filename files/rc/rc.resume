@@ -1,10 +1,11 @@
 #!/bin/sh
 #
-# /etc/rc.resume: Resume the system using ACPI
+# /etc/rc.resume: system resume script
 #
 
 source /etc/rc.conf
 
+logger -t ACPI resume at $(date +'%Y%m%d %H:%M:%S')
 if (( ${#services[@]} )); then
 	for service in "${services[@]}"; do
 		service="${service#@}"
@@ -14,4 +15,3 @@ if (( ${#services[@]} )); then
 		esac
 	done
 fi
-logger -t ACPI resume at $(date +'%Y%m%d %H:%M:%S')
