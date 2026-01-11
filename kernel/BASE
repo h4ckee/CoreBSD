@@ -35,7 +35,6 @@ options		TERMINAL_KERN_ATTR=(FG_RED|BG_BLACK)
 
 nooptions	GEOM_PART_BSD
 nooptions	GEOM_PART_EBR
-nooptions	NETLINK
 nodevice	uart_ns8250
 
 device		pf

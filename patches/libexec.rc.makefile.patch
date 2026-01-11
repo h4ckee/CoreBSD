@@ -1,8 +1,7 @@
 diff -Naur src.orig/libexec/rc/Makefile src/libexec/rc/Makefile
---- src.orig/libexec/rc/Makefile	2025-06-06 04:04:20.000000000 +0400
-+++ src/libexec/rc/Makefile	2025-12-15 13:17:47.486459000 +0400
-@@ -1,22 +1,19 @@
- 
+--- src.orig/libexec/rc/Makefile	2025-11-28 04:15:53.000000000 +0400
++++ src/libexec/rc/Makefile	2025-12-26 18:03:29.138442000 +0400
+@@ -1,27 +1,18 @@
  .include <src.opts.mk>
  
 -CONFGROUPS=	CONFETC CONFETCEXEC CONFETCDEFAULTS
@@ -24,6 +23,12 @@ diff -Naur src.orig/libexec/rc/Makefile src/libexec/rc/Makefile
 -CONFETCDEFAULTSDIR=	/etc/defaults
 -CONFETCDEFAULTS=	rc.conf
 -CONFETCDEFAULTSPACKAGE=	rc
+-
+-FILESGROUPS=	LIBEXEC_SCRIPTS
+-LIBEXEC_SCRIPTS=	debug.sh hooks.sh safe_eval.sh
+-LIBEXEC_SCRIPTSDIR=	/libexec
+-LIBEXEC_SCRIPTSMODE=	755
+-LIBEXEC_SCRIPTSPACKAGE=	rc
  
  SUBDIR+=	rc.d
  

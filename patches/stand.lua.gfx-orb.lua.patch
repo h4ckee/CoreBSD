@@ -1,10 +1,10 @@
 diff -Naur src.orig/stand/lua/gfx-orb.lua src/stand/lua/gfx-orb.lua
---- src.orig/stand/lua/gfx-orb.lua	2024-11-29 03:03:43.000000000 +0300
-+++ src/stand/lua/gfx-orb.lua	2025-06-08 17:41:40.689342000 +0300
-@@ -28,21 +28,16 @@
- return {
+--- src.orig/stand/lua/gfx-orb.lua	2025-11-28 04:15:54.000000000 +0400
++++ src/stand/lua/gfx-orb.lua	2025-12-28 14:26:43.574034000 +0400
+@@ -29,21 +29,16 @@
  	logo = {
- 		graphic = {
+ 		ascii = {
+ 			image = {
 -		    "  \027[31m```                        \027[31;1m`\027[31m",
 -		    " s` `.....---...\027[31;1m....--.```   -/\027[31m",
 -		    " +o   .--`         \027[31;1m/y:`      +.\027[31m",
@@ -30,6 +30,6 @@ diff -Naur src.orig/stand/lua/gfx-orb.lua src/stand/lua/gfx-orb.lua
 +		    "  II.\027[37m\"+iiii+\"\027[30;1m.II",
 +		    "   \"i;,,,,,,;i\"",
 +		    "      `\"\"\"\"`\027[m",
- 		},
- 		requires_color = true,
- 		shift = {x = 2, y = 3},
+ 			},
+ 			requires_color = true,
+ 			shift = {x = 5, y = -1},

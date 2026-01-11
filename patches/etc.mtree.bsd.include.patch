@@ -1,69 +1,94 @@
 diff -Naur src.orig/etc/mtree/BSD.include.dist src/etc/mtree/BSD.include.dist
---- src.orig/etc/mtree/BSD.include.dist	2025-06-06 03:04:20.000000000 +0300
-+++ src/etc/mtree/BSD.include.dist	2025-10-18 12:38:49.966153000 +0300
+--- src.orig/etc/mtree/BSD.include.dist	2025-11-28 04:15:53.000000000 +0400
++++ src/etc/mtree/BSD.include.dist	2026-01-06 13:49:28.928392000 +0400
 @@ -6,14 +6,8 @@
  .
      arpa
      ..
--    atf-c
+-    atf-c               tags=package=atf-dev
 -    ..
--    atf-c++
+-    atf-c++             tags=package=atf-dev
 -    ..
-     bsm
+     bsm                 tags=package=audit-dev
      ..
--    bsnmp
+-    bsnmp               tags=package=bsnmp-dev
 -    ..
      c++
          v1
              __algorithm
-@@ -190,8 +184,6 @@
-         wi
+@@ -149,8 +143,6 @@
+         ..
+         mfi
+         ..
+-        mlx5
+-        ..
+         mmc
+         ..
+         mpt
+@@ -167,8 +159,6 @@
+         ..
+         pci
+         ..
+-        powermac_nvram
+-        ..
+         ppbus
+         ..
+         pwm
+@@ -185,13 +175,9 @@
+         ..
+         vkbd
+         ..
+-        vmm
+-        ..
+         wg
          ..
      ..
--    devdctl
+-    devdctl             tags=package=utilities-dev
 -    ..
-     edit
-         readline
+     edit                tags=package=runtime-dev
+         readline        tags=package=runtime-dev
          ..
-@@ -254,32 +246,14 @@
+@@ -252,36 +238,12 @@
+         virstor
+         ..
      ..
-     gssapi
-     ..
--    infiniband
--        complib
+-    gssapi              tags=package=kerberos-dev
+-    ..
+-    gssrpc              tags=package=kerberos-dev
+-    ..
+-    infiniband          tags=package=utilities-dev
+-        complib         tags=package=utilities-dev
 -        ..
--        iba
+-        iba             tags=package=utilities-dev
 -        ..
--        opensm
+-        opensm          tags=package=utilities-dev
 -        ..
--        vendor
+-        vendor          tags=package=utilities-dev
 -        ..
 -    ..
      isofs
          cd9660
          ..
      ..
--    kadm5
+-    kadm5               tags=package=kerberos-dev
 -    ..
-     krb5
+-    krb5                tags=package=kerberos-dev
+-    ..
+     lib80211            tags=package=runtime-dev
      ..
-     lib80211
-     ..
--    lib9p
+-    lib9p               tags=package=lib9p-dev
 -    ..
 -    libipt
 -    ..
--    libmilter
+-    libmilter           tags=package=libmilter-dev
 -    ..
-     libxo
+     libxo               tags=package=runtime-dev
      ..
-     lzma
-@@ -297,12 +271,6 @@
+     lzma                tags=package=xz-dev
+@@ -299,10 +261,6 @@
      net80211
      ..
      netgraph
--        atm
--        ..
 -        bluetooth
 -            include
 -            ..
@@ -71,7 +96,7 @@ diff -Naur src.orig/etc/mtree/BSD.include.dist src/etc/mtree/BSD.include.dist
          netflow
          ..
      ..
-@@ -332,48 +300,18 @@
+@@ -332,50 +290,18 @@
      ..
      nfsclient
      ..
@@ -91,24 +116,26 @@ diff -Naur src.orig/etc/mtree/BSD.include.dist src/etc/mtree/BSD.include.dist
 -        stm
 -        ..
 -    ..
-     openssl
+     openssl             tags=package=openssl-dev
      ..
-     pcap
+     pcap                tags=package=utilities-dev
      ..
      protocols
      ..
--    rdma
+-    rdma                tags=package=utilities-dev
 -    ..
      rpc
      ..
      rpcsvc
      ..
      security
-         audit
+         audit           tags=package=audit-dev
 -        ..
 -        mac_biba
 -        ..
 -        mac_bsdextended
+-        ..
+-        mac_grantbylabel
 -        ..
 -        mac_lomac
 -        ..
@@ -119,4 +146,4 @@ diff -Naur src.orig/etc/mtree/BSD.include.dist src/etc/mtree/BSD.include.dist
 -        mac_veriexec
          ..
      ..
-     sys
+     ssp

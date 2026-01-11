@@ -1,8 +1,7 @@
 diff -Naur src.orig/stand/defaults/Makefile src/stand/defaults/Makefile
---- src.orig/stand/defaults/Makefile	2025-06-06 00:04:21.000000000 +0000
-+++ src/stand/defaults/Makefile	2025-08-13 07:18:02.959887000 +0000
-@@ -1,9 +1,11 @@
- 
+--- src.orig/stand/defaults/Makefile	2025-11-28 04:15:54.000000000 +0400
++++ src/stand/defaults/Makefile	2025-12-27 16:34:53.777850000 +0400
+@@ -1,8 +1,10 @@
  .include <bsd.init.mk>
  
 -FILES+=	loader.conf

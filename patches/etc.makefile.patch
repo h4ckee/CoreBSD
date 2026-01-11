@@ -1,7 +1,7 @@
 diff -Naur src.orig/etc/Makefile src/etc/Makefile
---- src.orig/etc/Makefile	2025-06-06 03:04:20.000000000 +0300
-+++ src/etc/Makefile	2025-10-17 11:05:39.364199000 +0300
-@@ -25,9 +25,6 @@
+--- src.orig/etc/Makefile	2026-01-08 19:00:02.184802000 +0400
++++ src/etc/Makefile	2026-01-10 15:14:14.567209000 +0400
+@@ -23,9 +23,6 @@
  	mailertable.sample
  .endif
  
@@ -11,33 +11,24 @@ diff -Naur src.orig/etc/Makefile src/etc/Makefile
  # Sanitize DESTDIR
  DESTDIR:=	${DESTDIR:C://*:/:g}
  
-@@ -54,12 +51,8 @@
+@@ -53,16 +50,8 @@
  	@echo "set DESTDIR before running \"make ${.TARGET}\""
  	@false
  .endif
+-.if ${MK_MITKRB5} != "no"
+-	${_+_}cd ${.CURDIR}/gss-krb5; ${MAKE} install
+-.else
 -	${_+_}cd ${.CURDIR}/gss; ${MAKE} install
+-.endif
  	${_+_}cd ${.CURDIR}/mtree; ${MAKE} install
  	${_+_}cd ${SRCTOP}/share/termcap; ${MAKE} etc-termcap
 -	${_+_}cd ${SRCTOP}/usr.sbin/rmt; ${MAKE} etc-rmt
 -	${INSTALL_SYMLINK} -T "package=runtime" ../var/run/os-release \
 -		${DESTDIR}/etc/os-release
  .if ${MK_UNBOUND} != "no"
- 	if [ ! -e ${DESTDIR}/etc/unbound ]; then \
- 		${INSTALL_SYMLINK} -T "package=unbound" \
-@@ -69,12 +62,6 @@
- .if ${MK_SENDMAIL} != "no"
- 	${_+_}cd ${.CURDIR}/sendmail; ${MAKE} distribution
- .endif
--.if ${MK_KERBEROS} != "no"
--	cd ${.CURDIR}/root; \
--	    ${INSTALL} -o ${BINOWN} -g ${BINGRP} -m 644 \
--		-T "package=runtime" \
--		dot.k5login ${DESTDIR}/root/.k5login;
--.endif
- 
- .if ${MK_MAIL} != "no"
- 	cd ${.CURDIR}/mail; ${INSTALL} -o ${BINOWN} -g ${BINGRP} -m 644 \
-@@ -89,8 +76,6 @@
+ # If NO_ROOT is defined, we are doing a stage install and always need to
+ # install the /etc/unbound symlink, otherwise, don't overwrite the user's
+@@ -99,8 +88,6 @@
  	cd ${.CURDIR}/mail; ${INSTALL} -o ${BINOWN} -g ${BINGRP} -m 644 \
  		-T "package=sendmail" ${ETCMAIL_SENDMAIL} ${DESTDIR}/etc/mail
  .endif
@@ -46,7 +37,7 @@ diff -Naur src.orig/etc/Makefile src/etc/Makefile
  .if ${MK_BOOT} != "no"
  .if exists(${SRCTOP}/sys/${MACHINE}/conf/GENERIC.hints)
  	${INSTALL} -o ${BINOWN} -g ${BINGRP} -m 444 \
-@@ -103,8 +88,7 @@
+@@ -113,8 +100,7 @@
  MTREES=		mtree/BSD.root.dist		/		\
  		mtree/BSD.var.dist		/var		\
  		mtree/BSD.usr.dist		/usr		\

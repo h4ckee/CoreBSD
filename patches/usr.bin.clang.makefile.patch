@@ -1,7 +1,7 @@
 diff -Naur src.orig/usr.bin/clang/Makefile src/usr.bin/clang/Makefile
---- src.orig/usr.bin/clang/Makefile	2025-06-06 00:04:27.000000000 +0000
-+++ src/usr.bin/clang/Makefile	2025-06-19 11:27:35.824145000 +0000
-@@ -9,7 +9,7 @@
+--- src.orig/usr.bin/clang/Makefile	2026-01-08 18:59:31.868177000 +0400
++++ src/usr.bin/clang/Makefile	2026-01-10 14:57:30.070375000 +0400
+@@ -12,7 +12,7 @@
  # LLVM binutils are needed to support features such as LTO, so we build them
  # by default if clang is enabled. If MK_LLVM_BINUTILS is set, we also use them
  # as the default binutils (ar,nm,addr2line, etc.).
@@ -10,12 +10,3 @@ diff -Naur src.orig/usr.bin/clang/Makefile src/usr.bin/clang/Makefile
  SUBDIR+=	llvm-ar
  SUBDIR+=	llvm-nm
  SUBDIR+=	llvm-objcopy
-@@ -20,7 +20,7 @@
- SUBDIR+=	llvm-symbolizer
- .endif
- 
--.if ${MK_LLVM_BINUTILS} != "no" || ${MK_LLVM_CXXFILT} != "no"
-+.if ${MK_LLVM_BINUTILS} != "no" && ${MK_LLVM_CXXFILT} != "no"
- SUBDIR+=	llvm-cxxfilt
- .endif
- 

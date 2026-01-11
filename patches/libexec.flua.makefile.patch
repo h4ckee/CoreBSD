@@ -1,0 +1,16 @@
+diff -Naur src.orig/libexec/flua/Makefile src/libexec/flua/Makefile
+--- src.orig/libexec/flua/Makefile	2025-11-28 04:15:53.000000000 +0400
++++ src/libexec/flua/Makefile	2026-01-07 12:56:27.746199000 +0400
+@@ -2,12 +2,6 @@
+ 
+ PACKAGE=	flua
+ 
+-SUBDIR+=	libfreebsd
+-SUBDIR+=	libhash
+-SUBDIR+=	libjail
+-SUBDIR+=	libucl
+-SUBDIR+=	liblyaml
+-
+ LUASRC?=	${SRCTOP}/contrib/lua/src
+ .PATH: ${LUASRC}
+ 

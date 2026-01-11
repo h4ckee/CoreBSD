@@ -1,0 +1,12 @@
+diff -Naur src.orig/secure/libexec/Makefile src/secure/libexec/Makefile
+--- src.orig/secure/libexec/Makefile	2025-11-28 04:15:53.000000000 +0400
++++ src/secure/libexec/Makefile	2026-01-05 13:48:34.378265000 +0400
+@@ -2,7 +2,7 @@
+ 
+ SUBDIR=
+ .if ${MK_OPENSSH} != "no"
+-SUBDIR+=sftp-server ssh-keysign ssh-pkcs11-helper ssh-sk-helper sshd-session
++SUBDIR+=ssh-keysign sshd-session
+ SUBDIR+=sshd-auth
+ .endif
+ 

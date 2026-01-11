@@ -1,6 +1,6 @@
 diff -Naur src.orig/share/numericdef_unicode/Makefile src/share/numericdef_unicode/Makefile
---- src.orig/share/numericdef_unicode/Makefile	2024-11-29 03:03:43.000000000 +0300
-+++ src/share/numericdef_unicode/Makefile	2025-06-08 17:56:45.332073000 +0300
+--- src.orig/share/numericdef_unicode/Makefile	2025-11-28 04:15:54.000000000 +0400
++++ src/share/numericdef_unicode/Makefile	2025-12-27 15:38:27.802533000 +0400
 @@ -10,88 +10,7 @@
  	grep -v -E '^(#$$|#[ ])' < ${.IMPSRC} > ${.TARGET}
  
@@ -33,7 +33,6 @@ diff -Naur src.orig/share/numericdef_unicode/Makefile src/share/numericdef_unico
 -SAME+=		uk_UA.UTF-8 fi_FI.UTF-8
 -SAME+=		uk_UA.UTF-8 et_EE.UTF-8
 -SAME+=		uk_UA.UTF-8 es_CR.UTF-8
--SAME+=		uk_UA.UTF-8 en_ZA.UTF-8
 -SAME+=		uk_UA.UTF-8 de_AT.UTF-8
 -SAME+=		uk_UA.UTF-8 cs_CZ.UTF-8
 -SAME+=		uk_UA.UTF-8 bg_BG.UTF-8
@@ -48,6 +47,7 @@ diff -Naur src.orig/share/numericdef_unicode/Makefile src/share/numericdef_unico
 -SAME+=		en_US.UTF-8 he_IL.UTF-8
 -SAME+=		en_US.UTF-8 ga_IE.UTF-8
 -SAME+=		en_US.UTF-8 es_MX.UTF-8
+-SAME+=		en_US.UTF-8 en_ZA.UTF-8
 -SAME+=		en_US.UTF-8 en_SG.UTF-8
 -SAME+=		en_US.UTF-8 en_PH.UTF-8
 -SAME+=		en_US.UTF-8 en_NZ.UTF-8

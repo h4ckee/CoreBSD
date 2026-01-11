@@ -1,0 +1,62 @@
+diff -Naur src.orig/contrib/mksh/Build.sh src/contrib/mksh/Build.sh
+--- src.orig/contrib/mksh/Build.sh	2026-01-08 19:01:08.645656000 +0400
++++ src/contrib/mksh/Build.sh	2026-01-11 14:52:12.327577000 +0400
+@@ -26,6 +26,11 @@
+ #
+ # Used environment documentation is at the end of this file.
+ 
++HAVE_SYS_SIGNAME=0
++HAVE__SYS_SIGNAME=0
++HAVE_SYS_SIGLIST=0
++HAVE__SYS_SIGLIST=0
++
+ LC_ALL=C; LANGUAGE=C
+ export LC_ALL; unset LANGUAGE
+ 
+diff -Naur src.orig/contrib/mksh/histrap.c src/contrib/mksh/histrap.c
+--- src.orig/contrib/mksh/histrap.c	2026-01-08 19:01:08.651502000 +0400
++++ src/contrib/mksh/histrap.c	2026-01-11 14:52:12.329634000 +0400
+@@ -1106,7 +1106,7 @@
+ #if HAVE_SYS_SIGLIST
+ 		sigtraps[i].mess = sys_siglist[i];
+ #elif HAVE_STRSIGNAL
+-		sigtraps[i].mess = strsignal(i);
++		strdupx(sigtraps[i].mess, strsignal(i), APERM);
+ #else
+ 		sigtraps[i].mess = NULL;
+ #endif
+diff -Naur src.orig/contrib/mksh/signames.inc src/contrib/mksh/signames.inc
+--- src.orig/contrib/mksh/signames.inc	1970-01-01 04:00:00.000000000 +0400
++++ src/contrib/mksh/signames.inc	2026-01-11 14:44:22.288568000 +0400
+@@ -0,0 +1,31 @@
++		{ "ABRT", 6 },
++		{ "FPE", 8 },
++		{ "ILL", 4 },
++		{ "INT", 2 },
++		{ "SEGV", 11 },
++		{ "TERM", 15 },
++		{ "ALRM", 14 },
++		{ "BUS", 10 },
++		{ "CHLD", 20 },
++		{ "CONT", 19 },
++		{ "HUP", 1 },
++		{ "KILL", 9 },
++		{ "PIPE", 13 },
++		{ "QUIT", 3 },
++		{ "STOP", 17 },
++		{ "TSTP", 18 },
++		{ "TTIN", 21 },
++		{ "TTOU", 22 },
++		{ "USR1", 30 },
++		{ "USR2", 31 },
++		{ "PROF", 27 },
++		{ "SYS", 12 },
++		{ "TRAP", 5 },
++		{ "URG", 16 },
++		{ "VTALRM", 26 },
++		{ "XCPU", 24 },
++		{ "XFSZ", 25 },
++		{ "INFO", 29 },
++		{ "WINCH", 28 },
++		{ "EMT", 7 },
++		{ "IO", 23 },

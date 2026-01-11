@@ -15,9 +15,13 @@ MKSHDIR=		${SRCTOP}/contrib/mksh
 SRCS=		edit.c eval.c exec.c expr.c funcs.c histrap.c jobs.c lalloc.c \
  		lex.c main.c misc.c shf.c syn.c tree.c ulimit.c var.c
 
-GENFILES=	${MKSHDIR}/sh_flags.gen ${MKSHDIR}/rlimits.gen ${MKSHDIR}/ulimits.gen
-
 CLEANFILES+=	${GENFILES} ${MAN}
+
+GENFILES=	${MKSHDIR}/sh_flags.gen \
+		${MKSHDIR}/rlimits.gen \
+		${MKSHDIR}/ulimits.gen
+
+beforebuild:	${GENFILES}
 
 ${MKSHDIR}/sh_flags.gen:
 	cd ${MKSHDIR} && sh ./Build.sh -G sh_flags.opt
@@ -27,8 +31,6 @@ ${MKSHDIR}/rlimits.gen:
 
 ${MKSHDIR}/ulimits.gen:
 	cd ${MKSHDIR} && sh ./Build.sh -G ulimits.opt
-
-${SRCS:S/.c/.o/g}: ${GENFILES}
 
 CFLAGS+=	-std=c99 -fno-asynchronous-unwind-tables -fno-strict-aliasing -fwrapv -I${MKSHDIR}
 CFLAGS+= \
@@ -47,15 +49,15 @@ CFLAGS+= \
 	-DHAVE_SETGROUPS=1		-DHAVE_SETLOCALE_CTYPE=1	-DHAVE_SETRESUGID=1		\
 	-DHAVE_SIG_T=1			-DHAVE_STDINT_H=1		-DHAVE_STRERROR=0		\
 	-DHAVE_STRINGS_H=1		-DHAVE_STRING_POOLING=1		-DHAVE_STRLCPY=1		\
-	-DHAVE_STRSIGNAL=0		-DHAVE_ST_MTIM=1		-DHAVE_ST_MTIMENSEC=0		\
+	-DHAVE_STRSIGNAL=1		-DHAVE_ST_MTIM=1		-DHAVE_ST_MTIMENSEC=0		\
 	-DHAVE_SYS_BSDTYPES_H=0		-DHAVE_SYS_ERRLIST=1		-DHAVE_SYS_ERRLIST_DECL=1	\
 	-DHAVE_SYS_FILE_H=1		-DHAVE_SYS_MKDEV_H=0		-DHAVE_SYS_MMAN_H=1		\
 	-DHAVE_SYS_PARAM_H=1		-DHAVE_SYS_RESOURCE_H=1		-DHAVE_SYS_SELECT_H=1		\
-	-DHAVE_SYS_SIGLIST=1		-DHAVE_SYS_SIGLIST_DECL=1	-DHAVE_SYS_SIGNAME=1		\
+	-DHAVE_SYS_SIGLIST=0		-DHAVE_SYS_SIGLIST_DECL=0	-DHAVE_SYS_SIGNAME=0		\
 	-DHAVE_SYS_SYSMACROS_H=0	-DHAVE_SYS_TIME_H=1		-DHAVE_TERMIOS_H=1		\
 	-DHAVE_TIME_H=1			-DHAVE_ULIMIT_H=1		-DHAVE_VALUES_H=0		\
-	-DMKSH_BUILDSH			-DMKSH_BUILD_R=593		-DMKSH_DISABLE_DEPRECATED	\
-	-DMKSH_S_NOVI=1
+	-DMKSH_S_NOVI=1			-DMKSH_BUILD_R=593		-DMKSH_DISABLE_DEPRECATED	\
+	-DMKSH_BUILDSH
 
 WARNS?=	0
 

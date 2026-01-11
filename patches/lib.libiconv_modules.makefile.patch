@@ -1,8 +1,7 @@
 diff -Naur src.orig/lib/libiconv_modules/Makefile src/lib/libiconv_modules/Makefile
---- src.orig/lib/libiconv_modules/Makefile	2025-06-06 03:04:20.000000000 +0300
-+++ src/lib/libiconv_modules/Makefile	2025-06-15 19:53:20.592745000 +0300
-@@ -1,9 +1,7 @@
- 
+--- src.orig/lib/libiconv_modules/Makefile	2025-11-28 04:15:53.000000000 +0400
++++ src/lib/libiconv_modules/Makefile	2025-12-26 16:34:42.833558000 +0400
+@@ -1,8 +1,6 @@
  .include <bsd.own.mk>
  
 -SUBDIR=	BIG5 DECHanyu EUC EUCTW GBK2K HZ ISO2022 JOHAB MSKanji UES UTF1632 \

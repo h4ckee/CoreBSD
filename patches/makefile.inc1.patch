@@ -1,7 +1,7 @@
 diff -Naur src.orig/Makefile.inc1 src/Makefile.inc1
---- src.orig/Makefile.inc1	2025-06-05 20:04:14.000000000 -0400
-+++ src/Makefile.inc1	2025-09-03 10:36:48.321615000 -0400
-@@ -1327,16 +1327,8 @@
+--- src.orig/Makefile.inc1	2025-11-28 04:15:47.000000000 +0400
++++ src/Makefile.inc1	2025-12-27 12:25:14.596190000 +0400
+@@ -1393,16 +1393,8 @@
  #
  # Check for missing UIDs/GIDs.
  #
@@ -20,7 +20,7 @@ diff -Naur src.orig/Makefile.inc1 src/Makefile.inc1
  _installcheck_world: __installcheck_UGID
  __installcheck_UGID: .PHONY
  .for uid in ${CHECK_UIDS}
-@@ -1381,10 +1373,6 @@
+@@ -1447,10 +1439,6 @@
  	ln make mkdir mtree mv pwd_mkdb \
  	rm sed services_mkdb sh sort strip ${_sysctl} test time true uname wc
  
@@ -31,7 +31,7 @@ diff -Naur src.orig/Makefile.inc1 src/Makefile.inc1
  # Needed for share/man
  .if ${MK_MAN_UTILS} != "no"
  ITOOLS+=makewhatis
-@@ -2643,11 +2631,6 @@
+@@ -2768,11 +2756,6 @@
  _basic_bootstrap_tools+=sbin/md5
  .endif
  
@@ -40,10 +40,10 @@ diff -Naur src.orig/Makefile.inc1 src/Makefile.inc1
 -_basic_bootstrap_tools+=usr.sbin/tzsetup
 -.endif
 -
- .if defined(BOOTSTRAP_ALL_TOOLS)
- _other_bootstrap_tools+=${_basic_bootstrap_tools}
- .for _subdir _links in ${_basic_bootstrap_tools_multilink}
-@@ -3277,10 +3260,8 @@
+ # certctl is needed as an install tool.  libcrypto is rather heavy, so we'll
+ # build that alongside it only for platforms that don't expose headers for
+ # OpenSSL, like macOS, or when building on releases with OpenSSL 1.x.
+@@ -3430,10 +3413,8 @@
  cddl/lib/libdtrace__L: lib/libxo__L
  .endif
  # cddl/lib/libdtrace requires lib/libproc and lib/librtld_db
@@ -55,7 +55,7 @@ diff -Naur src.orig/Makefile.inc1 src/Makefile.inc1
  
  .if ${MK_CRYPT} != "no"
  .if ${MK_OPENSSL} != "no"
-@@ -3355,10 +3336,6 @@
+@@ -3560,10 +3541,6 @@
  .if ${MK_OPENSSL} == "no"
  lib/libradius__L: lib/libmd__L
  .endif

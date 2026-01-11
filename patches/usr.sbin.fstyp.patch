@@ -1,7 +1,7 @@
 diff -Naur src.orig/usr.sbin/fstyp/Makefile src/usr.sbin/fstyp/Makefile
---- src.orig/usr.sbin/fstyp/Makefile	2024-11-29 03:03:49.000000000 +0300
-+++ src/usr.sbin/fstyp/Makefile	2025-06-04 10:59:58.787868000 +0300
-@@ -3,7 +3,7 @@
+--- src.orig/usr.sbin/fstyp/Makefile	2025-11-28 04:15:58.000000000 +0400
++++ src/usr.sbin/fstyp/Makefile	2025-12-28 15:23:02.265693000 +0400
+@@ -2,7 +2,7 @@
  
  PROG=	fstyp
  SRCS=	apfs.c befs.c cd9660.c exfat.c ext2fs.c fstyp.c geli.c hammer.c	\
@@ -20,13 +20,28 @@ diff -Naur src.orig/usr.sbin/fstyp/Makefile src/usr.sbin/fstyp/Makefile
  .if ${MK_ZFS} != "no"
  LIBADD+=nvpair zfs spl
 diff -Naur src.orig/usr.sbin/fstyp/fstyp.c src/usr.sbin/fstyp/fstyp.c
---- src.orig/usr.sbin/fstyp/fstyp.c	2024-11-29 03:03:49.000000000 +0300
-+++ src/usr.sbin/fstyp/fstyp.c	2025-06-04 10:59:41.130645000 +0300
-@@ -72,7 +72,6 @@
- 	{ "hfs+", &fstyp_hfsp, false, NULL },
- 	{ "msdosfs", &fstyp_msdosfs, false, NULL },
- 	{ "ntfs", &fstyp_ntfs, false, NTFS_ENC },
+--- src.orig/usr.sbin/fstyp/fstyp.c	2025-11-28 04:15:58.000000000 +0400
++++ src/usr.sbin/fstyp/fstyp.c	2025-12-28 15:21:15.852653000 +0400
+@@ -76,11 +76,6 @@
+ } fstypes[] = {
+ 	/* last sector of geli device */
+ 	{ "geli", &fstyp_geli, true, NULL },
+-	/*
+-	 * ufs headers have four different areas, searched in this order:
+-	 * offsets: 64k, 8k, 0k, 256k + 8192 bytes
+-	 */
 -	{ "ufs", &fstyp_ufs, false, NULL },
+ 	/* offset 32768 + 512 bytes */
+ 	{ "cd9660", &fstyp_cd9660, false, NULL },
+ 	/* offset 1024 + 512 bytes */
+diff -Naur src.orig/usr.sbin/fstyp/fstyp.h src/usr.sbin/fstyp/fstyp.h
+--- src.orig/usr.sbin/fstyp/fstyp.h	2025-11-28 04:15:58.000000000 +0400
++++ src/usr.sbin/fstyp/fstyp.h	2025-12-28 15:22:02.931685000 +0400
+@@ -58,7 +58,6 @@
+ int	fstyp_hfsp(FILE *fp, char *label, size_t size);
+ int	fstyp_msdosfs(FILE *fp, char *label, size_t size);
+ int	fstyp_ntfs(FILE *fp, char *label, size_t size);
+-int	fstyp_ufs(FILE *fp, char *label, size_t size);
  #ifdef HAVE_ZFS
- 	{ "zfs", &fstyp_zfs, true, NULL },
+ int	fstyp_zfs(FILE *fp, char *label, size_t size);
  #endif

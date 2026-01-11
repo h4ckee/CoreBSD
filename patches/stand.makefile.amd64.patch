@@ -1,8 +1,7 @@
 diff -Naur src.orig/stand/Makefile.amd64 src/stand/Makefile.amd64
---- src.orig/stand/Makefile.amd64	2025-06-06 00:04:21.000000000 +0000
-+++ src/stand/Makefile.amd64	2025-08-16 13:41:00.439849000 +0000
-@@ -1,7 +1,5 @@
- 
+--- src.orig/stand/Makefile.amd64	2025-11-28 04:15:54.000000000 +0400
++++ src/stand/Makefile.amd64	2025-12-28 14:36:07.366592000 +0400
+@@ -1,6 +1,4 @@
 -S.yes+=		userboot
  S.yes+=		i386
  

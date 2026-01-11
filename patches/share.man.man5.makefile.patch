@@ -1,19 +1,15 @@
 diff -Naur src.orig/share/man/man5/Makefile src/share/man/man5/Makefile
---- src.orig/share/man/man5/Makefile	2025-06-06 00:04:21.000000000 +0000
-+++ src/share/man/man5/Makefile	2025-08-12 14:41:29.667499000 +0000
-@@ -55,7 +55,6 @@
- 	procfs.5 \
- 	protocols.5 \
- 	quota.user.5 \
--	rc.conf.5 \
- 	rctl.conf.5 \
- 	regdomain.5 \
- 	remote.5 \
-@@ -82,7 +81,6 @@
- MLINKS+=passwd.5 spwd.db.5
- MLINKS+=portindex.5 INDEX.5
- MLINKS+=quota.user.5 quota.group.5
--MLINKS+=rc.conf.5 rc.conf.local.5
- MLINKS+=resolver.5 resolv.conf.5
- MLINKS+=src.conf.5 src-env.conf.5
+--- src.orig/share/man/man5/Makefile	2025-11-28 04:15:54.000000000 +0400
++++ src/share/man/man5/Makefile	2025-12-27 15:19:50.232224000 +0400
+@@ -88,11 +88,6 @@
+ PF=		pf.conf.5 \
+ 		pf.os.5
  
+-MANGROUPS+=				RC
+-RCPACKAGE=				rc
+-RC=		rc.conf.5
+-RCLINKS=	rc.conf.5 rc.conf.local.5
+-
+ MANGROUPS+=				RUNTIME
+ RUNTIMEPACKAGE=				runtime
+ RUNTIME=	devfs.conf.5 \

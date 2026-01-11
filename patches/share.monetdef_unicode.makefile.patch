@@ -1,10 +1,11 @@
 diff -Naur src.orig/share/monetdef_unicode/Makefile src/share/monetdef_unicode/Makefile
---- src.orig/share/monetdef_unicode/Makefile	2024-11-29 03:03:43.000000000 +0300
-+++ src/share/monetdef_unicode/Makefile	2025-06-08 17:52:24.743189000 +0300
+--- src.orig/share/monetdef_unicode/Makefile	2025-11-28 04:15:54.000000000 +0400
++++ src/share/monetdef_unicode/Makefile	2025-12-27 15:35:47.460889000 +0400
 @@ -9,89 +9,8 @@
  .src.out:
  	grep -v -E '^(#$$|#[ ])' < ${.IMPSRC} > ${.TARGET}
  
+-LOCALES+=	af_ZA.UTF-8
 -LOCALES+=	am_ET.UTF-8
 -LOCALES+=	ar_AE.UTF-8
 -LOCALES+=	ar_EG.UTF-8
@@ -45,7 +46,6 @@ diff -Naur src.orig/share/monetdef_unicode/Makefile src/share/monetdef_unicode/M
 -LOCALES+=	kk_KZ.UTF-8
 -LOCALES+=	ko_KR.UTF-8
 -LOCALES+=	mn_MN.UTF-8
--LOCALES+=	nb_NO.UTF-8
 -LOCALES+=	nl_NL.UTF-8
 -LOCALES+=	pl_PL.UTF-8
 -LOCALES+=	pt_BR.UTF-8
@@ -65,7 +65,6 @@ diff -Naur src.orig/share/monetdef_unicode/Makefile src/share/monetdef_unicode/M
 -
 -
 -
--SAME+=		en_ZA.UTF-8 af_ZA.UTF-8
 -SAME+=		it_IT.UTF-8 es_ES.UTF-8
 -SAME+=		it_IT.UTF-8 el_GR.UTF-8
 -SAME+=		it_IT.UTF-8 de_DE.UTF-8
@@ -85,8 +84,9 @@ diff -Naur src.orig/share/monetdef_unicode/Makefile src/share/monetdef_unicode/M
 -SAME+=		fr_FR.UTF-8 fr_BE.UTF-8
 -SAME+=		sk_SK.UTF-8 pt_PT.UTF-8
 -SAME+=		sk_SK.UTF-8 lv_LV.UTF-8
--SAME+=		nl_NL.UTF-8 nl_BE.UTF-8
 -SAME+=		se_NO.UTF-8 nn_NO.UTF-8
+-SAME+=		se_NO.UTF-8 nb_NO.UTF-8
+-SAME+=		nl_NL.UTF-8 nl_BE.UTF-8
 -SAME+=		sr_RS.UTF-8@latin sr_RS.UTF-8
  
  FILES=		${LOCALES:S/$/.out/}
