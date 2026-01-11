@@ -1,12 +1,11 @@
 diff -Naur src.orig/sys/Makefile src/sys/Makefile
---- src.orig/sys/Makefile	2025-06-06 00:04:21.000000000 +0000
-+++ src/sys/Makefile	2025-07-13 10:40:18.326650000 +0000
-@@ -1,10 +1,8 @@
- 
+--- src.orig/sys/Makefile	2025-11-28 04:15:54.000000000 +0400
++++ src/sys/Makefile	2025-12-28 14:45:30.938204000 +0400
+@@ -1,9 +1,7 @@
  # Directories to include in cscope name file and TAGS.
 -CSCOPEDIRS=	bsm cam cddl compat conf contrib crypto ddb dev fs gdb \
 -		geom gnu isa kern libkern modules net net80211 \
--		netgraph netinet netinet6 netipsec netpfil \
+-		netgraph netinet netinet6 netipsec netlink netpfil \
 -		netsmb nfs nfsclient nfsserver nlm ofed opencrypto \
 -		rpc security sys ufs vm xdr xen ${CSCOPE_ARCHDIR}
 +CSCOPEDIRS=	cam cddl conf contrib crypto dev fs geom gnu isa \

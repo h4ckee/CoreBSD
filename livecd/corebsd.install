@@ -4,7 +4,7 @@
 #
 
 archives=(base.txz kernel.txz)
-srcdir='/usr/corebsd'
+srcdir='/usr/distsets'
 rootpool='zroot'
 datapool='zdata'
 mountdir='/mnt'
@@ -168,6 +168,9 @@ if (( ${#datapooldevs[@]} )); then
 
 	echo "===> Configuring ${datapool}.cache for $datapool"
 	zpool set cachefile="$mountdir"/boot/zfs/"$datapool".cache "$datapool" || exit 1
+
+	echo "===> Allowing wheel group to manage $datapool"
+	zfs allow -g wheel clone,create,destroy,mount,promote,rename,rollback,snapshot "$datapool" || exit 1
 else
 	echo "===> Creating ${rootpool}/usr/obj filesystem"
 	zfs create -o mountpoint=/usr/obj -o sync=disabled "$rootpool"/usr/obj || exit 1
@@ -181,6 +184,9 @@ else
 	echo "===> Creating ${rootpool}/home filesystem"
 	zfs create -o mountpoint=/home -o sync=disabled "$rootpool"/home || exit 1
 fi
+
+echo "===> Allowing wheel group to manage $rootpool"
+zfs allow -g wheel clone,create,destroy,mount,promote,rename,rollback,snapshot "$rootpool" || exit 1
 
 for archive in "${archives[@]}"; do
 	echo "===> Verifying checksum of $archive"
@@ -222,7 +228,7 @@ fi
 
 echo '===> Setting /boot/entropy file'
 dd if=/dev/random of="$mountdir"/boot/entropy bs=4096 count=1 2> /dev/null || exit 1
-chown 0:0 "$mountdir"/boot/entropy || exit 1
+#chown 0:0 "$mountdir"/boot/entropy || exit 1
 
 echo '===> Edit /boot/loader.conf, /etc/sysctl.conf, /etc/rc.conf, etc. Press Ctrl+D when finished'
 chroot "$mountdir" /bin/sh -l 2>&1

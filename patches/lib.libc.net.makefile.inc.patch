@@ -1,12 +1,12 @@
 diff -Naur src.orig/lib/libc/net/Makefile.inc src/lib/libc/net/Makefile.inc
---- src.orig/lib/libc/net/Makefile.inc	2025-06-06 00:04:20.000000000 +0000
-+++ src/lib/libc/net/Makefile.inc	2025-09-02 09:45:56.387069000 +0000
-@@ -3,7 +3,7 @@
+--- src.orig/lib/libc/net/Makefile.inc	2025-11-28 04:15:53.000000000 +0400
++++ src/lib/libc/net/Makefile.inc	2025-12-26 16:24:44.829243000 +0400
+@@ -1,7 +1,7 @@
  # machine-independent net sources
  .PATH: ${LIBC_SRCTOP}/net
  
--CONFS+=	net/hosts net/hosts.equiv net/networks net/nsswitch.conf net/protocols
-+CONFS+=	net/hosts net/nsswitch.conf net/protocols
+-CONFS+=	net/hosts net/hosts.equiv net/networks ${.OBJDIR}/nsswitch.conf net/protocols
++CONFS+=	net/hosts ${.OBJDIR}/nsswitch.conf net/protocols
  SRCS+=	base64.c ether_addr.c eui64.c \
  	gai_strerror.c getaddrinfo.c \
  	gethostbydns.c gethostbyht.c gethostbynis.c gethostnamadr.c \

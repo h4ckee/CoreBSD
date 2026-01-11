@@ -5,8 +5,10 @@ ident		COREBSD
 nomakeoptions	DEBUG
 nomakeoptions	WITH_CTF
 
+nooptions	EXTERR_STRINGS
 nooptions	INET6
 nooptions	IPSEC_SUPPORT
+nooptions	IPSEC_OFFLOAD
 nooptions	TCP_BLACKBOX
 nooptions	FFS
 nooptions	SOFTUPDATES
@@ -51,6 +53,7 @@ nooptions	COMPAT_LINUXKPI
 nooptions	SC_PIXEL_MODE
 
 nodevice	smbios
+nodevice	ufshci
 nodevice	fdc
 nodevice	vga
 nodevice	splash
@@ -65,3 +68,5 @@ nodevice	mlx5
 nodevice	mlxfw
 nodevice	mlx5en
 nodevice	hyperv
+nodevice	efidev
+nodevice	efirtc

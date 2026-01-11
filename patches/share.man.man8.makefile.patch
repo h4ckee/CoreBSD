@@ -1,28 +1,33 @@
 diff -Naur src.orig/share/man/man8/Makefile src/share/man/man8/Makefile
---- src.orig/share/man/man8/Makefile	2025-06-06 00:04:21.000000000 +0000
-+++ src/share/man/man8/Makefile	2025-08-10 14:04:57.938511000 +0000
-@@ -7,23 +7,11 @@
+--- src.orig/share/man/man8/Makefile	2025-11-28 04:15:54.000000000 +0400
++++ src/share/man/man8/Makefile	2025-12-27 15:30:01.409178000 +0400
+@@ -5,28 +5,13 @@
+ MAN=	\
+ 	beinstall.8 \
  	crash.8 \
+-	debug.sh.8 \
  	diskless.8 \
  	intro.8 \
 -	nanobsd.8 \
--	rc.8 \
--	rc.subr.8 \
  	rescue.8 \
- 	${_uefi.8} \
+ 	${_uefi.8}
  
  MLINKS= \
 -	beinstall.8 beinstall.sh.8 \
--	nanobsd.8 nanobsd.sh.8 \
--	rc.8 rc.d.8 \
--	rc.8 rc.firewall.8 \
--	rc.8 rc.local.8 \
--	rc.8 rc.network.8 \
--	rc.8 rc.pccard.8 \
--	rc.8 rc.resume.8 \
--	rc.8 rc.serial.8 \
--	rc.8 rc.shutdown.8
+-	nanobsd.8 nanobsd.sh.8
+-
+-MANGROUPS+=	RC
+-RC=		rc.8 rc.subr.8
+-RCLINKS=	rc.8 rc.d.8 \
+-		rc.8 rc.firewall.8 \
+-		rc.8 rc.local.8 \
+-		rc.8 rc.network.8 \
+-		rc.8 rc.pccard.8 \
+-		rc.8 rc.resume.8 \
+-		rc.8 rc.serial.8 \
+-		rc.8 rc.shutdown.8
+-RCPACKAGE=	rc
 +	beinstall.8 beinstall.sh.8
  
  .if ${MK_NIS} != "no"
- MAN+=	yp.8
+ MANGROUPS+=	YP

@@ -1,7 +1,7 @@
 diff -Naur src.orig/etc/mtree/BSD.var.dist src/etc/mtree/BSD.var.dist
---- src.orig/etc/mtree/BSD.var.dist	2025-06-06 00:04:20.000000000 +0000
-+++ src/etc/mtree/BSD.var.dist	2025-08-02 09:05:07.524711000 +0000
-@@ -4,51 +4,17 @@
+--- src.orig/etc/mtree/BSD.var.dist	2025-11-28 04:15:53.000000000 +0400
++++ src/etc/mtree/BSD.var.dist	2025-12-26 15:12:46.585572000 +0400
+@@ -4,53 +4,17 @@
  
  /set type=dir uname=root gname=wheel mode=0755 tags=package=runtime
  .
@@ -46,6 +46,8 @@ diff -Naur src.orig/etc/mtree/BSD.var.dist src/etc/mtree/BSD.var.dist
 -        ..
 -        ipf             mode=0700 tags=package=ipf
 -        ..
+-        krb5kdc		mode=0700 tags=package=kerberos-kdc
+-        ..
          mtree
          ..
 -        ntp             uname=ntpd gname=ntpd
@@ -53,7 +55,7 @@ diff -Naur src.orig/etc/mtree/BSD.var.dist src/etc/mtree/BSD.var.dist
          pkg
          ..
          ports
-@@ -60,52 +26,16 @@
+@@ -62,52 +26,16 @@
      ..
      empty           mode=0555 flags=schg
      ..
@@ -99,8 +101,8 @@ diff -Naur src.orig/etc/mtree/BSD.var.dist src/etc/mtree/BSD.var.dist
          vi.recover      mode=01777
          ..
 -    ..
--    unbound         uname=unbound gname=unbound mode=0755 tags=package=unbound
--        conf.d          uname=unbound gname=unbound mode=0755 tags=package=unbound
+-    unbound         uname=unbound gname=unbound mode=0755 tags=package=local-unbound
+-        conf.d          uname=unbound gname=unbound mode=0755 tags=package=local-unbound
 -        ..
 -    ..
 -    yp

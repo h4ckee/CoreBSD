@@ -5,7 +5,7 @@ if (( USER_ID )); then
 	exit 1
 fi
 
-VERSION='14.3-RELEASE'
+VERSION='15.0-RELEASE'
 BASEURL="http://ftp2.ru.freebsd.org/pub/FreeBSD/releases/amd64/${VERSION}"
 MKSHURL="http://www.mirbsd.org/MirOS/dist/mir/mksh"
 BASESRC='src.txz'
@@ -65,10 +65,6 @@ patch_sources() {
 	zfs rollback "$SRCPOOL"@default
 
 	echo "===> Patching $SRCDIR"
-	for patch in "$CURDIR"/patches/*.patch; do
-		echo " * ${patch##*/}"
-		patch -s -V none -d /usr < "$patch" || exit 1
-	done
 
 	cp -R "$CURDIR"/files/mksh			"$SRCDIR"/bin/
 	cp -R "$CURDIR"/files/rc/*			"$SRCDIR"/libexec/rc/
@@ -84,6 +80,12 @@ patch_sources() {
 	cp "$CURDIR"/files/etcupdate.conf		"$SRCDIR"/usr.sbin/etcupdate/
 	cp "$CURDIR"/files/FreeBSD.conf.quarterly	"$SRCDIR"/usr.sbin/pkg/
 	cp "$CURDIR"/files/service.sh			"$SRCDIR"/usr.sbin/service/
+	cp "$CURDIR"/files/login.conf			"$SRCDIR"/usr.bin/login/
+
+	for patch in "$CURDIR"/patches/*.patch; do
+		echo " * ${patch##*/}"
+		patch -s -V none -d /usr < "$patch" || exit 1
+	done
 
 	ln "$SRCDIR"/sys/amd64/conf/COREBSD.hints "$SRCDIR"/sys/amd64/conf/DESKTOP.hints
 	cat "$CURDIR"/kernel/COREBSD.hints "$CURDIR"/kernel/LAPTOP.hints > "$SRCDIR"/sys/amd64/conf/LAPTOP.hints
@@ -113,6 +115,7 @@ set_environment() {
 	export NOPKG="YES"
 	export NOPORTS="YES"
 	export NOSRC="YES"
+	export NOPKGBASE="YES"
 
 	MODULES='aac aacraid accf_data accf_dns accf_http acl_nfs4 acl_posix1e ae aesni age agp ahci aic7xxx alc ale \
 		amd_ecc_inject amdsbwd amdtemp arcmsr ata ath_hal axgbe bce bfe bge bios bnxt bxe cam \
@@ -226,17 +229,10 @@ unmount_boot_environment() {
 	bectl activate -t be"$DATE" || exit 1
 }
 
-show_stats() {
-	for dir in /bin /sbin /usr/bin /usr/sbin /usr/libexec /lib /usr/lib; do
-		printf "${dir}: %d\n" "$(find $dir -type f -depth 1 | wc -l)"
-	done | column -t | tee ${VERSION}.stats
-}
-
 usage() {
 	cat <<- INFO
 	usage: "${0##*/}" <command>
 
-	    stats	- show current stats
 	    fetch	- fetch sources
 	    patch	- patch sources
 	    kernel	- update kernel
@@ -270,7 +266,7 @@ case "$COMMAND" in
 		delete_old
 		unmount_boot_environment
 		clean_directory "$OBJDIR"
-		shutdown -r now
+#		shutdown -r now
 		;;
 	image)	check_patched
 		clean_directory "$OBJDIR"
@@ -278,12 +274,11 @@ case "$COMMAND" in
 		build_world
 		build_kernel
 		build_image
-		clean_directory "$OBJDIR"
+#		clean_directory "$OBJDIR"
 		echo '--------------------------------------------------------------'
 		echo ">>> Building COREBSD image completed at $( date )"
 		echo '--------------------------------------------------------------'
 		echo "===> ${CURDIR}/CoreBSD-${CPUTYPE}-${VERSION}.iso.xz"
 		;;
-	stats)	show_stats ;;
 	*)	usage ;;
 esac

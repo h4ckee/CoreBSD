@@ -1,12 +1,12 @@
 diff -Naur src.orig/share/misc/Makefile src/share/misc/Makefile
---- src.orig/share/misc/Makefile	2024-11-29 03:03:43.000000000 +0300
-+++ src/share/misc/Makefile	2025-06-06 14:49:22.049247000 +0300
-@@ -4,11 +4,7 @@
- 
+--- src.orig/share/misc/Makefile	2025-11-28 04:15:54.000000000 +0400
++++ src/share/misc/Makefile	2025-12-27 15:33:02.834146000 +0400
+@@ -3,11 +3,7 @@
  .PATH:	${.CURDIR}/../../sys/dev/usb
  
+ FILESGROUPS=	FILES
 -FILES=	ascii birthtoken bsd-family-tree committers-doc.dot committers-ports.dot \
--	committers-src.dot flowers init.ee \
+-	committers-src.dot flowers \
 -	iso3166 iso639 latin1 mdoc.template operator pci_vendors \
 -	scsi_modes usb_vendors \
 -	organization.dot

@@ -1,8 +1,7 @@
 diff -Naur src.orig/share/vt/keymaps/Makefile src/share/vt/keymaps/Makefile
---- src.orig/share/vt/keymaps/Makefile	2025-06-06 03:04:21.000000000 +0300
-+++ src/share/vt/keymaps/Makefile	2025-06-09 11:11:21.113240000 +0300
-@@ -1,95 +1,9 @@
- 
+--- src.orig/share/vt/keymaps/Makefile	2025-11-28 04:15:54.000000000 +0400
++++ src/share/vt/keymaps/Makefile	2025-12-27 16:23:40.056582000 +0400
+@@ -1,94 +1,7 @@
  PACKAGE=	vt-data
  
 -FILES=	INDEX.keymaps \
@@ -69,8 +68,7 @@ diff -Naur src.orig/share/vt/keymaps/Makefile src/share/vt/keymaps/Makefile
 -	pl.kbd \
 -	pt.acc.kbd \
 -	pt.kbd \
-+FILES=	\
- 	ru.kbd \
+-	ru.kbd \
 -	ru.shift.kbd \
 -	ru.win.kbd \
 -	se.kbd \
@@ -95,6 +93,7 @@ diff -Naur src.orig/share/vt/keymaps/Makefile src/share/vt/keymaps/Makefile
 -	us.kbd \
 -	us.macbook.kbd \
 -	us.unix.kbd \
++FILES=	ru.kbd \
 +	us.kbd
  
  FILESDIR= ${SHAREDIR}/vt/keymaps

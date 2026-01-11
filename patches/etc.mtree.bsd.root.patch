@@ -1,24 +1,30 @@
 diff -Naur src.orig/etc/mtree/BSD.root.dist src/etc/mtree/BSD.root.dist
---- src.orig/etc/mtree/BSD.root.dist	2025-06-06 00:04:20.000000000 +0000
-+++ src/etc/mtree/BSD.root.dist	2025-09-02 09:31:22.972189000 +0000
-@@ -9,16 +9,6 @@
+--- src.orig/etc/mtree/BSD.root.dist	2025-11-28 04:15:53.000000000 +0400
++++ src/etc/mtree/BSD.root.dist	2026-01-06 14:00:03.615516000 +0400
+@@ -10,22 +10,10 @@
      boot
          defaults
          ..
 -        dtb
--            allwinner             tags=package=runtime
+-            allwinner       tags=package=runtime
 -            ..
--            overlays              tags=package=runtime
+-            overlays        tags=package=runtime
 -            ..
--            rockchip              tags=package=runtime
+-            rockchip        tags=package=runtime
 -            ..
 -        ..
 -        efi
 -        ..
          firmware
          ..
-         loader.conf.d             tags=package=bootloader
-@@ -29,68 +19,24 @@
+         fonts
+         ..
+-        images
+-        ..
+         kernel
+         ..
+         loader.conf.d
+@@ -34,8 +22,6 @@
          ..
          modules
          ..
@@ -27,93 +33,95 @@ diff -Naur src.orig/etc/mtree/BSD.root.dist src/etc/mtree/BSD.root.dist
          zfs
          ..
      ..
-     dev             mode=0555
+@@ -43,60 +29,18 @@
+     dev             mode=0555 tags=package=runtime
      ..
-     etc
--        X11
+     etc                 tags=package=runtime
+-        X11             tags=package=runtime
 -        ..
--        authpf
+-        authpf          tags=package=pf
 -        ..
--        autofs
+-        autofs          tags=package=autofs
 -        ..
--        bluetooth
+-        bluetooth       tags=package=bluetooth
 -        ..
-         cron.d
+         cron.d          tags=package=cron
          ..
--        defaults
+-        defaults        tags=package=runtime
 -        ..
-         devd
+         devd            tags=package=devd
          ..
--        dma
+-        dma             tags=package=dma
 -        ..
--        gss
+-        gss             tags=package=runtime
 -        ..
--        jail.conf.d
+-        jail.conf.d     tags=package=jail
 -        ..
--        kyua             tags=package=tests
+-        kyua            tags=package=tests
 -        ..
--        mail
+-        mail            tags=package=runtime
 -        ..
-         mtree
+         mtree           tags=package=mtree
          ..
--        newsyslog.conf.d
+-        newsyslog.conf.d tags=package=newsyslog
 -        ..
--        ntp             mode=0700
+-        ntp             mode=0700 tags=package=ntp
 -        ..
-         pam.d
+         pam.d           tags=package=runtime
          ..
--        periodic
--            daily
+-        periodic        tags=package=periodic
+-            daily       tags=package=periodic
 -            ..
--            monthly
+-            monthly     tags=package=periodic
 -            ..
--            security
+-            security    tags=package=periodic
 -            ..
--            weekly
+-            weekly      tags=package=periodic
 -            ..
 -        ..
-         pkg
+         pkg             tags=package=pkg-bootstrap
          ..
--        ppp
+-        ppp             tags=package=ppp
 -        ..
--        profile.d
+-        profile.d       tags=package=runtime
 -        ..
--        rc.conf.d
+-        rc.conf.d       tags=package=rc
 -        ..
-         rc.d
+         rc.d            tags=package=rc
          ..
--        security
+-        security        tags=package=audit
 -        ..
-         ssh
+         ssh             tags=package=ssh
          ..
-         ssl
-@@ -99,13 +45,9 @@
-             untrusted
+         ssl             tags=package=caroot
+@@ -105,14 +49,8 @@
+             untrusted		tags=package=caroot
              ..
          ..
--	sysctl.kld.d
--	..
-         syslog.d
+-        sysctl.kld.d    tags=package=runtime
+-        ..
+         syslog.d        tags=package=syslogd
          ..
-         zfs
--            compatibility.d
+-        zfs                     tags=package=zfs
+-            compatibility.d     tags=package=zfs
 -            ..
+-        ..
+     ..
+     lib                 tags=package=clibs
+         geom            tags=package=geom
+@@ -124,15 +62,7 @@
+         resolvconf      tags=package=resolvconf
          ..
      ..
-     lib
-@@ -118,15 +60,7 @@
-         resolvconf
-         ..
+-    media           tags=package=runtime
+-    ..
+     mnt             tags=package=runtime
+-    ..
+-    net             tags=package=autofs
+-    ..
+-    proc            mode=0555 tags=package=runtime
+-    ..
+-    rescue          tags=package=rescue
      ..
--    media
--    ..
-     mnt
--    ..
--    net
--    ..
--    proc            mode=0555
--    ..
--    rescue
-     ..
-     root            mode=0750
+     root            mode=0750 tags=package=runtime
      ..

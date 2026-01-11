@@ -1,7 +1,7 @@
 diff -Naur src.orig/stand/fonts/Makefile src/stand/fonts/Makefile
---- src.orig/stand/fonts/Makefile	2025-06-06 04:04:21.000000000 +0400
-+++ src/stand/fonts/Makefile	2025-10-01 16:12:11.379322000 +0400
-@@ -4,20 +4,9 @@
+--- src.orig/stand/fonts/Makefile	2025-11-28 04:15:54.000000000 +0400
++++ src/stand/fonts/Makefile	2025-12-28 14:09:50.204125000 +0400
+@@ -4,21 +4,9 @@
  .PATH: ${SRCTOP}/contrib/terminus
  
  FONTS=	\
@@ -17,6 +17,7 @@ diff -Naur src.orig/stand/fonts/Makefile src/stand/fonts/Makefile
 -	12x24.fnt.gz \
 -	14x28.fnt.gz \
 -	16x32.fnt.gz \
+-	32x64.fnt.gz \
  
 -FILES=	${FONTS} INDEX.fonts
 +FILES=	${FONTS}

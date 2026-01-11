@@ -1,7 +1,7 @@
 diff -Naur src.orig/sbin/Makefile src/sbin/Makefile
---- src.orig/sbin/Makefile	2025-06-06 00:04:20.000000000 +0000
-+++ src/sbin/Makefile	2025-08-02 10:40:05.430416000 +0000
-@@ -4,30 +4,13 @@
+--- src.orig/sbin/Makefile	2025-11-28 04:15:53.000000000 +0400
++++ src/sbin/Makefile	2025-12-30 16:25:49.396958000 +0400
+@@ -2,28 +2,13 @@
  
  SUBDIR=adjkerntz \
  	camcontrol \
@@ -24,15 +24,13 @@ diff -Naur src.orig/sbin/Makefile src/sbin/Makefile
  	fsck_msdosfs \
 -	fsdb \
 -	fsirand \
--	gbde \
  	geom \
 -	ggate \
 -	growfs \
--	gvinum \
  	ifconfig \
  	init \
  	kldconfig \
-@@ -37,35 +20,23 @@
+@@ -33,36 +18,23 @@
  	ldconfig \
  	md5 \
  	mdconfig \
@@ -65,15 +63,18 @@ diff -Naur src.orig/sbin/Makefile src/sbin/Makefile
  	swapon \
  	sysctl \
 -	tunefs \
+-	umbctl \
  	umount
  
  .if ${MK_INET} != "no" || ${MK_INET6} != "no"
-@@ -78,8 +49,6 @@
- SUBDIR.${MK_INET6}+=	rtsol
+@@ -76,10 +48,8 @@
  SUBDIR.${MK_IPFILTER}+=	ipf
  SUBDIR.${MK_IPFW}+=	ipfw
--SUBDIR.${MK_IPFW}+=	natd
+ SUBDIR.${MK_IPFW}+=	natd
 -SUBDIR.${MK_OPENSSL}+=	decryptcore
  SUBDIR.${MK_PF}+=	pfctl
  SUBDIR.${MK_PF}+=	pflogd
+-SUBDIR.${MK_PF}+=	pflowctl
  SUBDIR.${MK_QUOTAS}+=	quotacheck
+ SUBDIR.${MK_ROUTED}+=	routed
+ SUBDIR.${MK_VERIEXEC}+=	veriexec
