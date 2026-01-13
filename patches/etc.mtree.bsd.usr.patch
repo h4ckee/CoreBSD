@@ -1,27 +1,36 @@
 diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
---- src.orig/etc/mtree/BSD.usr.dist	2025-11-28 04:15:53.000000000 +0400
-+++ src/etc/mtree/BSD.usr.dist	2026-01-06 14:06:28.702499000 +0400
-@@ -12,8 +12,6 @@
+--- src.orig/etc/mtree/BSD.usr.dist	2026-01-08 19:00:02.189568000 +0400
++++ src/etc/mtree/BSD.usr.dist	2026-01-13 16:33:24.943653000 +0400
+@@ -12,28 +12,8 @@
              ..
              bsdstat           tags=package=libbsdstat-dev
              ..
 -            event1            tags=package=libevent1-dev
 -            ..
-             gmock             tags=package=utilities-dev
-                 internal      tags=package=utilities-dev
-                     custom    tags=package=utilities-dev
-@@ -26,10 +24,6 @@
-                     ..
-                 ..
-             ..
+-            gmock             tags=package=utilities-dev
+-                internal      tags=package=utilities-dev
+-                    custom    tags=package=utilities-dev
+-                    ..
+-                ..
+-            ..
+-            gtest             tags=package=utilities-dev
+-                internal      tags=package=utilities-dev
+-                    custom    tags=package=utilities-dev
+-                    ..
+-                ..
+-            ..
 -            samplerate        tags=package=sound-dev
 -            ..
 -            sqlite3           tags=package=libsqlite3-dev
 -            ..
              ucl               tags=package=libucl-dev
              ..
-             yaml              tags=package=libyaml-dev
-@@ -63,18 +57,8 @@
+-            yaml              tags=package=libyaml-dev
+-            ..
+             zstd              tags=package=runtime-dev
+             ..
+         ..
+@@ -63,136 +43,24 @@
                      xray
                      ..
                  ..
@@ -39,9 +48,12 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
 -        ..
          engines-3
          ..
-         flua
-@@ -85,114 +69,18 @@
-         ..
+-        flua
+-            freebsd
+-                sys
+-                ..
+-            ..
+-        ..
          i18n
          ..
 -        krb5                    tags=package=kerberos-kdc
@@ -155,7 +167,7 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
      ..
      local
      ..
-@@ -201,274 +89,20 @@
+@@ -201,274 +69,20 @@
      sbin
      ..
      share
@@ -430,9 +442,16 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
                  UTF
                  ..
              ..
-@@ -487,440 +121,42 @@
+@@ -480,447 +94,43 @@
+                 trusted         tags=package=runtime
                  ..
              ..
+-            pkgbase-15
+-                revoked         tags=package=runtime
+-                ..
+-                trusted         tags=package=runtime
+-                ..
+-            ..
          ..
 -        kyua            tags=package=tests
 -            misc            tags=package=tests

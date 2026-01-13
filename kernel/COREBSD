@@ -32,6 +32,7 @@ nooptions	COMPAT_FREEBSD10
 nooptions	COMPAT_FREEBSD11
 nooptions	COMPAT_FREEBSD12
 nooptions	COMPAT_FREEBSD13
+nooptions	COMPAT_FREEBSD14
 nooptions	KTRACE
 nooptions	STACK
 nooptions	HWPMC_HOOKS

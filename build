@@ -274,7 +274,7 @@ case "$COMMAND" in
 		build_world
 		build_kernel
 		build_image
-#		clean_directory "$OBJDIR"
+		clean_directory "$OBJDIR"
 		echo '--------------------------------------------------------------'
 		echo ">>> Building COREBSD image completed at $( date )"
 		echo '--------------------------------------------------------------'
