@@ -104,8 +104,8 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
 +	echo "./etc/resolv.conf type=link uname=root gname=wheel mode=0755 link=/var/run/resolv.conf" >> ${.TARGET}/METALOG
 +	echo "./tmp type=link uname=root gname=wheel mode=0755 link=/var/tmp" >> ${.TARGET}/METALOG
 +	echo "./root/corebsd.install type=file uname=root gname=wheel mode=0555" >> ${.TARGET}/METALOG
-+	sed -E 's/ tags=package=.+$//' ${.TARGET}/METALOG | sort | uniq > ${.TARGET}/METALOG.tmp
++	sed -E 's/[[:blank:]]tags=package=[[:graph:]]+//' ${.TARGET}/METALOG | sort | uniq > ${.TARGET}/METALOG.tmp
 +	mv ${.TARGET}/METALOG.tmp ${.TARGET}/METALOG
  	touch ${.TARGET}
- 
+
  bootonly:
