@@ -1,6 +1,6 @@
 diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
 --- src.orig/etc/mtree/BSD.usr.dist	2026-01-08 19:00:02.189568000 +0400
-+++ src/etc/mtree/BSD.usr.dist	2026-01-13 16:33:24.943653000 +0400
++++ src/etc/mtree/BSD.usr.dist	2026-01-14 11:36:33.544410000 +0400
 @@ -12,28 +12,8 @@
              ..
              bsdstat           tags=package=libbsdstat-dev
@@ -30,9 +30,26 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
              zstd              tags=package=runtime-dev
              ..
          ..
-@@ -63,136 +43,24 @@
-                     xray
+@@ -46,153 +26,33 @@
+                         bits
+                         ..
                      ..
+-                    fuzzer
+-                    ..
+                     hlsl
+                     ..
+                     openmp_wrappers
+                     ..
+-                    orc_rt
+-                    ..
+                     ppc_wrappers
+                     ..
+-                    profile
+-                    ..
+                     sanitizer
+                     ..
+-                    xray
+-                    ..
                  ..
 -                lib
 -                    freebsd
@@ -167,7 +184,7 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
      ..
      local
      ..
-@@ -201,274 +69,20 @@
+@@ -201,274 +61,20 @@
      sbin
      ..
      share
@@ -442,7 +459,7 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
                  UTF
                  ..
              ..
-@@ -480,447 +94,43 @@
+@@ -480,447 +86,43 @@
                  trusted         tags=package=runtime
                  ..
              ..

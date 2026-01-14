@@ -118,18 +118,18 @@ set_environment() {
 	export NOPKGBASE="YES"
 
 	MODULES='aac aacraid accf_data accf_dns accf_http acl_nfs4 acl_posix1e ae aesni age agp ahci aic7xxx alc ale \
-		amd_ecc_inject amdsbwd amdtemp arcmsr ata ath_hal axgbe bce bfe bge bios bnxt bxe cam \
-		cardbus cas cbb cc cd9660 ciss coretemp cpufreq crypto cryptodev cxgbe dc dcons dcons_crom em ena \
-		et evdev exca ext2fs fdc firewire firmware fxp gem geom hid hpt27xx hptiop hptmv hptnr hptrr hwpmc \
-		hyperv iavf ice ida if_gif if_tuntap if_vlan iflib igc imgact_binmisc io ip6_mroute_mod ipfw \
-		ipfw_nat ipfw_nat64 ipfw_nptv6 ipfw_pmod ipmi ips ipw isci isp iwi iwn ix ixl ixv jme kbdmux kgssapi \
-		kgssapi_krb5 khelp krpc le lge libalias linprocfs linsysfs linux linux64 linux_common \
-		linuxkpi_wlan lpt malo mana md mem mfi mii miibus mlx mlx5 mlx5en mlxfw mmc mmcsd mpi3mr mpr mps mpt \
-		mrsas msdosfs msk mvs mwl netlink nfe nfscl nfscommon nfsd nfslockd nfssvc nge nvd nvme ocs_fc \
-		padlock_rng pfsync plip ppbus ppc ppi pps procfs pseudofs puc qlnx ral random_fortuna random_other \
-		rdrand_rng re rl s3 safexcel sdhci sdhci_acpi sdhci_pci send sge sgx sgx_linux siis sis sk smartpqi \
-		smbfs sound speaker splash ste stge sym syscons sysvipc ti toecore tws uart ufs uinput usb vesa vge \
-		virtio vmd vmware vr wlan wlan_amrr wlan_ccmp wlan_tkip wlan_wep wpi x86bios xdr xl xz zfs zlib'
+		amd_ecc_inject amdsbwd amdtemp arcmsr ata ath_hal axgbe bce bfe bge bios bnxt bxe cam cardbus cas cbb cc \
+		cd9660 ciss coretemp cpufreq crypto cryptodev cxgbe dc dcons dcons_crom em ena et evdev exca ext2fs fdc \
+		firewire firmware fxp gem geom hid hpt27xx hptiop hptmv hptnr hptrr hwpmc hyperv iavf ice ida if_gif \
+		if_tuntap if_vlan iflib igc imgact_binmisc io ip6_mroute_mod ipfw ipfw_nat ipfw_nat64 ipfw_nptv6 ipfw_pmod \
+		ipmi ips ipw isci isp iwi iwn ix ixl ixv jme kbdmux kgssapi kgssapi_krb5 khelp krpc le lge libalias \
+		linprocfs linsysfs linux linux64 linux_common linuxkpi_wlan lpt malo mana md mem mfi mii miibus mlx mlx5 \
+		mlx5en mlxfw mmc mmcsd mpi3mr mpr mps mpt mrsas msdosfs msk mvs mwl netlink nfe nfscl nfscommon nfsd \
+		nfslockd nfssvc nge nvd nvme ocs_fc padlock_rng pf pflog pflow pfsync plip ppbus ppc ppi pps procfs \
+		pseudofs puc qlnx ral random_fortuna random_other rdrand_rng rdseed_rng re rl s3 safexcel sdhci sdhci_acpi \
+		sdhci_pci send sge sgx sgx_linux siis sis sk smartpqi smbfs sound speaker splash ste stge sym syscons \
+		sysvipc ti tmpfs toecore tws uart ufs uinput usb vesa vge virtio vmd vmware vr wlan wlan_amrr wlan_ccmp \
+		wlan_gcmp wlan_tkip wlan_wep wpi x86bios xdr xl xz zfs zlib'
 
 	case "$HWMODEL" in
 	*Core\(TM\)\ i[57]*)
