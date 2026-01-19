@@ -1,6 +1,6 @@
 diff -Naur src.orig/release/Makefile src/release/Makefile
---- src.orig/release/Makefile	2026-01-08 19:00:02.190827000 +0400
-+++ src/release/Makefile	2026-01-10 11:49:25.204962000 +0400
+--- src.orig/release/Makefile	2025-11-28 04:15:53.000000000 +0400
++++ src/release/Makefile	2026-01-19 13:04:45.515592000 +0400
 @@ -235,33 +235,38 @@
  	    DESTDIR=${.OBJDIR}/${.TARGET} MK_AT=no \
  	    MK_INSTALLLIB=no MK_MAIL=no \
@@ -87,7 +87,7 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
 +	mv ${.TARGET}/usr/share/zoneinfo/Etc/UTC ${.TARGET}/etc/localtime
 +	sed -E -i '' \
 +		-e '/\/boot\/(loader\.conf\.d|modules|zfs )/d' \
-+		-e '/\/etc\/(devd|dhclient|etcupdate|libmap|moused|rc|(new)?syslog)\.conf/d' \
++		-e '/\/etc\/(devd|dhclient|etcupdate|libmap|rc|(new)?syslog)\.conf/d' \
 +		-e '/\/etc\/(cron(\.d|tab)|devd|fbtab|login.access|pkg|rc\.(d|resume|suspend)|syslog\.d|ss(h|l))/d' \
 +		-e '/\/etc\/mtree\/BSD\.(include|root|usr)\.dist/d' \
 +		-e '/\/etc\/pam\.d\/(cron|sshd|xdm)/d' \
@@ -95,8 +95,8 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
 +		-e '/\/usr\/libexec\/(flua|ulog-helper)/d' \
 +		-e '/\/usr\/lib\/(.+\.(a|o)|clang|flua|libxo)/d' \
 +		-e '/\/bin\/(crontab|iconv)/d' \
-+		-e '/\/sbin\/(cron|devd|etcupdate|mixer|moused|(new)?syslogd?|nologin|powerd)/d' \
-+		-e '/\/share\/(certs|keys|man|mk|moused|pkg|skel|zoneinfo)/d' \
++		-e '/\/sbin\/(cron|devd|etcupdate|mixer|(new)?syslogd?|nologin|powerd)/d' \
++		-e '/\/share\/(certs|keys|man|mk|pkg|skel|zoneinfo)/d' \
 +		-e '/\/var\/(cache|cron|db|empty|log|run|tmp)/d' \
 +		-e '/\.\/tmp/d' \
 +	${.TARGET}/METALOG
@@ -107,5 +107,5 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
 +	sed -E 's/[[:blank:]]tags=package=[[:graph:]]+//' ${.TARGET}/METALOG | sort | uniq > ${.TARGET}/METALOG.tmp
 +	mv ${.TARGET}/METALOG.tmp ${.TARGET}/METALOG
  	touch ${.TARGET}
-
+ 
  bootonly:

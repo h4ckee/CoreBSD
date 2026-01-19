@@ -52,6 +52,9 @@ nooptions	NETDUMP
 nooptions	NETGDB
 nooptions	COMPAT_LINUXKPI
 nooptions	SC_PIXEL_MODE
+nooptions	XENHVM
+nooptions	USB_DEBUG
+nooptions	HID_DEBUG
 
 nodevice	smbios
 nodevice	ufshci
@@ -59,6 +62,7 @@ nodevice	fdc
 nodevice	vga
 nodevice	splash
 nodevice	sc
+nodevice	vt_efifb
 nodevice	uart
 nodevice	ppc
 nodevice	ppbus
@@ -69,5 +73,8 @@ nodevice	mlx5
 nodevice	mlxfw
 nodevice	mlx5en
 nodevice	hyperv
+nodevice	xenefi
+nodevice	xenpci
+nodevice	xentimer
 nodevice	efidev
 nodevice	efirtc

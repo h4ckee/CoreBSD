@@ -1,6 +1,6 @@
 diff -Naur src.orig/usr.sbin/Makefile src/usr.sbin/Makefile
---- src.orig/usr.sbin/Makefile	2026-01-08 18:59:30.451767000 +0400
-+++ src/usr.sbin/Makefile	2026-01-10 15:07:57.806907000 +0400
+--- src.orig/usr.sbin/Makefile	2025-11-28 04:15:58.000000000 +0400
++++ src/usr.sbin/Makefile	2026-01-19 13:00:50.054797000 +0400
 @@ -1,110 +1,41 @@
  .include <src.opts.mk>
  
@@ -121,7 +121,7 @@ diff -Naur src.orig/usr.sbin/Makefile src/usr.sbin/Makefile
  SUBDIR.${MK_CXGBETOOL}+=	cxgbetool
  SUBDIR.${MK_EFI}+=	efivar efidp efibootmgr efitable efiwake
  .if ${MK_OPENSSL} != "no"
-@@ -156,14 +86,12 @@
+@@ -156,15 +86,12 @@
  SUBDIR.${MK_INET6}+=	rtsold
  SUBDIR.${MK_INET6}+=	traceroute6
  SUBDIR.${MK_INETD}+=	inetd
@@ -133,10 +133,11 @@ diff -Naur src.orig/usr.sbin/Makefile src/usr.sbin/Makefile
  # XXX MK_SYSCONS
  SUBDIR.${MK_LEGACY_CONSOLE}+=	kbdcontrol
 -SUBDIR.${MK_LEGACY_CONSOLE}+=	kbdmap
- SUBDIR.${MK_LEGACY_CONSOLE}+=	moused
+-SUBDIR.${MK_LEGACY_CONSOLE}+=	moused
  SUBDIR.${MK_LEGACY_CONSOLE}+=	vidcontrol
  SUBDIR.${MK_PPP}+=	pppctl
-@@ -185,9 +113,6 @@
+ SUBDIR.${MK_NS_CACHING}+=	nscd
+@@ -185,9 +112,6 @@
  SUBDIR.${MK_NIS}+=	ypserv
  SUBDIR.${MK_NIS}+=	ypset
  SUBDIR.${MK_NTP}+=	ntp
@@ -146,7 +147,7 @@ diff -Naur src.orig/usr.sbin/Makefile src/usr.sbin/Makefile
  SUBDIR.${MK_PKGBOOTSTRAP}+=	pkg
  SUBDIR.${MK_PMC}+=	pmc pmcannotate pmccontrol pmcstat pmcstudy
  SUBDIR.${MK_PPP}+=	ppp
-@@ -204,14 +129,10 @@
+@@ -204,14 +128,10 @@
  SUBDIR.${MK_TOOLCHAIN}+=	config
  SUBDIR.${MK_TOOLCHAIN}+=	crunch
  SUBDIR.${MK_UNBOUND}+=	unbound

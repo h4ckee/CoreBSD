@@ -1,6 +1,6 @@
 diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
 --- src.orig/libexec/rc/rc.d/Makefile	2025-11-28 04:15:53.000000000 +0400
-+++ src/libexec/rc/rc.d/Makefile	2025-12-26 17:58:39.364410000 +0400
++++ src/libexec/rc/rc.d/Makefile	2026-01-19 12:51:32.562284000 +0400
 @@ -5,137 +5,14 @@
  CONFSPACKAGE=	rc
  
@@ -140,7 +140,7 @@ diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
  CONFGROUPS+=			DEVD
  DEVDPACKAGE=			devd
  DEVD=		devd
-@@ -152,229 +29,30 @@
+@@ -152,229 +29,26 @@
  CRONPACKAGE=			cron
  CRON=		cron
  
@@ -304,7 +304,7 @@ diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
  CONFGROUPS.${MK_WIRELESS}+=	WPA
  WPAPACKAGE=			wpa
  WPA=		wpa_supplicant
- 
+-
 -CONFGROUPS.${MK_ZFS}+=		ZFS
 -ZFSPACKAGE=			zfs
 -ZFS=		zfs \
@@ -316,9 +316,9 @@ diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
 -		zpoolupgrade \
 -		zvol
 -
- CONFGROUPS.${MK_LEGACY_CONSOLE}+=SYSCONS
- SYSCONSPACKAGE=			console-tools
- SYSCONS=	moused \
+-CONFGROUPS.${MK_LEGACY_CONSOLE}+=SYSCONS
+-SYSCONSPACKAGE=			console-tools
+-SYSCONS=	moused \
 -		msconvd \
 -		syscons
 -
