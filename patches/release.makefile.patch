@@ -1,6 +1,6 @@
 diff -Naur src.orig/release/Makefile src/release/Makefile
 --- src.orig/release/Makefile	2025-11-28 04:15:53.000000000 +0400
-+++ src/release/Makefile	2026-01-19 13:04:45.515592000 +0400
++++ src/release/Makefile	2026-01-20 11:47:06.833218000 +0400
 @@ -235,33 +235,38 @@
  	    DESTDIR=${.OBJDIR}/${.TARGET} MK_AT=no \
  	    MK_INSTALLLIB=no MK_MAIL=no \
@@ -51,7 +51,7 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
  	done
  .endif
  .endif
-@@ -277,19 +282,45 @@
+@@ -277,19 +282,46 @@
  	${PKG_CLEAN} || true
  .endif
  # Set up installation environment
@@ -83,9 +83,10 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
 +	echo "ttyv2 \"/usr/libexec/getty Pc\"    xterm onifexists secure" >> ${.TARGET}/etc/ttys
 +	pw -R ${.TARGET} usermod -n root -w none
 +	cp ${.CURDIR}/rc ${.CURDIR}/rc.shutdown ${.CURDIR}/sysctl.conf ${.TARGET}/etc
-+	cp ${.CURDIR}/corebsd.install ${.TARGET}/root
++	cp ${.CURDIR}/setup ${.TARGET}/root
 +	mv ${.TARGET}/usr/share/zoneinfo/Etc/UTC ${.TARGET}/etc/localtime
 +	sed -E -i '' \
++		-e '/\/kernel\/(hid(bus)?|(h|u)kbd|umass|usb(hid)?|(e|o|u|x)hci).ko/d' \
 +		-e '/\/boot\/(loader\.conf\.d|modules|zfs )/d' \
 +		-e '/\/etc\/(devd|dhclient|etcupdate|libmap|rc|(new)?syslog)\.conf/d' \
 +		-e '/\/etc\/(cron(\.d|tab)|devd|fbtab|login.access|pkg|rc\.(d|resume|suspend)|syslog\.d|ss(h|l))/d' \
@@ -103,7 +104,7 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
 +	echo "./etc/localtime type=file uname=root gname=wheel mode=0644" >> ${.TARGET}/METALOG
 +	echo "./etc/resolv.conf type=link uname=root gname=wheel mode=0755 link=/var/run/resolv.conf" >> ${.TARGET}/METALOG
 +	echo "./tmp type=link uname=root gname=wheel mode=0755 link=/var/tmp" >> ${.TARGET}/METALOG
-+	echo "./root/corebsd.install type=file uname=root gname=wheel mode=0555" >> ${.TARGET}/METALOG
++	echo "./root/setup type=file uname=root gname=wheel mode=0555" >> ${.TARGET}/METALOG
 +	sed -E 's/[[:blank:]]tags=package=[[:graph:]]+//' ${.TARGET}/METALOG | sort | uniq > ${.TARGET}/METALOG.tmp
 +	mv ${.TARGET}/METALOG.tmp ${.TARGET}/METALOG
  	touch ${.TARGET}

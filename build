@@ -137,11 +137,11 @@ set_environment() {
 		export COPTFLAGS="-O2 -pipe -march=ivybridge -fomit-frame-pointer"
 		export CFLAGS="$COPTFLAGS -fno-plt"
 		export LDFLAGS="-Wl,-O2 -Wl,--sort-common -Wl,--strip-debug"
-		if [ "$COMMAND" = "image" ]; then
+		if [ "$COMMAND" = "img" ]; then
 			export KERNCONF="COREBSD"
 			export WITHOUT_MODULES="$MODULES"
 		else
-			if [ "$COMMAND" = "world" ]; then
+			if [ "$COMMAND" = "all" ]; then
 				export DESTDIR="/mnt"
 			fi
 			export KERNCONF="LAPTOP"
@@ -155,11 +155,11 @@ set_environment() {
 		export COPTFLAGS="-O2 -pipe -march=core2 -fomit-frame-pointer"
 		export CFLAGS="$COPTFLAGS -fno-plt"
 		export LDFLAGS="-Wl,-O2 -Wl,--sort-common -Wl,--strip-debug"
-		if [ "$COMMAND" = "image" ]; then
+		if [ "$COMMAND" = "img" ]; then
 			export KERNCONF="COREBSD"
 			export WITHOUT_MODULES="$MODULES"
 		else
-			if [ "$COMMAND" = "world" ]; then
+			if [ "$COMMAND" = "all" ]; then
 				export DESTDIR="/mnt"
 			fi
 			export KERNCONF="DESKTOP"
@@ -180,9 +180,6 @@ build_kernel() {
 install_kernel() {
 	make -C "$SRCDIR" installkernel || exit 1
 	kldxref "$DESTDIR"/boot/kernel || exit 1
-	if [ "$COMMAND" = "image" ]; then
-		rm -f "$DESTDIR"/boot/kernel/{hid{,bus},{h,u}kbd,umass,usb{,hid},{e,o,u,x}hci}.ko
-	fi
 }
 
 build_world() {
@@ -234,13 +231,13 @@ unmount_boot_environment() {
 
 usage() {
 	cat <<- INFO
-	usage: "${0##*/}" <command>
+	usage: ${0##*/} <command>
 
-	    fetch	- fetch sources
-	    patch	- patch sources
-	    kernel	- update kernel
-	    world	- update world + kernel
-	    image	- build iso image
+	    src - fetch source tree
+	    pts - apply patches
+	    krn - update kernel
+	    all - update world + kernel
+	    img - build iso image
 
 	INFO
 	exit
@@ -248,9 +245,9 @@ usage() {
 
 COMMAND="$1"
 case "$COMMAND" in
-	fetch)	check_sources ;;
-	patch)	patch_sources ;;
-	kernel)	check_patched
+	src)	check_sources ;;
+	pts)	patch_sources ;;
+	krn)	check_patched
 		clean_directory "$OBJDIR"
 		set_environment
 		build_kernel
@@ -258,7 +255,7 @@ case "$COMMAND" in
 		clean_directory "$OBJDIR"
 		shutdown -r now
 		;;
-	world)	check_patched
+	all)	check_patched
 		clean_directory "$OBJDIR"
 		set_environment
 		build_world
@@ -271,7 +268,7 @@ case "$COMMAND" in
 		clean_directory "$OBJDIR"
 #		shutdown -r now
 		;;
-	image)	check_patched
+	img)	check_patched
 		clean_directory "$OBJDIR"
 		set_environment
 		build_world
