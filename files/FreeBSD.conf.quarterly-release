@@ -1,12 +1,10 @@
 #
 # To disable this repository, instead of modifying or removing this file,
 # create a /usr/local/etc/pkg/repos/FreeBSD.conf file:
-#
-#   mkdir -p /usr/local/etc/pkg/repos
 #   echo "FreeBSD: { enabled: no }" > /usr/local/etc/pkg/repos/FreeBSD.conf
 #
 
-FreeBSD_primary: {
+FreeBSD-primary: {
   url: "http://pkg0.sjb.freebsd.org/${ABI}/quarterly",
   mirror_type: "NONE",
   enabled: yes,
@@ -14,7 +12,15 @@ FreeBSD_primary: {
   priority: 10
 }
 
-FreeBSD_secondary: {
+FreeBSD-primary-kmods: {
+  url: "http://pkg0.sjb.freebsd.org/${ABI}/kmods_quarterly_${VERSION_MINOR}",
+  mirror_type: "NONE",
+  enabled: yes,
+  ip_version: 4,
+  priority: 10
+}
+
+FreeBSD-secondary: {
   url: "http://pkg0.nyi.freebsd.org/${ABI}/quarterly",
   mirror_type: "NONE",
   enabled: no,
@@ -22,7 +28,15 @@ FreeBSD_secondary: {
   priority: 10
 }
 
-FreeBSD_backup: {
+FreeBSD-secondary-kmods: {
+  url: "http://pkg0.nyi.freebsd.org/${ABI}/kmods_quarterly_${VERSION_MINOR}",
+  mirror_type: "NONE",
+  enabled: no,
+  ip_version: 4,
+  priority: 10
+}
+
+FreeBSD-backup: {
   url: "pkg+https://pkg.FreeBSD.org/${ABI}/quarterly",
   mirror_type: "srv",
   signature_type: "fingerprints",
@@ -32,12 +46,12 @@ FreeBSD_backup: {
   priority: 20
 }
 
-FreeBSD-kmods: {
+FreeBSD-backup-kmods: {
   url: "pkg+https://pkg.FreeBSD.org/${ABI}/kmods_quarterly_${VERSION_MINOR}",
   mirror_type: "srv",
   signature_type: "fingerprints",
   fingerprints: "/usr/share/keys/pkg",
-  enabled: yes,
+  enabled: no,
   ip_version: 4,
   priority: 50
 }

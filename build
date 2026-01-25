@@ -66,21 +66,21 @@ patch_sources() {
 
 	echo "===> Patching $SRCDIR"
 
-	cp -R "$CURDIR"/files/mksh			"$SRCDIR"/bin/
-	cp -R "$CURDIR"/files/rc/*			"$SRCDIR"/libexec/rc/
-	cp "$CURDIR"/files/devd/*			"$SRCDIR"/sbin/devd/
-	cp "$CURDIR"/livecd/*				"$SRCDIR"/release/
-	cp "$CURDIR"/kernel/*				"$SRCDIR"/sys/amd64/conf/
-	cp "$CURDIR"/files/shells			"$SRCDIR"/etc/
-	cp "$CURDIR"/files/loader*			"$SRCDIR"/stand/defaults/
-	cp "$CURDIR"/files/dot.*			"$SRCDIR"/share/skel/
-	cp "$CURDIR"/files/devfs.rules			"$SRCDIR"/sbin/devfs/
-	cp "$CURDIR"/files/sysctl.conf			"$SRCDIR"/sbin/sysctl/
-	cp "$CURDIR"/files/pf.conf			"$SRCDIR"/sbin/pfctl/
-	cp "$CURDIR"/files/etcupdate.conf		"$SRCDIR"/usr.sbin/etcupdate/
-	cp "$CURDIR"/files/FreeBSD.conf.quarterly	"$SRCDIR"/usr.sbin/pkg/
-	cp "$CURDIR"/files/service.sh			"$SRCDIR"/usr.sbin/service/
-	cp "$CURDIR"/files/login.conf			"$SRCDIR"/usr.bin/login/
+	cp -R "$CURDIR"/files/mksh		"$SRCDIR"/bin/
+	cp -R "$CURDIR"/files/rc/*		"$SRCDIR"/libexec/rc/
+	cp "$CURDIR"/files/devd/*		"$SRCDIR"/sbin/devd/
+	cp "$CURDIR"/livecd/*			"$SRCDIR"/release/
+	cp "$CURDIR"/kernel/*			"$SRCDIR"/sys/amd64/conf/
+	cp "$CURDIR"/files/shells		"$SRCDIR"/etc/
+	cp "$CURDIR"/files/loader*		"$SRCDIR"/stand/defaults/
+	cp "$CURDIR"/files/dot.*		"$SRCDIR"/share/skel/
+	cp "$CURDIR"/files/devfs.rules		"$SRCDIR"/sbin/devfs/
+	cp "$CURDIR"/files/sysctl.conf		"$SRCDIR"/sbin/sysctl/
+	cp "$CURDIR"/files/pf.conf		"$SRCDIR"/sbin/pfctl/
+	cp "$CURDIR"/files/etcupdate.conf	"$SRCDIR"/usr.sbin/etcupdate/
+	cp "$CURDIR"/files/FreeBSD.conf*	"$SRCDIR"/usr.sbin/pkg/
+	cp "$CURDIR"/files/service.sh		"$SRCDIR"/usr.sbin/service/
+	cp "$CURDIR"/files/login.conf		"$SRCDIR"/usr.bin/login/
 
 	for patch in "$CURDIR"/patches/*.patch; do
 		echo " * ${patch##*/}"

@@ -72,7 +72,7 @@ bkup() {
 }
 
 uu() {
-	mntdir=$(mount -p | awk '$2 ~ /mnt\/.+/ && $3 ~ "(fuse|msdos)fs" {print $2}')
+	mntdir=$(mount -p | awk '$2 ~ /mnt\/.+/ && $3 ~ "(cd9660|fusefs|msdosfs)" {print $2}')
 	if [ -n "$mntdir" ]; then
 		sync
 		if $DOAS umount "$mntdir"; then
