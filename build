@@ -37,9 +37,62 @@ fetch_sources() {
 
 extract_sources() {
 	echo "===> Extracting $BASESRC"
-	LC_ALL=C bsdtar -C / --uid 0 --gid 0 -xf "$TMPDIR"/"$BASESRC" || exit 1
+	LC_ALL=C bsdtar -C / --uid 0 --gid 0 -xf "$TMPDIR"/"$BASESRC" \
+		--exclude="${SRCDIR#/}/contrib/arm-optimized-routines"	--exclude="${SRCDIR#/}/contrib/atf" \
+		--exclude="${SRCDIR#/}/contrib/bearssl"			--exclude="${SRCDIR#/}/contrib/bsnmp" \
+		--exclude="${SRCDIR#/}/contrib/dialog"			--exclude="${SRCDIR#/}/contrib/googletest" \
+		--exclude="${SRCDIR#/}/contrib/kyua"			--exclude="${SRCDIR#/}/contrib/libevent" \
+		--exclude="${SRCDIR#/}/contrib/libfido2"		--exclude="${SRCDIR#/}/contrib/libsamplerate" \
+		--exclude="${SRCDIR#/}/contrib/llvm-project/lldb"	--exclude="${SRCDIR#/}/contrib/llvm-project/openmp" \
+		--exclude="${SRCDIR#/}/contrib/netbsd-tests"		--exclude="${SRCDIR#/}/contrib/ntp" \
+		--exclude="${SRCDIR#/}/contrib/ofed"			--exclude="${SRCDIR#/}/contrib/openbsm" \
+		--exclude="${SRCDIR#/}/contrib/opencsd"			--exclude="${SRCDIR#/}/contrib/pam-krb5" \
+		--exclude="${SRCDIR#/}/contrib/processor-trace"		--exclude="${SRCDIR#/}/contrib/sendmail" \
+		--exclude="${SRCDIR#/}/contrib/spleen"			--exclude="${SRCDIR#/}/contrib/sqlite3" \
+		--exclude="${SRCDIR#/}/contrib/tcsh"			--exclude="${SRCDIR#/}/contrib/unbound" \
+		--exclude="${SRCDIR#/}/crypto/heimdal"			--exclude="${SRCDIR#/}/crypto/krb5" \
+		--exclude="${SRCDIR#/}/kerberos5"			--exclude="${SRCDIR#/}/krb5" \
+		--exclude="${SRCDIR#/}/share/colldef"			--exclude="${SRCDIR#/}/share/dict" \
+		--exclude="${SRCDIR#/}/sys/contrib/alpine-hal"		--exclude="${SRCDIR#/}/sys/contrib/device-tree" \
+		--exclude="${SRCDIR#/}/sys/contrib/edk2"		--exclude="${SRCDIR#/}/sys/contrib/ncsw" \
+		--exclude="${SRCDIR#/}/sys/crypto/openssl/aarch64"	--exclude="${SRCDIR#/}/sys/crypto/openssl/arm" \
+		--exclude="${SRCDIR#/}/sys/crypto/openssl/i386"		--exclude="${SRCDIR#/}/sys/crypto/openssl/powerpc*" \
+	|| exit 1
+#		--exclude="${SRCDIR#/}/sys/ofed" \
 	echo "===> Extracting $MKSHSRC"
 	LC_ALL=C bsdtar -C "$SRCDIR"/contrib --uid 0 --gid 0 -xf "$TMPDIR"/"$MKSHSRC" || exit 1
+	echo "===> Removing extra directories"
+	find -E "$SRCDIR" \( \
+		-path "$SRCDIR"/sys/dev/ntb/test -o -path "$SRCDIR"/contrib/file/doc 		-o \
+		-path "$SRCDIR"/contrib/llvm-project/lld/docs -o -path "$SRCDIR"/bin/test	\) \
+	-prune -o -type d \( \
+		-regex '.*/(docs?|(.*_)?tests?)' -o -name .github				-o \
+		-name demos		-o -name example\*		-o -name html		-o \
+		-name perl		-o -name regress\*		-o -name travis\*	\) \
+	-exec rm -rf '{}' \+
+	echo "===> Removing extra files"
+#		-regex '.*\.(b(at|z2)|css|ex(ample|e)|fnt|(ht|y)ml|gz|info|json|m(d|sg)|p(l|kg|ng)|svg)$' -o \
+	find -E "$SRCDIR" -type f \( \
+		-regex '.*\.(b(at|z2)|css|ex(ample|e)|fnt|(ht|y)ml|gz|info|json|m(d|sg)|p(l|ng)|svg)$' -o \
+		-regex '.*/config(\.guess|\.sub|ure.*)' -o -name .git\*	-o \
+		-name aclocal.m4	-o -name autogen.sh		-o -name install-sh	-o \
+		-name ABOUT-NLS		-o -name ACKNOWLEDGEMENTS	-o -name ANNOUNCE	-o \
+		-name AUTHORS		-o -name Change[lL]og\*		-o -name CHANGELOG\*	-o \
+		-name Changes		-o -name CommitLog\*		-o -name CHANGES	-o \
+		-name CONTRIBUTING\*	-o -name CONTRIBUTIONS		-o -name CONTRIBUTORS	-o \
+		-name COPYING\*		-o -name Copyright		-o -name COPYRIGHT	-o \
+		-name CREDITS		-o -name DISCLAIMER		-o -name FAQ		-o \
+		-name FILES		-o -name FIXES\*		-o -name FREEBSD\*	-o \
+		-name HISTORY		-o -name INSTALL\*		-o -name KNOWNBUGS	-o \
+		-name LICENSE\*		-o -name Makefile.[ai][mn]	-o -name MAINT		-o \
+		-name MAINTAINERS	-o -name MAINTENANCE\*		-o -name MANIFEST	-o \
+		-name MEMORY_BUGS\*	-o -name NEW_FEATURES		-o -name NEWS		-o \
+		-name NOTES\*		-o -name NOTICE\*		-o -name NO_WARRANTY	-o \
+		-name ONEWS		-o -name PGPKEYS		-o -name README\*	-o \
+		-name RELNOTES		-o -name RELEASE\*		-o -name SECURITY\*	-o \
+		-name THANKS		-o -name THIRDPARTYLICENSE\*	-o -name TODO		-o \
+		-name TO-DO		-o -name TUNING\*		-o -name Y2K		\) \
+	-delete
 	echo "$VERSION" > "$SRCDIR"/VERSION
 	rm -f "$TMPDIR"/"$BASESRC" "$TMPDIR"/"$MKSHSRC"
 	zfs snapshot "$SRCPOOL"@default
@@ -63,9 +116,7 @@ check_sources() {
 patch_sources() {
 	check_sources
 	zfs rollback "$SRCPOOL"@default
-
 	echo "===> Patching $SRCDIR"
-
 	cp -R "$CURDIR"/files/mksh		"$SRCDIR"/bin/
 	cp -R "$CURDIR"/files/rc/*		"$SRCDIR"/libexec/rc/
 	cp "$CURDIR"/files/devd/*		"$SRCDIR"/sbin/devd/
@@ -81,16 +132,13 @@ patch_sources() {
 	cp "$CURDIR"/files/FreeBSD.conf*	"$SRCDIR"/usr.sbin/pkg/
 	cp "$CURDIR"/files/service.sh		"$SRCDIR"/usr.sbin/service/
 	cp "$CURDIR"/files/login.conf		"$SRCDIR"/usr.bin/login/
-
 	for patch in "$CURDIR"/patches/*.patch; do
 		echo " * ${patch##*/}"
 		patch -s -V none -d /usr < "$patch" || exit 1
 	done
-
 	ln "$SRCDIR"/sys/amd64/conf/COREBSD.hints "$SRCDIR"/sys/amd64/conf/DESKTOP.hints
 	cat "$CURDIR"/kernel/COREBSD.hints "$CURDIR"/kernel/LAPTOP.hints > "$SRCDIR"/sys/amd64/conf/LAPTOP.hints
 	ln "$SRCDIR"/share/numericdef_unicode/uk_UA.UTF-8.src	"$SRCDIR"/share/numericdef_unicode/ru_RU.UTF-8.src
-
 	touch "$SRCDIR"/.patched
 }
 
@@ -271,8 +319,9 @@ case "$COMMAND" in
 	img)	check_patched
 		clean_directory "$OBJDIR"
 		set_environment
-		build_world
 		build_kernel
+		build_world
+##		build_kernel
 		build_image
 		clean_directory "$OBJDIR"
 		echo '--------------------------------------------------------------'
