@@ -58,7 +58,6 @@ extract_sources() {
 		--exclude="${SRCDIR#/}/sys/crypto/openssl/aarch64"	--exclude="${SRCDIR#/}/sys/crypto/openssl/arm" \
 		--exclude="${SRCDIR#/}/sys/crypto/openssl/i386"		--exclude="${SRCDIR#/}/sys/crypto/openssl/powerpc*" \
 	|| exit 1
-#		--exclude="${SRCDIR#/}/sys/ofed" \
 	echo "===> Extracting $MKSHSRC"
 	LC_ALL=C bsdtar -C "$SRCDIR"/contrib --uid 0 --gid 0 -xf "$TMPDIR"/"$MKSHSRC" || exit 1
 	echo "===> Removing extra directories"
@@ -71,7 +70,6 @@ extract_sources() {
 		-name perl		-o -name regress\*		-o -name travis\*	\) \
 	-exec rm -rf '{}' \+
 	echo "===> Removing extra files"
-#		-regex '.*\.(b(at|z2)|css|ex(ample|e)|fnt|(ht|y)ml|gz|info|json|m(d|sg)|p(l|kg|ng)|svg)$' -o \
 	find -E "$SRCDIR" -type f \( \
 		-regex '.*\.(b(at|z2)|css|ex(ample|e)|fnt|(ht|y)ml|gz|info|json|m(d|sg)|p(l|ng)|svg)$' -o \
 		-regex '.*/config(\.guess|\.sub|ure.*)' -o -name .git\*	-o \
@@ -164,7 +162,6 @@ set_environment() {
 	export NOPORTS="YES"
 	export NOSRC="YES"
 	export NOPKGBASE="YES"
-
 	MODULES='aac aacraid accf_data accf_dns accf_http acl_nfs4 acl_posix1e ae aesni age agp ahci aic7xxx alc ale \
 		amd_ecc_inject amdsbwd amdtemp arcmsr ata ath_hal axgbe bce bfe bge bios bnxt bxe cam cardbus cas cbb cc \
 		cd9660 ciss coretemp cpufreq crypto cryptodev cxgbe dc dcons dcons_crom em ena et evdev exca ext2fs fdc \
@@ -239,15 +236,11 @@ install_world() {
 	etcupdate resolve -p -D "$DESTDIR"
 	chflags -R noschg "$DESTDIR"
 	find "$DESTDIR" -mindepth 1 \( \
-		-path "$DESTDIR"/boot\* -o \
-		-path "$DESTDIR"/etc\* -o \
-		-path "$DESTDIR"/home\* -o \
-		-path "$DESTDIR"/root\* -o \
-		-path "$DESTDIR"/usr/local\* -o \
-		-path "$DESTDIR"/usr/src\* -o \
-		-path "$DESTDIR"/sys\* -o \
-		-path "$DESTDIR"/var\* \) \
-		-prune -o -delete
+		-path "$DESTDIR"/boot\*		-o -path "$DESTDIR"/etc\* 	-o \
+		-path "$DESTDIR"/home\*		-o -path "$DESTDIR"/root\*	-o \
+		-path "$DESTDIR"/usr/local\*	-o -path "$DESTDIR"/usr/src\*	-o \
+		-path "$DESTDIR"/sys\*		-o -path "$DESTDIR"/var\* \) \
+	-prune -o -delete
 	make -C "$SRCDIR" installworld || exit 1
 	for dir in geom libutil libpam/modules; do
 		make -C "$SRCDIR"/lib/"$dir" all-man maninstall || exit 1
@@ -319,9 +312,8 @@ case "$COMMAND" in
 	img)	check_patched
 		clean_directory "$OBJDIR"
 		set_environment
-		build_kernel
 		build_world
-##		build_kernel
+		build_kernel
 		build_image
 		clean_directory "$OBJDIR"
 		echo '--------------------------------------------------------------'
