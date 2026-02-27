@@ -37,26 +37,26 @@ fetch_sources() {
 
 extract_sources() {
 	echo "===> Extracting $BASESRC"
-	LC_ALL=C bsdtar -C / --uid 0 --gid 0 -xf "$TMPDIR"/"$BASESRC" \
-		--exclude="${SRCDIR#/}/contrib/arm-optimized-routines"	--exclude="${SRCDIR#/}/contrib/atf" \
-		--exclude="${SRCDIR#/}/contrib/bearssl"			--exclude="${SRCDIR#/}/contrib/bsnmp" \
-		--exclude="${SRCDIR#/}/contrib/dialog"			--exclude="${SRCDIR#/}/contrib/googletest" \
-		--exclude="${SRCDIR#/}/contrib/kyua"			--exclude="${SRCDIR#/}/contrib/libevent" \
-		--exclude="${SRCDIR#/}/contrib/libfido2"		--exclude="${SRCDIR#/}/contrib/libsamplerate" \
-		--exclude="${SRCDIR#/}/contrib/llvm-project/lldb"	--exclude="${SRCDIR#/}/contrib/llvm-project/openmp" \
-		--exclude="${SRCDIR#/}/contrib/netbsd-tests"		--exclude="${SRCDIR#/}/contrib/ntp" \
-		--exclude="${SRCDIR#/}/contrib/ofed"			--exclude="${SRCDIR#/}/contrib/openbsm" \
-		--exclude="${SRCDIR#/}/contrib/opencsd"			--exclude="${SRCDIR#/}/contrib/pam-krb5" \
-		--exclude="${SRCDIR#/}/contrib/processor-trace"		--exclude="${SRCDIR#/}/contrib/sendmail" \
-		--exclude="${SRCDIR#/}/contrib/spleen"			--exclude="${SRCDIR#/}/contrib/sqlite3" \
-		--exclude="${SRCDIR#/}/contrib/tcsh"			--exclude="${SRCDIR#/}/contrib/unbound" \
-		--exclude="${SRCDIR#/}/crypto/heimdal"			--exclude="${SRCDIR#/}/crypto/krb5" \
-		--exclude="${SRCDIR#/}/kerberos5"			--exclude="${SRCDIR#/}/krb5" \
-		--exclude="${SRCDIR#/}/share/colldef"			--exclude="${SRCDIR#/}/share/dict" \
-		--exclude="${SRCDIR#/}/sys/contrib/alpine-hal"		--exclude="${SRCDIR#/}/sys/contrib/device-tree" \
-		--exclude="${SRCDIR#/}/sys/contrib/edk2"		--exclude="${SRCDIR#/}/sys/contrib/ncsw" \
-		--exclude="${SRCDIR#/}/sys/crypto/openssl/aarch64"	--exclude="${SRCDIR#/}/sys/crypto/openssl/arm" \
-		--exclude="${SRCDIR#/}/sys/crypto/openssl/i386"		--exclude="${SRCDIR#/}/sys/crypto/openssl/powerpc*" \
+	LC_ALL=C bsdtar -C / --uid 0 --gid 0 -xf "$TMPDIR"/"$BASESRC"								\
+		--exclude="${SRCDIR#/}/contrib/arm-optimized-routines"	--exclude="${SRCDIR#/}/contrib/atf"			\
+		--exclude="${SRCDIR#/}/contrib/bearssl"			--exclude="${SRCDIR#/}/contrib/bsnmp"			\
+		--exclude="${SRCDIR#/}/contrib/dialog"			--exclude="${SRCDIR#/}/contrib/googletest"		\
+		--exclude="${SRCDIR#/}/contrib/kyua"			--exclude="${SRCDIR#/}/contrib/libevent"		\
+		--exclude="${SRCDIR#/}/contrib/libfido2"		--exclude="${SRCDIR#/}/contrib/libsamplerate"		\
+		--exclude="${SRCDIR#/}/contrib/llvm-project/lldb"	--exclude="${SRCDIR#/}/contrib/llvm-project/openmp"	\
+		--exclude="${SRCDIR#/}/contrib/netbsd-tests"		--exclude="${SRCDIR#/}/contrib/ntp"			\
+		--exclude="${SRCDIR#/}/contrib/ofed"			--exclude="${SRCDIR#/}/contrib/openbsm"			\
+		--exclude="${SRCDIR#/}/contrib/opencsd"			--exclude="${SRCDIR#/}/contrib/pam-krb5"		\
+		--exclude="${SRCDIR#/}/contrib/processor-trace"		--exclude="${SRCDIR#/}/contrib/sendmail"		\
+		--exclude="${SRCDIR#/}/contrib/spleen"			--exclude="${SRCDIR#/}/contrib/sqlite3"			\
+		--exclude="${SRCDIR#/}/contrib/tcsh"			--exclude="${SRCDIR#/}/contrib/unbound"			\
+		--exclude="${SRCDIR#/}/crypto/heimdal"			--exclude="${SRCDIR#/}/crypto/krb5"			\
+		--exclude="${SRCDIR#/}/kerberos5"			--exclude="${SRCDIR#/}/krb5"				\
+		--exclude="${SRCDIR#/}/share/colldef"			--exclude="${SRCDIR#/}/share/dict"			\
+		--exclude="${SRCDIR#/}/sys/contrib/alpine-hal"		--exclude="${SRCDIR#/}/sys/contrib/device-tree"		\
+		--exclude="${SRCDIR#/}/sys/contrib/edk2"		--exclude="${SRCDIR#/}/sys/contrib/ncsw"		\
+		--exclude="${SRCDIR#/}/sys/crypto/openssl/aarch64"	--exclude="${SRCDIR#/}/sys/crypto/openssl/arm"		\
+		--exclude="${SRCDIR#/}/sys/crypto/openssl/i386"		--exclude="${SRCDIR#/}/sys/crypto/openssl/powerpc*"	\
 	|| exit 1
 	echo "===> Extracting $MKSHSRC"
 	LC_ALL=C bsdtar -C "$SRCDIR"/contrib --uid 0 --gid 0 -xf "$TMPDIR"/"$MKSHSRC" || exit 1
@@ -136,7 +136,7 @@ patch_sources() {
 	done
 	ln "$SRCDIR"/sys/amd64/conf/COREBSD.hints "$SRCDIR"/sys/amd64/conf/DESKTOP.hints
 	cat "$CURDIR"/kernel/COREBSD.hints "$CURDIR"/kernel/LAPTOP.hints > "$SRCDIR"/sys/amd64/conf/LAPTOP.hints
-	ln "$SRCDIR"/share/numericdef_unicode/uk_UA.UTF-8.src	"$SRCDIR"/share/numericdef_unicode/ru_RU.UTF-8.src
+	ln "$SRCDIR"/share/numericdef_unicode/uk_UA.UTF-8.src "$SRCDIR"/share/numericdef_unicode/ru_RU.UTF-8.src
 	touch "$SRCDIR"/.patched
 }
 
