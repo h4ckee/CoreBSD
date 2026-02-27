@@ -136,7 +136,7 @@ patch_sources() {
 	done
 	ln "$SRCDIR"/sys/amd64/conf/COREBSD.hints "$SRCDIR"/sys/amd64/conf/DESKTOP.hints
 	cat "$CURDIR"/kernel/COREBSD.hints "$CURDIR"/kernel/LAPTOP.hints > "$SRCDIR"/sys/amd64/conf/LAPTOP.hints
-	ln "$SRCDIR"/share/numericdef_unicode/uk_UA.UTF-8.src	"$SRCDIR"/share/numericdef_unicode/ru_RU.UTF-8.src
+	ln "$SRCDIR"/share/numericdef_unicode/uk_UA.UTF-8.src "$SRCDIR"/share/numericdef_unicode/ru_RU.UTF-8.src
 	touch "$SRCDIR"/.patched
 }
 
