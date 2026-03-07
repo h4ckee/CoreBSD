@@ -19,5 +19,5 @@ if [ -z "$SSH_CONNECTION" ]; then
 	kbdcontrol -f 1 'startx'
 	kbdcontrol -f 3 'lock -np'
 	kbdcontrol -f 4 '/etc/rc.suspend'
-	kbdcontrol -f 12 'shutdown -p now'
+	kbdcontrol -f 12 'poweroff'
 fi

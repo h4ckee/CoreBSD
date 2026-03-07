@@ -21,8 +21,8 @@ fi
 
 alias p='$DOAS pkg'
 alias root='$DOAS su -l'
-alias poweroff='$DOAS /sbin/shutdown -p now'
-alias reboot='$DOAS /sbin/shutdown -r now'
+alias poweroff='shutdown -pq now'
+alias reboot='shutdown -rq now'
 alias m='$PAGER'
 alias e='$EDITOR'
 alias h='fc -rl 1 | $PAGER'
