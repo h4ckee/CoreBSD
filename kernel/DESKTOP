@@ -1,6 +1,7 @@
 include         BASE
 ident		DESKTOP
 
+device		psm
 # device	ata
 # device	virtio
 # device	virtio_pci

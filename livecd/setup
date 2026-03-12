@@ -19,7 +19,7 @@ usage() {
 	    -m    mountdir name     (default: /mnt)
 	    -s    swap size in M|G  (default: -)
 	    -u    user name         (default: -)
-	available devices: $(sysctl -n kern.disks | grep -Eo "a?da[0-9]" | sort | tr '\n' ' ')
+	available devices: $(sysctl -n kern.disks | egrep -o 'a?da[0-9]+' | tr '\n' ' ')
 	INFO
 	exit
 }
