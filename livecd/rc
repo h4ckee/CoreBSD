@@ -21,10 +21,10 @@ fi
 ln -sf cd0 /dev/cdrom
 mount -a
 mtree -deiU -f /etc/mtree/BSD.var.dist -p /var > /dev/null
-adjkerntz -i
-hostname livecd
 for ttyv in /dev/ttyv*; do
 	kbdcontrol -F -l ru -r normal -b off < "$ttyv" &> "$ttyv"
 	vidcontrol -t 300 -h 1000 < "$ttyv" &> "$ttyv"
 done
+hostname livecd
+adjkerntz -i
 ifconfig lo0 inet 127.0.0.1/8 alias up

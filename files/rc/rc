@@ -27,6 +27,13 @@ PATH=/sbin:/bin:/usr/sbin:/usr/bin
 [ -d /usr/local/bin ] && PATH="$PATH":/usr/local/bin
 export PATH
 
+for cachefile in /boot/zfs/*.cache; do
+	if [ -r "$cachefile" ]; then
+		zpool import -c "$cachefile" -a -N &
+		import="$!"
+	fi
+done
+
 if (( ${#modules[@]} )); then
 	devctl freeze
 	for module in "${modules[@]}"; do
@@ -37,10 +44,6 @@ fi
 
 if [ -r /etc/sysctl.conf ]; then
 	sysctl -f /etc/sysctl.conf > /dev/null
-fi
-
-if [[ " ${services[@]} " != *" devd "* ]]; then
-	sysctl -n hw.bus.devctl_queue=0 > /dev/null
 fi
 
 if [ -r /etc/devfs.rules ]; then
@@ -74,7 +77,7 @@ done
 
 ln -sf cd0 /dev/cdrom
 
-for disk in $(printf '%s\n' $(sysctl -n kern.disks) | egrep 'a?da[0-9]+'); do
+for disk in $(sysctl -n kern.disks | egrep -o 'a?da[0-9]+'); do
 	if camcontrol identify "$disk" | egrep -q "^advanced power management[ ]+yes"; then
 		camcontrol cmd "$disk" -a "EF 85 00 00 00 00 00 00 00 00 00 00"
 		camcontrol idle "$disk" -t "$idletime"
@@ -82,16 +85,20 @@ for disk in $(printf '%s\n' $(sysctl -n kern.disks) | egrep 'a?da[0-9]+'); do
 	fi
 done
 
-for cachefile in /boot/zfs/*.cache; do
-	if [ -r "$cachefile" ] && ! zpool import -c "$cachefile" -a -N; then
-		echo >&2 "Importing $cachefile failed"
-	fi
+for ttyv in /dev/ttyv*; do
+	kbdcontrol -F -l "$keymap" -r "$keyrate" -b "$keybell" < "$ttyv" &> "$ttyv"
+	vidcontrol -t "$blanktime" -h "$scrollback" < "$ttyv" &> "$ttyv"
 done
 
 if ! mount -uw /; then
 	echo >&2 'Mounting / read-write failed'
 	kill -TERM "$$"
 	exit 1
+fi
+
+if [ "$import" ]; then
+	wait "$import"
+	(( $? )) && echo >&2 "Importing $cachefile failed"
 fi
 
 zfs mount -a || echo >&2 'Mounting ZFS filesystems failed'
@@ -102,6 +109,12 @@ swapon -aq || echo >&2 'Enabling swap failed'
 
 source /etc/rc.d/ldconfig
 
+hostname "$hostname"
+
+adjkerntz -i
+
+newsyslog -CN
+
 if [ -r /boot/nextboot.conf ]; then
 	nextboot -D
 fi
@@ -109,23 +122,6 @@ fi
 if [ ! -f /boot/kernel/linker.hints ]; then
 	kldxref /boot/kernel
 fi
-
-if [ -s /var/db/entropy ]; then
-	cat /var/db/entropy > /dev/random
-	rm -f /var/db/entropy
-fi
-
-newsyslog -CN
-
-adjkerntz -i
-
-hostname "$hostname"
-
-for mixer in /dev/mixer[0-9]; do
-	if [[ -c "$mixer" && -r /var/db/"${mixer##*/}"-state ]]; then
-		mixer -s -f "$mixer" $(< /var/db/"${mixer##*/}"-state) > /dev/null
-	fi
-done
 
 if [ -f /usr/share/zoneinfo/Etc/"$timezone" ]; then
 	if [ "$(readlink /etc/localtime)" != /usr/share/zoneinfo/Etc/"$timezone" ]; then
@@ -137,9 +133,15 @@ else
 	fi
 fi
 
-for ttyv in /dev/ttyv*; do
-	kbdcontrol -F -l "$keymap" -r "$keyrate" -b "$keybell" < "$ttyv" &> "$ttyv"
-	vidcontrol -t "$blanktime" -h "$scrollback" < "$ttyv" &> "$ttyv"
+if [ -s /var/db/entropy ]; then
+	cat /var/db/entropy > /dev/random
+	rm -f /var/db/entropy
+fi
+
+for mixer in /dev/mixer[0-9]; do
+	if [[ -c "$mixer" && -r /var/db/"${mixer##*/}"-state ]]; then
+		mixer -s -f "$mixer" $(< /var/db/"${mixer##*/}"-state) > /dev/null
+	fi
 done
 
 if (( ${#services[@]} )); then

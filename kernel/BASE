@@ -28,6 +28,8 @@ options		SYSVSHM
 options		_KPOSIX_PRIORITY_SCHEDULING
 options		PRINTF_BUFR_SIZE=128
 options		KBD_INSTALL_CDEV
+options		KBD_MAXWAIT=2
+options		KBD_RESETDELAY=5
 options		INCLUDE_CONFIG_FILE
 options		NO_SYSCTL_DESCR
 options		TERMINAL_NORM_ATTR=(FG_LIGHTGREY|BG_BLACK)
@@ -55,7 +57,6 @@ device		cd
 device		pass
 device		atkbdc
 device		atkbd
-device		psm
 device		kbdmux
 device		vt
 device		vt_vga
