@@ -27,12 +27,10 @@ PATH=/sbin:/bin:/usr/sbin:/usr/bin
 [ -d /usr/local/bin ] && PATH="$PATH":/usr/local/bin
 export PATH
 
-for cachefile in /boot/zfs/*.cache; do
-	if [ -r "$cachefile" ]; then
-		zpool import -c "$cachefile" -a -N &
-		import="$!"
-	fi
-done
+if [ -r /boot/zfs/zpool.cache ]; then
+	zpool import -c /boot/zfs/zpool.cache -a -N &
+	import="$!"
+fi
 
 if (( ${#modules[@]} )); then
 	devctl freeze
