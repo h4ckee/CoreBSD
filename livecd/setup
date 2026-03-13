@@ -126,6 +126,9 @@ zpool set bootfs="$rootpool"/ROOT/default "$rootpool" || exit 1
 echo '===> Creating /boot/zfs directory'
 mkdir -p "$mountdir"/boot/zfs || exit 1
 
+echo "===> Configuring zpool.cache for $rootpool"
+zpool set cachefile="$mountdir"/boot/zfs/zpool.cache "$rootpool" || exit 1
+
 echo "===> Creating ${rootpool}/usr filesystem"
 zfs create -o mountpoint=/usr -o canmount=off "$rootpool"/usr || exit 1
 
@@ -145,6 +148,9 @@ if (( ${#datapooldevs[@]} )); then
 	echo "===> Creating $datapool pool"
 	zpool create -R "$mountdir" -o ashift=12 -O compression=zstd -O checksum=blake3 -O atime=off -O sync=disabled -O acltype=off -O xattr=off -O redundant_metadata=some -m none -f "$datapool" /dev/gpt/zdata* || exit 1
 
+	echo "===> Configuring zpool.cache for $datapool"
+	zpool set cachefile="$mountdir"/boot/zfs/zpool.cache "$datapool" || exit 1
+
 	echo "===> Creating ${datapool}/usr filesystem"
 	zfs create -o mountpoint=/usr -o canmount=off "$datapool"/usr || exit 1
 
@@ -162,9 +168,6 @@ if (( ${#datapooldevs[@]} )); then
 
 	echo "===> Creating ${datapool}/home filesystem"
 	zfs create -o mountpoint=/home -o sync=disabled "$datapool"/home || exit 1
-
-	echo "===> Configuring ${datapool}.cache for $datapool"
-	zpool set cachefile="$mountdir"/boot/zfs/"$datapool".cache "$datapool" || exit 1
 
 	echo "===> Allowing wheel group to manage $datapool"
 	zfs allow -g wheel clone,create,destroy,mount,promote,rename,rollback,snapshot "$datapool" || exit 1
