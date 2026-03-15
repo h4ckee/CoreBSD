@@ -1,7 +1,7 @@
 diff -Naur src.orig/stand/lua/drawer.lua src/stand/lua/drawer.lua
---- src.orig/stand/lua/drawer.lua	2024-11-29 03:03:43.000000000 +0300
-+++ src/stand/lua/drawer.lua	2025-06-09 10:53:41.915948000 +0300
-@@ -402,13 +402,13 @@
+--- src.orig/stand/lua/drawer.lua	2025-11-28 04:15:54.000000000 +0400
++++ src/stand/lua/drawer.lua	2026-03-15 15:09:44.033810000 +0400
+@@ -456,13 +456,13 @@
  end
  
  fbsd_brand = {
@@ -22,3 +22,13 @@ diff -Naur src.orig/stand/lua/drawer.lua src/stand/lua/drawer.lua
  }
  none = {""}
  
+@@ -501,9 +501,6 @@
+ 	["fbsd"] = {
+ 		ascii = {
+ 			image = fbsd_brand,
+-		},
+-		fb = {
+-			image = "/boot/images/freebsd-brand-rev.png",
+ 		},
+ 	},
+ 	["none"] = {

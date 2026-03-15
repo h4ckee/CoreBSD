@@ -12,11 +12,6 @@ options		INET
 options		TCP_OFFLOAD
 options		TCP_RFC7413
 options		KERN_TLS
-options		MSDOSFS
-options		CD9660
-# options	LIBICONV
-# options	MSDOSFS_ICONV
-# options	CD9660_ICONV
 options		TMPFS
 options		GEOM_LABEL
 options		SCSI_NO_SENSE_STRINGS
@@ -64,9 +59,6 @@ device		vt_vbefb
 device		agp
 device		iflib
 device		em
-# device	wlan
-# device	wlan_ccmp
-# device	wlan_amrr
 device		crypto
 device		loop
 device		rdrand_rng
