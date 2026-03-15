@@ -160,14 +160,14 @@ if (( ${#datapooldevs[@]} )); then
 	echo "===> Creating ${datapool}/home filesystem"
 	zfs create -o mountpoint=/home -o sync=disabled "$datapool"/home || exit 1
 
-	echo "===> Allowing wheel group to manage $datapool"
-	zfs allow -g wheel clone,create,destroy,mount,promote,rename,rollback,snapshot "$datapool" || exit 1
-
 	echo '===> Creating /boot/zfs directory'
 	mkdir -p "$mountdir"/boot/zfs || exit 1
 
 	echo "===> Configuring zpool.cache for $datapool"
 	zpool set cachefile="$mountdir"/boot/zfs/zpool.cache "$datapool" || exit 1
+
+	echo "===> Allowing wheel group to manage $datapool"
+	zfs allow -g wheel clone,create,destroy,mount,promote,rename,rollback,snapshot "$datapool" || exit 1
 else
 	echo "===> Creating ${rootpool}/usr/obj filesystem"
 	zfs create -o mountpoint=/usr/obj -o sync=disabled "$rootpool"/usr/obj || exit 1

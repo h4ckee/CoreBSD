@@ -190,9 +190,10 @@ set_environment() {
 				export DESTDIR="/mnt"
 			fi
 			export KERNCONF="LAPTOP"
-			export MODULES_OVERRIDE="acpi/acpi_ibm acpi/acpi_video acpi/acpi_wmi backlight cuse fusefs \
-				hid/hms hid/hidmap i2c/controllers/ichsmb i2c/smbus i2c/iic i2c/iicbb i2c/iicbus \
-				iwn iwnfw/iwn6000g2a lindebugfs linuxkpi linuxkpi_video pseudofs"
+			export MODULES_OVERRIDE="acpi/acpi_ibm acpi/acpi_video acpi/acpi_wmi backlight cd9660 cuse \
+				fusefs hid/hms hid/hidmap i2c/controllers/ichsmb i2c/smbus i2c/iic i2c/iicbb i2c/iicbus \
+				iwn iwnfw/iwn6000g2a lindebugfs linuxkpi linuxkpi_video msdosfs nullfs pseudofs udf \
+				unionfs wlan wlan_amrr wlan_ccmp"
 		fi
 		;;
 	*Core\(TM\)2*)
@@ -208,9 +209,9 @@ set_environment() {
 				export DESTDIR="/mnt"
 			fi
 			export KERNCONF="DESKTOP"
-			export MODULES_OVERRIDE="backlight cd9660_iconv coretemp fusefs i2c/controllers/ichsmb \
+			export MODULES_OVERRIDE="backlight cd9660 coretemp fusefs i2c/controllers/ichsmb \
 				i2c/smbus i2c/iic i2c/iicbb i2c/iicbus sound/driver/emu10k1 libiconv lindebugfs \
-				linuxkpi linuxkpi_video msdosfs_iconv pseudofs"
+				linuxkpi linuxkpi_video msdosfs_iconv msdosfs nullfs pseudofs udf unionfs"
 		fi
 		;;
 	*) echo "Profile for $HWMODEL is not defined"; exit 1 ;;
@@ -220,6 +221,12 @@ set_environment() {
 build_kernel() {
 	make -C "$SRCDIR" buildkernel || exit 1
 	strip -p "${OBJDIR}${SRCDIR}"/amd64.amd64/sys/"$KERNCONF"/kernel || exit 1
+	for module in $(find "${OBJDIR}${SRCDIR}"/amd64.amd64/sys/"$KERNCONF"/modules -name "*.ko" -type f); do
+		case "${module##*/}" in
+			pseudofs.ko) continue ;;
+			*) strip -p --strip-unneeded "$module" ;;
+		esac
+	done
 }
 
 install_kernel() {
@@ -307,7 +314,6 @@ case "$COMMAND" in
 		delete_old
 		unmount_boot_environment
 		clean_directory "$OBJDIR"
-#		shutdown -rq now
 		;;
 	img)	check_patched
 		clean_directory "$OBJDIR"
