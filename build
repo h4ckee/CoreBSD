@@ -5,18 +5,20 @@ if (( USER_ID )); then
 	exit 1
 fi
 
-VERSION='15.0-RELEASE'
-BASEURL="http://ftp2.ru.freebsd.org/pub/FreeBSD/releases/amd64/${VERSION}"
+VERSION="15.0-RELEASE"
+HWMODEL="$(sysctl -n hw.model)"
+TARGET="$(sysctl -n hw.machine)"
+TARGET_ARCH="$(sysctl -n hw.machine_arch)"
+BASEURL="http://ftp2.ru.freebsd.org/pub/FreeBSD/releases/${TARGET}/${VERSION}"
 MKSHURL="http://www.mirbsd.org/MirOS/dist/mir/mksh"
-BASESRC='src.txz'
-MKSHSRC='mksh-R59c.tgz'
+BASESRC="src.txz"
+MKSHSRC="mksh-R59c.tgz"
+SRCDIR="/usr/src"
+OBJDIR="/usr/obj"
+TMPDIR="/tmp"
 CURDIR="$PWD"
-OBJDIR='/usr/obj'
-TMPDIR='/tmp'
-SRCDIR='/usr/src'
 SRCPOOL="$(zfs list -H -o name $SRCDIR)"
 DATE="$(date '+%y%m%d%H%M')"
-HWMODEL="$(sysctl -n hw.model)"
 
 trap 'exit 2' 1 2 3 13 15
 
@@ -119,7 +121,7 @@ patch_sources() {
 	cp -R "$CURDIR"/files/rc/*		"$SRCDIR"/libexec/rc/
 	cp "$CURDIR"/files/devd/*		"$SRCDIR"/sbin/devd/
 	cp "$CURDIR"/livecd/*			"$SRCDIR"/release/
-	cp "$CURDIR"/kernel/*			"$SRCDIR"/sys/amd64/conf/
+	cp "$CURDIR"/kernel/*			"$SRCDIR"/sys/"$TARGET"/conf/
 	cp "$CURDIR"/files/shells		"$SRCDIR"/etc/
 	cp "$CURDIR"/files/loader*		"$SRCDIR"/stand/defaults/
 	cp "$CURDIR"/files/dot.*		"$SRCDIR"/share/skel/
@@ -134,8 +136,8 @@ patch_sources() {
 		echo " * ${patch##*/}"
 		patch -s -V none -d /usr < "$patch" || exit 1
 	done
-	ln "$SRCDIR"/sys/amd64/conf/COREBSD.hints "$SRCDIR"/sys/amd64/conf/DESKTOP.hints
-	cat "$CURDIR"/kernel/COREBSD.hints "$CURDIR"/kernel/LAPTOP.hints > "$SRCDIR"/sys/amd64/conf/LAPTOP.hints
+	ln "$SRCDIR"/sys/"$TARGET"/conf/COREBSD.hints "$SRCDIR"/sys/"$TARGET"/conf/DESKTOP.hints
+	cat "$CURDIR"/kernel/COREBSD.hints "$CURDIR"/kernel/LAPTOP.hints > "$SRCDIR"/sys/"$TARGET"/conf/LAPTOP.hints
 	ln "$SRCDIR"/share/numericdef_unicode/uk_UA.UTF-8.src "$SRCDIR"/share/numericdef_unicode/ru_RU.UTF-8.src
 	touch "$SRCDIR"/.patched
 }
@@ -157,7 +159,7 @@ set_environment() {
 	export SRCCONF="${CURDIR}/files/src.conf"
 	export WRKDIRPREFIX="$OBJDIR"
 	export LOCAL_ITOOLS="printf"
-	export MAN_ARCH="amd64"
+	export MAN_ARCH="$TARGET_ARCH"
 	export NOPKG="YES"
 	export NOPORTS="YES"
 	export NOSRC="YES"
@@ -190,10 +192,9 @@ set_environment() {
 				export DESTDIR="/mnt"
 			fi
 			export KERNCONF="LAPTOP"
-			export MODULES_OVERRIDE="acpi/acpi_ibm acpi/acpi_video acpi/acpi_wmi backlight cd9660 cuse \
-				fusefs hid/hms hid/hidmap i2c/controllers/ichsmb i2c/smbus i2c/iic i2c/iicbb i2c/iicbus \
-				iwn iwnfw/iwn6000g2a lindebugfs linuxkpi linuxkpi_video msdosfs nullfs pseudofs udf \
-				unionfs wlan wlan_amrr wlan_ccmp"
+			export MODULES_OVERRIDE="acpi/acpi_ibm acpi/acpi_video acpi/acpi_wmi backlight cuse fusefs \
+				hid/hms hid/hidmap i2c/controllers/ichsmb i2c/smbus i2c/iic i2c/iicbb i2c/iicbus \
+				iwn iwnfw/iwn6000g2a lindebugfs linuxkpi linuxkpi_video nullfs pseudofs udf unionfs"
 		fi
 		;;
 	*Core\(TM\)2*)
@@ -209,9 +210,9 @@ set_environment() {
 				export DESTDIR="/mnt"
 			fi
 			export KERNCONF="DESKTOP"
-			export MODULES_OVERRIDE="backlight cd9660 coretemp fusefs i2c/controllers/ichsmb \
-				i2c/smbus i2c/iic i2c/iicbb i2c/iicbus sound/driver/emu10k1 libiconv lindebugfs \
-				linuxkpi linuxkpi_video msdosfs_iconv msdosfs nullfs pseudofs udf unionfs"
+			export MODULES_OVERRIDE="backlight coretemp fusefs i2c/controllers/ichsmb i2c/smbus i2c/iic \
+				i2c/iicbb i2c/iicbus sound/driver/emu10k1 libiconv lindebugfs linuxkpi linuxkpi_video \
+				nullfs pseudofs udf unionfs"
 		fi
 		;;
 	*) echo "Profile for $HWMODEL is not defined"; exit 1 ;;
@@ -220,8 +221,8 @@ set_environment() {
 
 build_kernel() {
 	make -C "$SRCDIR" buildkernel || exit 1
-	strip -p "${OBJDIR}${SRCDIR}"/amd64.amd64/sys/"$KERNCONF"/kernel || exit 1
-	for module in $(find "${OBJDIR}${SRCDIR}"/amd64.amd64/sys/"$KERNCONF"/modules -name "*.ko" -type f); do
+	strip -p "${OBJDIR}${SRCDIR}"/"$TARGET"."$TARGET_ARCH"/sys/"$KERNCONF"/kernel || exit 1
+	for module in $(find "${OBJDIR}${SRCDIR}"/"$TARGET"."$TARGET_ARCH"/sys/"$KERNCONF"/modules -name "*.ko" -type f); do
 		case "${module##*/}" in
 			pseudofs.ko) continue ;;
 			*) strip -p --strip-unneeded "$module" ;;
@@ -261,8 +262,9 @@ delete_old() {
 }
 
 build_image() {
+	rm -f "$CURDIR"/CoreBSD-"$CPUTYPE"-"$VERSION".iso*
 	make -C "$SRCDIR"/release release.iso || exit 1
-	mv "${OBJDIR}${SRCDIR}"/amd64.amd64/release/disc1.iso "$CURDIR"/CoreBSD-"$CPUTYPE"-"$VERSION".iso
+	mv "${OBJDIR}${SRCDIR}"/"$TARGET"."$TARGET_ARCH"/release/disc1.iso "$CURDIR"/CoreBSD-"$CPUTYPE"-"$VERSION".iso
 	xz -9v "$CURDIR"/CoreBSD-"$CPUTYPE"-"$VERSION".iso
 	make -C "$SRCDIR"/release clean
 }
