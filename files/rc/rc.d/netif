@@ -18,9 +18,9 @@ start)		for interface in "${interfaces[@]}"; do
 					address="$interface"
 					interface="${!interface}"
 					if [[ $address = +([0-9]).+([0-9]).+([0-9]).+([0-9])/+([0-9]) ]]; then
-						ifconfig "${interface}" inet "$address" mtu "${mtu:=1500}" up
+						ifconfig "$interface" inet "$address" mtu "${mtu:=1500}" up
 					else
-						ifconfig "${interface}" up
+						ifconfig "$interface" up
 					fi
 					;;
 			esac
@@ -33,6 +33,14 @@ start)		for interface in "${interfaces[@]}"; do
 			hop="${route#* }"
 			route add -net "$net" "$hop"
 		fi
+		for _ in $(seq 1 8); do
+			interface="$(route -4n get default 2>/dev/null | awk '/interface:/ { print $2 }')"
+			if [ "$interface" ]; then
+				ifconfig "$interface" group egress
+				break
+			fi
+			sleep 1
+		done
 		;;
 stop)		route -n flush -inet > /dev/null
 		for interface in "${interfaces[@]}"; do
