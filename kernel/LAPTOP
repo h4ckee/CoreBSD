@@ -1,12 +1,6 @@
 include         BASE
 ident		LAPTOP
 
-# device	acpi_ibm
-# device	acpi_video
-# device	acpi_wmi
-# device	wlan
-# device	wlan_ccmp
-# device	wlan_amrr
 # device	iwn
 # device	iwn6000g2afw
 device		sound
