@@ -105,8 +105,8 @@ zpool create \
 	$mode /dev/gpt/zroot* || exit
 zfs allow -g wheel clone,create,destroy,mount,promote,rename,rollback,snapshot "$rootpool" || exit
 zfs create -o mountpoint=none "$rootpool"/ROOT || exit
-zfs create -o mountpoint=/ "$rootpool"/ROOT/default || exit
-zfs set canmount=noauto "$rootpool"/ROOT/default || exit
+zfs create -o mountpoint=/ -o canmount=noauto "$rootpool"/ROOT/default || exit
+zfs mount "$rootpool"/ROOT/default || exit
 zpool set bootfs="$rootpool"/ROOT/default "$rootpool" || exit
 zfs create -o mountpoint=/usr -o canmount=off "$rootpool"/usr || exit
 zfs create -o mountpoint=/usr/src -o setuid=off "$rootpool"/usr/src || exit
