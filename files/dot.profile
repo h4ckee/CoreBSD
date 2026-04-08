@@ -4,7 +4,6 @@
 
 [ -d ~/.local/bin ] && export PATH=~/.local/bin:"$PATH"
 [ -d ~/.config ] && export XDG_CONFIG_HOME=~/.config
-
 if whence -p micro > /dev/null; then
 	export EDITOR=micro
 else
@@ -12,9 +11,8 @@ else
 fi
 export PAGER=less
 export ENV=~/.shrc
-
+export UGEN=$(usbconfig | awk -F: '{ if (tolower($0) ~ /mouse.+pwr=off/) print $1 }')
 ls -t ~/.serverauth.* 2>/dev/null | tail -n +2 | xargs rm -f --
-
 if [ -z "$SSH_CONNECTION" ]; then
 	kbdcontrol -f 1 'startx'
 	kbdcontrol -f 3 'lock -np'
