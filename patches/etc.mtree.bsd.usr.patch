@@ -1,6 +1,6 @@
 diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
---- src.orig/etc/mtree/BSD.usr.dist	2026-01-08 19:00:02.189568000 +0400
-+++ src/etc/mtree/BSD.usr.dist	2026-01-14 11:36:33.544410000 +0400
+--- src.orig/etc/mtree/BSD.usr.dist	2025-11-28 03:15:53.000000000 +0300
++++ src/etc/mtree/BSD.usr.dist	2026-04-01 21:05:08.965518000 +0300
 @@ -12,28 +12,8 @@
              ..
              bsdstat           tags=package=libbsdstat-dev
@@ -30,7 +30,7 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
              zstd              tags=package=runtime-dev
              ..
          ..
-@@ -46,153 +26,33 @@
+@@ -46,153 +26,35 @@
                          bits
                          ..
                      ..
@@ -165,8 +165,8 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
 -        ..
 -        dwatch
 -        ..
--        fwget
--        ..
+         fwget
+         ..
 -        hyperv
 -        ..
 -        kgdb
@@ -184,7 +184,7 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
      ..
      local
      ..
-@@ -201,274 +61,20 @@
+@@ -201,274 +63,20 @@
      sbin
      ..
      share
@@ -459,7 +459,7 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
                  UTF
                  ..
              ..
-@@ -480,447 +86,43 @@
+@@ -480,447 +88,43 @@
                  trusted         tags=package=runtime
                  ..
              ..

@@ -1,0 +1,13 @@
+diff -Naur src.orig/usr.sbin/usbconfig/Makefile src/usr.sbin/usbconfig/Makefile
+--- src.orig/usr.sbin/usbconfig/Makefile	2025-11-28 03:15:58.000000000 +0300
++++ src/usr.sbin/usbconfig/Makefile	2026-04-08 16:04:22.632269000 +0300
+@@ -3,6 +3,9 @@
+ PROG=	usbconfig
+ MAN=	usbconfig.8
+ SRCS=	usbconfig.c dump.c
++BINOWN=	root
++BINGRP=	operator
++BINMODE=4554
+ LIBADD=	usb
+ 
+ .include <bsd.prog.mk>
