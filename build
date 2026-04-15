@@ -11,8 +11,10 @@ TARGET="$(sysctl -n hw.machine)"
 TARGET_ARCH="$(sysctl -n hw.machine_arch)"
 BASEURL="http://ftp2.ru.freebsd.org/pub/FreeBSD/releases/${TARGET}/${VERSION}"
 MKSHURL="http://www.mirbsd.org/MirOS/dist/mir/mksh"
+DOASURL="https://codeberg.org/thejessesmith/doas/archive"
 BASESRC="src.txz"
 MKSHSRC="mksh-R59c.tgz"
+DOASSRC="master.tar.gz"
 SRCDIR="/usr/src"
 OBJDIR="/usr/obj"
 TMPDIR="/tmp"
@@ -35,6 +37,8 @@ fetch_sources() {
 	FTP_PASSIVE_MODE=YES fetch --no-verify-peer -q -a -r -o "$TMPDIR" "$BASEURL"/"$BASESRC" || exit 1
 	echo "===> Fetching $MKSHSRC"
 	FTP_PASSIVE_MODE=YES fetch --no-verify-peer -q -a -r -o "$TMPDIR" "$MKSHURL"/"$MKSHSRC" || exit 1
+	echo "===> Fetching $DOASSRC"
+	FTP_PASSIVE_MODE=YES fetch --no-verify-peer -q -a -r -o "$TMPDIR" "$DOASURL"/"$DOASSRC" || exit 1
 }
 
 extract_sources() {
@@ -62,6 +66,8 @@ extract_sources() {
 	|| exit 1
 	echo "===> Extracting $MKSHSRC"
 	LC_ALL=C bsdtar -C "$SRCDIR"/contrib --uid 0 --gid 0 -xf "$TMPDIR"/"$MKSHSRC" || exit 1
+	echo "===> Extracting $DOASSRC"
+	LC_ALL=C bsdtar -C "$SRCDIR"/contrib --uid 0 --gid 0 -xf "$TMPDIR"/"$DOASSRC" --exclude="doas/compat" || exit 1
 	echo "===> Removing extra directories"
 	find -E "$SRCDIR" \( \
 		-path "$SRCDIR"/sys/dev/ntb/test -o -path "$SRCDIR"/contrib/file/doc 		-o \
@@ -118,6 +124,7 @@ patch_sources() {
 	zfs rollback "$SRCPOOL"@default
 	echo "===> Patching $SRCDIR"
 	cp -R "$CURDIR"/files/mksh		"$SRCDIR"/bin/
+	cp -R "$CURDIR"/files/doas		"$SRCDIR"/usr.bin/
 	cp -R "$CURDIR"/files/rc/*		"$SRCDIR"/libexec/rc/
 	cp "$CURDIR"/files/devd/*		"$SRCDIR"/sbin/devd/
 	cp "$CURDIR"/livecd/*			"$SRCDIR"/release/
@@ -131,6 +138,7 @@ patch_sources() {
 	cp "$CURDIR"/files/etcupdate.conf	"$SRCDIR"/usr.sbin/etcupdate/
 	cp "$CURDIR"/files/FreeBSD.conf*	"$SRCDIR"/usr.sbin/pkg/
 	cp "$CURDIR"/files/service.sh		"$SRCDIR"/usr.sbin/service/
+	cp "$CURDIR"/files/wpa_supplicant.conf	"$SRCDIR"/usr.sbin/wpa/wpa_supplicant/
 	cp "$CURDIR"/files/login.conf		"$SRCDIR"/usr.bin/login/
 	for patch in "$CURDIR"/patches/*.patch; do
 		echo " * ${patch##*/}"
@@ -306,7 +314,7 @@ case "$COMMAND" in
 		clean_directory "$OBJDIR"
 		;;
 	img)	check_patched
-		clean_directory "$OBJDIR"
+#		clean_directory "$OBJDIR"
 		set_environment
 		build_world
 		build_kernel

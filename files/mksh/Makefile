@@ -1,5 +1,8 @@
 .include <src.opts.mk>
 
+MKSHDIR=		${SRCTOP}/contrib/mksh
+.PATH:			${MKSHDIR}
+
 CONFGROUPS=		ETC ROOT
 ETC=			profile
 ROOT=			dot.shrc dot.profile
@@ -7,10 +10,7 @@ ROOTDIR=		/root
 ROOTDIR_MODE=		0750
 ROOTNAME_dot.shrc=	.shrc
 ROOTNAME_dot.profile=	.profile
-PACKAGE=		runtime
 PROG=			mksh
-MKSHDIR=		${SRCTOP}/contrib/mksh
-.PATH: ${MKSHDIR}
 
 SRCS=		edit.c eval.c exec.c expr.c funcs.c histrap.c jobs.c lalloc.c \
  		lex.c main.c misc.c shf.c syn.c tree.c ulimit.c var.c
