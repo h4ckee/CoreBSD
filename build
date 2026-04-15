@@ -314,7 +314,7 @@ case "$COMMAND" in
 		clean_directory "$OBJDIR"
 		;;
 	img)	check_patched
-#		clean_directory "$OBJDIR"
+		clean_directory "$OBJDIR"
 		set_environment
 		build_world
 		build_kernel
