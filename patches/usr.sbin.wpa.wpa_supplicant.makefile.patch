@@ -1,0 +1,17 @@
+diff -Naur src.orig/usr.sbin/wpa/wpa_supplicant/Makefile src/usr.sbin/wpa/wpa_supplicant/Makefile
+--- src.orig/usr.sbin/wpa/wpa_supplicant/Makefile	2025-11-28 03:15:58.000000000 +0300
++++ src/usr.sbin/wpa/wpa_supplicant/Makefile	2026-04-14 23:00:53.827970000 +0300
+@@ -40,11 +40,8 @@
+ 
+ MAN=	wpa_supplicant.8 wpa_supplicant.conf.5
+ 
+-.if ${MK_EXAMPLES} != "no"
+-FILESDIR= ${SHAREDIR}/examples/etc
+-.PATH:	${WPA_SUPPLICANT_DISTDIR}
+-FILES=	wpa_supplicant.conf
+-.endif
++CONFS=	wpa_supplicant.conf
++CONFSMODE=	640
+ 
+ CFLAGS+=-DCONFIG_BACKEND_FILE
+ #CFLAGS+= -g

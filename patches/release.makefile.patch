@@ -88,14 +88,14 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
 +	sed -E -i '' \
 +		-e '/\/kernel\/(hid(bus)?|(h|u)kbd|umass|usb(hid)?|(e|o|u|x)hci).ko/d' \
 +		-e '/\/boot\/(loader\.conf\.d|modules|zfs )/d' \
-+		-e '/\/etc\/(devd|dhclient|etcupdate|libmap|rc|(new)?syslog)\.conf/d' \
++		-e '/\/etc\/(devd|dhclient|doas|etcupdate|libmap|rc|(new)?syslog|wpa_supplicant)\.conf/d' \
 +		-e '/\/etc\/(cron(\.d|tab)|devd|fbtab|login.access|pkg|rc\.(d|resume|suspend)|syslog\.d|ss(h|l))/d' \
 +		-e '/\/etc\/mtree\/BSD\.(include|root|usr)\.dist/d' \
 +		-e '/\/etc\/pam\.d\/(cron|sshd|xdm)/d' \
 +		-e '/\/usr\/(include|libdata|local|obj|share\/openssl|src)/d' \
 +		-e '/\/usr\/libexec\/(flua|ulog-helper)/d' \
 +		-e '/\/usr\/lib\/(.+\.(a|o)|clang|flua|libxo)/d' \
-+		-e '/\/bin\/(crontab|iconv)/d' \
++		-e '/\/bin\/(crontab|doas|iconv)/d' \
 +		-e '/\/sbin\/(cron|devd|etcupdate|mixer|(new)?syslogd?|nologin|powerd)/d' \
 +		-e '/\/share\/(certs|keys|man|mk|pkg|skel|zoneinfo)/d' \
 +		-e '/\/var\/(cache|cron|db|empty|log|run|tmp)/d' \
@@ -108,5 +108,5 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
 +	sed -E 's/[[:blank:]]tags=package=[[:graph:]]+//' ${.TARGET}/METALOG | sort | uniq > ${.TARGET}/METALOG.tmp
 +	mv ${.TARGET}/METALOG.tmp ${.TARGET}/METALOG
  	touch ${.TARGET}
- 
+
  bootonly:
