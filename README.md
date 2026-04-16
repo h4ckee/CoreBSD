@@ -8,4 +8,5 @@ Custom-built, FreeBSD-based, desktop-oriented operating system for personal use.
 - Installer rewritten.
 - System initialization scripts rewritten.
 - Default shell changed to mksh.
+- Doas moved to Base.
 - ZFS and PF enabled by default.
