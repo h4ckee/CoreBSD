@@ -141,6 +141,17 @@ patch_sources() {
 	cp "$CURDIR"/files/service.sh		"$SRCDIR"/usr.sbin/service/
 	cp "$CURDIR"/files/wpa_supplicant.conf	"$SRCDIR"/usr.sbin/wpa/wpa_supplicant/
 	cp "$CURDIR"/files/login.conf		"$SRCDIR"/usr.bin/login/
+	case "$HWMODEL" in
+	*Core\(TM\)\ i[57]*)
+		sed -E -i '' '/hw\.(ath|psm)/d' "$SRCDIR"/sbin/sysctl/sysctl.conf
+		;;
+	*Core\(TM\)2*)
+		sed -E -i '' '/hw\.acpi/d' "$SRCDIR"/sbin/sysctl/sysctl.conf
+		sed -E -i '' '/(hw\.acpi|compat\.linuxkpi)/d' "$SRCDIR"/stand/defaults/loader_local.conf
+		;;
+	*)	echo "Profile for $HWMODEL is not defined"; exit 1 ;;
+	esac
+
 	for patch in "$CURDIR"/patches/*.patch; do
 		echo " * ${patch##*/}"
 		patch -s -V none -d /usr < "$patch" || exit 1
@@ -162,7 +173,6 @@ check_patched() {
 set_environment() {
 	case "$HWMODEL" in
 	*Core\(TM\)\ i[57]*)
-		sed -E -i '' '/hw\.(ath|psm)/d' "$SRCDIR"/sbin/sysctl/sysctl.conf
 		export CPUTYPE="ivybridge"
 		export KERNCONF="LAPTOP"
 		MODULES="acpi/acpi_ibm acpi/acpi_video acpi/acpi_wmi backlight cuse fusefs hid/hms hid/hidmap \
@@ -170,7 +180,6 @@ set_environment() {
 			linuxkpi linuxkpi_video nullfs pseudofs udf unionfs"
 		;;
 	*Core\(TM\)2*)
-		sed -E -i '' '/hw\.acpi/d' "$SRCDIR"/sbin/sysctl/sysctl.conf
 		export CPUTYPE="core2"
 		export KERNCONF="DESKTOP"
 		MODULES="backlight fusefs i2c/controllers/ichsmb i2c/smbus i2c/iic i2c/iicbb i2c/iicbus lindebugfs \
