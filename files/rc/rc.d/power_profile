@@ -31,7 +31,7 @@ case "$1" in
 			Battery is running low: ${level}%
 			Emergency shutdown initiated.
 		EOF
-		shutdown -p now
+		shutdown -pq now
 	fi
 	;;
 *)	echo "${0##*/} [0x00|0x01|0x80]"
