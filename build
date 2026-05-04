@@ -147,7 +147,10 @@ patch_sources() {
 		;;
 	*Core\(TM\)2*)
 		sed -E -i '' '/hw\.acpi/d' "$SRCDIR"/sbin/sysctl/sysctl.conf
-		sed -E -i '' '/(hw\.acpi|compat\.linuxkpi)/d' "$SRCDIR"/stand/defaults/loader_local.conf
+		sed -E -i '' \
+			-e '/(hw\.acpi|compat\.linuxkpi)/d' \
+			-e '/vfs.zfs.txg.timeout/s/=.*/="30"/' \
+		"$SRCDIR"/stand/defaults/loader_local.conf
 		;;
 	*)	echo "Profile for $HWMODEL is not defined"; exit 1 ;;
 	esac

@@ -1,6 +1,6 @@
 diff -Naur src.orig/release/Makefile src/release/Makefile
---- src.orig/release/Makefile	2025-11-28 04:15:53.000000000 +0400
-+++ src/release/Makefile	2026-01-20 11:47:06.833218000 +0400
+--- src.orig/release/Makefile	2025-11-28 03:15:53.000000000 +0300
++++ src/release/Makefile	2026-04-24 20:35:38.255541000 +0300
 @@ -235,33 +235,38 @@
  	    DESTDIR=${.OBJDIR}/${.TARGET} MK_AT=no \
  	    MK_INSTALLLIB=no MK_MAIL=no \
@@ -51,7 +51,7 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
  	done
  .endif
  .endif
-@@ -277,19 +282,46 @@
+@@ -277,19 +282,96 @@
  	${PKG_CLEAN} || true
  .endif
  # Set up installation environment
@@ -95,12 +95,62 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
 +		-e '/\/usr\/(include|libdata|local|obj|share\/openssl|src)/d' \
 +		-e '/\/usr\/libexec\/(flua|ulog-helper)/d' \
 +		-e '/\/usr\/lib\/(.+\.(a|o)|clang|flua|libxo)/d' \
-+		-e '/\/bin\/(crontab|doas|iconv)/d' \
-+		-e '/\/sbin\/(cron|devd|etcupdate|mixer|(new)?syslogd?|nologin|powerd)/d' \
++		-e '/\/usr\/bin\/(bintrans|chgrp|crontab|dc|doas|(h|o)d|iconv|fuser|groups|(b|g)unzip2?|mandoc|mkcsmapper|more|p(args|env|rocstat)|readlink|(un)?lzma|(n)?vi(ew)?|n(awk|cal|ex)|un(xz|zstd)|.+(cat|code|grep|less)|w(hoami)?|zstd(cat|mt))/d' \
++		-e '/\/usr\/sbin\/(cron|etcupdate|idprio|mixer|nmtree|(new)?syslogd?|powerd|pstat)/d' \
++		-e '/\/bin\/(link|sh|pgrep|test|unlink)/d' \
++		-e '/\/sbin\/(devd|(fast|next)?(boot|halt)|g(label|mirror|part|stripe)|md5sum|nologin|poweroff|(rmd|sha|skein|swapo).+)/d' \
 +		-e '/\/share\/(certs|keys|man|mk|pkg|skel|zoneinfo)/d' \
 +		-e '/\/var\/(cache|cron|db|empty|log|run|tmp)/d' \
 +		-e '/\.\/tmp/d' \
 +	${.TARGET}/METALOG
++	echo "./bin/link type=link uname=root gname=wheel mode=0555 link=ln" >> ${.TARGET}/METALOG
++	echo "./bin/unlink type=link uname=root gname=wheel mode=0555 link=rm" >> ${.TARGET}/METALOG
++	echo "./bin/sh type=link uname=root gname=wheel mode=0555 link=mksh" >> ${.TARGET}/METALOG
++	echo "./bin/pgrep type=link uname=root gname=wheel mode=0555 link=pkill" >> ${.TARGET}/METALOG
++	echo "./bin/test type=link uname=root gname=wheel mode=0555 link=[" >> ${.TARGET}/METALOG
++	echo "./sbin/glabel type=link uname=root gname=wheel mode=0555 link=geom" >> ${.TARGET}/METALOG
++	echo "./sbin/gmirror type=link uname=root gname=wheel mode=0555 link=geom" >> ${.TARGET}/METALOG
++	echo "./sbin/gpart type=link uname=root gname=wheel mode=0555 link=geom" >> ${.TARGET}/METALOG
++	echo "./sbin/gstripe type=link uname=root gname=wheel mode=0555 link=geom" >> ${.TARGET}/METALOG
++	echo "./sbin/halt type=link uname=root gname=operator mode=0555 link=reboot" >> ${.TARGET}/METALOG
++	echo "./sbin/poweroff type=link uname=root gname=operator mode=0555 link=shutdown" >> ${.TARGET}/METALOG
++	echo "./sbin/sha256 type=link uname=root gname=wheel mode=0555 link=md5" >> ${.TARGET}/METALOG
++	echo "./sbin/sha512 type=link uname=root gname=wheel mode=0555 link=md5" >> ${.TARGET}/METALOG
++	echo "./sbin/swapon type=link uname=root gname=wheel mode=0555 link=swapctl" >> ${.TARGET}/METALOG
++	echo "./sbin/swapoff type=link uname=root gname=wheel mode=0555 link=swapctl" >> ${.TARGET}/METALOG
++	echo "./usr/bin/chgrp type=link uname=root gname=wheel mode=0555 link=/usr/sbin/chown" >> ${.TARGET}/METALOG
++	echo "./usr/bin/dc type=link uname=root gname=wheel mode=0555 link=bc" >> ${.TARGET}/METALOG
++	echo "./usr/bin/fuser type=link uname=root gname=wheel mode=0555 link=fstat" >> ${.TARGET}/METALOG
++	echo "./usr/bin/nawk type=link uname=root gname=wheel mode=0555 link=awk" >> ${.TARGET}/METALOG
++	echo "./usr/bin/ncal type=link uname=root gname=wheel mode=0555 link=cal" >> ${.TARGET}/METALOG
++	echo "./usr/bin/readlink type=link uname=root gname=wheel mode=0555 link=stat" >> ${.TARGET}/METALOG
++	echo "./usr/bin/vi type=link uname=root gname=wheel mode=0555 link=ex" >> ${.TARGET}/METALOG
++	echo "./usr/bin/w type=link uname=root gname=wheel mode=0555 link=uptime" >> ${.TARGET}/METALOG
++	echo "./usr/bin/b64decode type=link uname=root gname=wheel mode=0555 link=base64" >> ${.TARGET}/METALOG
++	echo "./usr/bin/b64encode type=link uname=root gname=wheel mode=0555 link=base64" >> ${.TARGET}/METALOG
++	echo "./usr/bin/uudecode type=link uname=root gname=wheel mode=0555 link=base64" >> ${.TARGET}/METALOG
++	echo "./usr/bin/uuencode type=link uname=root gname=wheel mode=0555 link=base64" >> ${.TARGET}/METALOG
++	echo "./usr/bin/hd type=link uname=root gname=wheel mode=0555 link=hexdump" >> ${.TARGET}/METALOG
++	echo "./usr/bin/od type=link uname=root gname=wheel mode=0555 link=hexdump" >> ${.TARGET}/METALOG
++	echo "./usr/bin/groups type=link uname=root gname=wheel mode=0555 link=id" >> ${.TARGET}/METALOG
++	echo "./usr/bin/whoami type=link uname=root gname=wheel mode=0555 link=id" >> ${.TARGET}/METALOG
++	echo "./usr/bin/pargs type=link uname=root gname=wheel mode=0555 link=pwdx" >> ${.TARGET}/METALOG
++	echo "./usr/bin/penv type=link uname=root gname=wheel mode=0555 link=pwdx" >> ${.TARGET}/METALOG
++	echo "./usr/bin/procstat type=link uname=root gname=wheel mode=0555 link=pwdx" >> ${.TARGET}/METALOG
++	echo "./usr/bin/egrep type=link uname=root gname=wheel mode=0555 link=grep" >> ${.TARGET}/METALOG
++	echo "./usr/bin/fgrep type=link uname=root gname=wheel mode=0555 link=grep" >> ${.TARGET}/METALOG
++	echo "./usr/bin/rgrep type=link uname=root gname=wheel mode=0555 link=grep" >> ${.TARGET}/METALOG
++	echo "./usr/bin/bzcat type=link uname=root gname=wheel mode=0555 link=bzip2" >> ${.TARGET}/METALOG
++	echo "./usr/bin/bunzip2 type=link uname=root gname=wheel mode=0555 link=bzip2" >> ${.TARGET}/METALOG
++	echo "./usr/bin/gzcat type=link uname=root gname=wheel mode=0555 link=gzip" >> ${.TARGET}/METALOG
++	echo "./usr/bin/gunzip type=link uname=root gname=wheel mode=0555 link=gzip" >> ${.TARGET}/METALOG
++	echo "./usr/bin/unxz type=link uname=root gname=wheel mode=0555 link=xz" >> ${.TARGET}/METALOG
++	echo "./usr/bin/xzcat type=link uname=root gname=wheel mode=0555 link=xz" >> ${.TARGET}/METALOG
++	echo "./usr/bin/unzstd type=link uname=root gname=wheel mode=0555 link=zstd" >> ${.TARGET}/METALOG
++	echo "./usr/bin/zstdcat type=link uname=root gname=wheel mode=0555 link=zstd" >> ${.TARGET}/METALOG
++	echo "./usr/sbin/idprio type=link uname=root gname=wheel mode=0555 link=rtprio" >> ${.TARGET}/METALOG
++	echo "./usr/sbin/nmtree type=link uname=root gname=wheel mode=0555 link=mtree" >> ${.TARGET}/METALOG
++	echo "./usr/sbin/pstat type=link uname=root gname=wheel mode=0555 link=swapinfo" >> ${.TARGET}/METALOG
 +	echo "./etc/localtime type=file uname=root gname=wheel mode=0644" >> ${.TARGET}/METALOG
 +	echo "./etc/resolv.conf type=link uname=root gname=wheel mode=0755 link=/var/run/resolv.conf" >> ${.TARGET}/METALOG
 +	echo "./tmp type=link uname=root gname=wheel mode=0755 link=/var/tmp" >> ${.TARGET}/METALOG
@@ -108,5 +158,5 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
 +	sed -E 's/[[:blank:]]tags=package=[[:graph:]]+//' ${.TARGET}/METALOG | sort | uniq > ${.TARGET}/METALOG.tmp
 +	mv ${.TARGET}/METALOG.tmp ${.TARGET}/METALOG
  	touch ${.TARGET}
-
+ 
  bootonly:

@@ -16,6 +16,7 @@ nooptions	UFS_ACL
 nooptions	UFS_DIRHASH
 nooptions	UFS_GJOURNAL
 nooptions	QUOTA
+nooptions	MD_ROOT
 nooptions	NFSCL
 nooptions	NFSD
 nooptions	NFSLOCKD
