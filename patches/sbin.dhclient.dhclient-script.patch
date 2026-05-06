@@ -1,0 +1,43 @@
+diff -Naur src.orig/sbin/dhclient/dhclient-script src/sbin/dhclient/dhclient-script
+--- src.orig/sbin/dhclient/dhclient-script	2025-11-28 03:15:53.000000000 +0300
++++ src/sbin/dhclient/dhclient-script	2026-05-06 23:18:23.271636000 +0300
+@@ -84,6 +84,14 @@
+ 	fi
+ }
+ 
++delete_egress_group() {
++	$IFCONFIG $interface -group egress
++}
++
++add_egress_group() {
++	$IFCONFIG $interface group egress
++}
++
+ fill_classless_routes() {
+ 	set $1
+ 	while [ $# -ge 5 ]; do
+@@ -351,6 +359,7 @@
+ 	fi
+ 	if is_default_interface; then
+ 		add_new_resolv_conf
++		add_egress_group
+ 	fi
+ 	;;
+ 
+@@ -363,8 +372,6 @@
+ 	if [ -x $ARP ]; then
+ 		$ARP -d -a -i $interface
+ 	fi
+-	# XXX Why add alias we just deleted above?
+-	add_new_alias
+ 	if is_default_interface; then
+ 		case $resolvconf_enable in
+ 		# "no", "false", "off", or "0"
+@@ -377,6 +384,7 @@
+ 			/sbin/resolvconf -d ${interface}
+ 			;;
+ 		esac
++		delete_egress_group
+ 	fi
+ 	;;
+ 
