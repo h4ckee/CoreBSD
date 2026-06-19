@@ -1,6 +1,6 @@
 diff -Naur src.orig/etc/mtree/BSD.root.dist src/etc/mtree/BSD.root.dist
---- src.orig/etc/mtree/BSD.root.dist	2025-11-28 04:15:53.000000000 +0400
-+++ src/etc/mtree/BSD.root.dist	2026-01-06 14:00:03.615516000 +0400
+--- src.orig/etc/mtree/BSD.root.dist	2026-06-12 10:36:42.000000000 +0400
++++ src/etc/mtree/BSD.root.dist	2026-06-14 21:09:37.403017000 +0400
 @@ -10,22 +10,10 @@
      boot
          defaults
@@ -57,7 +57,7 @@ diff -Naur src.orig/etc/mtree/BSD.root.dist src/etc/mtree/BSD.root.dist
 -        ..
 -        jail.conf.d     tags=package=jail
 -        ..
--        kyua            tags=package=tests
+-        kyua            tags=package=kyua
 -        ..
 -        mail            tags=package=runtime
 -        ..
@@ -98,7 +98,7 @@ diff -Naur src.orig/etc/mtree/BSD.root.dist src/etc/mtree/BSD.root.dist
              untrusted		tags=package=caroot
              ..
          ..
--        sysctl.kld.d    tags=package=runtime
+-        sysctl.kld.d    tags=package=rc
 -        ..
          syslog.d        tags=package=syslogd
          ..

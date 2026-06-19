@@ -1,7 +1,7 @@
 diff -Naur src.orig/share/numericdef_unicode/Makefile src/share/numericdef_unicode/Makefile
---- src.orig/share/numericdef_unicode/Makefile	2025-11-28 04:15:54.000000000 +0400
-+++ src/share/numericdef_unicode/Makefile	2025-12-27 15:38:27.802533000 +0400
-@@ -10,88 +10,7 @@
+--- src.orig/share/numericdef_unicode/Makefile	2026-06-12 10:36:43.000000000 +0400
++++ src/share/numericdef_unicode/Makefile	2026-06-16 18:28:59.873972000 +0400
+@@ -10,88 +10,9 @@
  	grep -v -E '^(#$$|#[ ])' < ${.IMPSRC} > ${.TARGET}
  
  LOCALES+=	en_US.UTF-8
@@ -11,8 +11,9 @@ diff -Naur src.orig/share/numericdef_unicode/Makefile src/share/numericdef_unico
 -LOCALES+=	it_CH.UTF-8
 -LOCALES+=	tr_TR.UTF-8
 -LOCALES+=	uk_UA.UTF-8
--
--
++LOCALES+=	ru_RU.UTF-8
+ 
+ 
 -
 -SAME+=		uk_UA.UTF-8 sv_SE.UTF-8
 -SAME+=		uk_UA.UTF-8 sv_FI.UTF-8
@@ -33,6 +34,7 @@ diff -Naur src.orig/share/numericdef_unicode/Makefile src/share/numericdef_unico
 -SAME+=		uk_UA.UTF-8 fi_FI.UTF-8
 -SAME+=		uk_UA.UTF-8 et_EE.UTF-8
 -SAME+=		uk_UA.UTF-8 es_CR.UTF-8
+-SAME+=		uk_UA.UTF-8 en_ZA.UTF-8
 -SAME+=		uk_UA.UTF-8 de_AT.UTF-8
 -SAME+=		uk_UA.UTF-8 cs_CZ.UTF-8
 -SAME+=		uk_UA.UTF-8 bg_BG.UTF-8
@@ -47,7 +49,6 @@ diff -Naur src.orig/share/numericdef_unicode/Makefile src/share/numericdef_unico
 -SAME+=		en_US.UTF-8 he_IL.UTF-8
 -SAME+=		en_US.UTF-8 ga_IE.UTF-8
 -SAME+=		en_US.UTF-8 es_MX.UTF-8
--SAME+=		en_US.UTF-8 en_ZA.UTF-8
 -SAME+=		en_US.UTF-8 en_SG.UTF-8
 -SAME+=		en_US.UTF-8 en_PH.UTF-8
 -SAME+=		en_US.UTF-8 en_NZ.UTF-8
@@ -87,7 +88,6 @@ diff -Naur src.orig/share/numericdef_unicode/Makefile src/share/numericdef_unico
 -SAME+=		it_CH.UTF-8 de_CH.UTF-8
 -SAME+=		fr_FR.UTF-8 fr_CH.UTF-8
 -SAME+=		fr_FR.UTF-8 fr_BE.UTF-8
-+LOCALES+=	ru_RU.UTF-8
  
  FILES=		${LOCALES:S/$/.out/}
  CLEANFILES=	${FILES}

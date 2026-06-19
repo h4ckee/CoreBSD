@@ -1,6 +1,6 @@
 diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
---- src.orig/etc/mtree/BSD.usr.dist	2025-11-28 03:15:53.000000000 +0300
-+++ src/etc/mtree/BSD.usr.dist	2026-04-01 21:05:08.965518000 +0300
+--- src.orig/etc/mtree/BSD.usr.dist	2026-06-12 10:36:42.000000000 +0400
++++ src/etc/mtree/BSD.usr.dist	2026-06-14 21:24:09.583201000 +0400
 @@ -12,28 +12,8 @@
              ..
              bsdstat           tags=package=libbsdstat-dev
@@ -30,7 +30,7 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
              zstd              tags=package=runtime-dev
              ..
          ..
-@@ -46,153 +26,35 @@
+@@ -46,151 +26,35 @@
                          bits
                          ..
                      ..
@@ -91,8 +91,8 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
          ..
          ossl-modules
          ..
--	virtual_oss
--	..
+-        virtual_oss
+-        ..
      ..
      libdata
 -        ldscripts
@@ -169,10 +169,8 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
          ..
 -        hyperv
 -        ..
--        kgdb
--        ..
--        lpr
--            ru
+-        lpr			tags=package=lp
+-            ru			tags=package=lp
 -            ..
 -        ..
 -        sendmail
@@ -184,11 +182,11 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
      ..
      local
      ..
-@@ -201,274 +63,20 @@
+@@ -199,272 +63,20 @@
      sbin
      ..
      share
--        atf             tags=package=tests
+-        atf             tags=package=atf
 -        ..
 -        bhyve
 -            gdb
@@ -225,17 +223,15 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
 -        doc
 -            IPv6
 -            ..
--            atf             tags=package=tests
+-            atf             tags=package=atf
 -            ..
--            kyua            tags=package=tests
+-            kyua            tags=package=kyua
 -            ..
 -            legal
 -            ..
 -            llvm
 -                clang
 -                ..
--            ..
--            ncurses
 -            ..
 -            ntp
 -                drivers
@@ -325,7 +321,7 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
 -                    ..
 -                ..
 -            ..
--            kyua            tags=package=tests
+-            kyua            tags=package=kyua
 -            ..
 -            libusb20
 -            ..
@@ -343,7 +339,7 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
 -            ..
 -            ppp
 -            ..
--            printing
+-            printing		tags=package=lp
 -            ..
 -            scsi_target
 -            ..
@@ -459,7 +455,7 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
                  UTF
                  ..
              ..
-@@ -480,447 +88,43 @@
+@@ -476,443 +88,47 @@
                  trusted         tags=package=runtime
                  ..
              ..
@@ -470,10 +466,10 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
 -                ..
 -            ..
          ..
--        kyua            tags=package=tests
--            misc            tags=package=tests
+-        kyua            tags=package=kyua
+-            misc            tags=package=kyua
 -            ..
--            store           tags=package=tests
+-            store           tags=package=kyua
 -            ..
 -        ..
          locale
@@ -490,8 +486,6 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
              man4
 -                aarch64
 -                ..
--                amd64
--                ..
 -                arm
 -                ..
 -                i386
@@ -506,12 +500,6 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
              man7
              ..
              man8
--                amd64
--                ..
--                i386
--                ..
--                powerpc
--                ..
              ..
 -            man9
 -            ..
@@ -826,6 +814,10 @@ diff -Naur src.orig/etc/mtree/BSD.usr.dist src/etc/mtree/BSD.usr.dist
 -                ..
 -                man7
 -                ..
+             ..
+         ..
+         pkg
+             triggers
              ..
          ..
 -        security

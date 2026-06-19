@@ -5,6 +5,7 @@ ident		COREBSD
 nomakeoptions	DEBUG
 nomakeoptions	WITH_CTF
 
+nooptions 	SCHED_4BSD
 nooptions	EXTERR_STRINGS
 nooptions	INET6
 nooptions	IPSEC_SUPPORT

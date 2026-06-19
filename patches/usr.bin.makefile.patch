@@ -1,18 +1,17 @@
 diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
---- src.orig/usr.bin/Makefile	2025-11-28 03:15:58.000000000 +0300
-+++ src/usr.bin/Makefile	2026-04-14 19:59:11.652530000 +0300
-@@ -1,42 +1,28 @@
+--- src.orig/usr.bin/Makefile	2026-06-12 10:36:48.000000000 +0400
++++ src/usr.bin/Makefile	2026-06-17 13:45:58.241032000 +0400
+@@ -1,41 +1,29 @@
  .include <src.opts.mk>
  
 -SUBDIR=	alias \
--	apply \
++SUBDIR=	\
+ 	apply \
 -	asa \
-+SUBDIR=	apply \
  	awk \
  	backlight \
 -	banner \
  	basename \
--	beep \
  	bintrans \
 -	brandelf \
  	bsdcat \
@@ -46,7 +45,7 @@ diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
  	expand \
  	false \
  	fetch \
-@@ -45,10 +31,7 @@
+@@ -44,10 +32,7 @@
  	fold \
  	fstat \
  	fsync \
@@ -57,7 +56,7 @@ diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
  	getent \
  	getopt \
  	grep \
-@@ -56,86 +39,42 @@
+@@ -55,85 +40,42 @@
  	head \
  	hexdump \
  	id \
@@ -91,7 +90,6 @@ diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
  	mandoc \
 -	mdo \
 -	mesg \
--	mididump \
 -	ministat \
 -	mkdep \
  	mkfifo \
@@ -144,7 +142,7 @@ diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
  	sort \
  	split \
  	stat \
-@@ -145,10 +84,8 @@
+@@ -143,10 +85,8 @@
  	systat \
  	tail \
  	tar \
@@ -155,7 +153,7 @@ diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
  	top \
  	touch \
  	tr \
-@@ -161,24 +98,16 @@
+@@ -159,24 +99,16 @@
  	unexpand \
  	uniq \
  	unzip \
@@ -180,7 +178,7 @@ diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
  	yes \
  	zstd
  
-@@ -216,7 +145,6 @@
+@@ -214,7 +146,6 @@
  SUBDIR.${MK_ICONV}+=	mkcsmapper
  SUBDIR.${MK_ICONV}+=	mkesdb
  SUBDIR.${MK_ISCSI}+=	iscsictl
@@ -188,7 +186,7 @@ diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
  SUBDIR.${MK_KDUMP}+=	truss
  .if ${MK_MITKRB5} == "no"
  SUBDIR.${MK_KERBEROS}+=	compile_et
-@@ -233,7 +161,6 @@
+@@ -231,20 +162,16 @@
  SUBDIR.${MK_MAKE}+=	bmake
  SUBDIR.${MK_MAN_UTILS}+=	man
  SUBDIR.${MK_NETCAT}+=	nc
@@ -196,7 +194,12 @@ diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
  SUBDIR.${MK_NIS}+=	ypcat
  SUBDIR.${MK_NIS}+=	ypmatch
  SUBDIR.${MK_NIS}+=	ypwhich
-@@ -244,7 +171,6 @@
+ SUBDIR.${MK_OPENSSH}+=	ssh-copy-id
+ SUBDIR.${MK_QUOTAS}+=	quota
+ SUBDIR.${MK_SENDMAIL}+=	vacation
+-SUBDIR.${MK_SOUND}+=	beep
+-SUBDIR.${MK_SOUND}+=	mididump
+ SUBDIR.${MK_TALK}+=	talk
  SUBDIR.${MK_TELNET}+=	telnet
  SUBDIR.${MK_TESTS_SUPPORT}+=	kyua
  SUBDIR.${MK_TESTS}+=	tests
@@ -204,7 +207,7 @@ diff -Naur src.orig/usr.bin/Makefile src/usr.bin/Makefile
  SUBDIR.${MK_TFTP}+=	tftp
  .if ${MK_LLVM_BINUTILS} == "no"
  # Only build the elftoolchain tools if we aren't using the LLVM ones.
-@@ -254,28 +180,13 @@
+@@ -254,28 +181,13 @@
  SUBDIR.${MK_TOOLCHAIN}+=	readelf
  SUBDIR.${MK_TOOLCHAIN}+=	size
  .endif

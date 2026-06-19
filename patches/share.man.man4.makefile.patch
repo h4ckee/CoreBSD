@@ -1,16 +1,24 @@
 diff -Naur src.orig/share/man/man4/Makefile src/share/man/man4/Makefile
---- src.orig/share/man/man4/Makefile	2025-06-06 00:04:21.000000000 +0000
-+++ src/share/man/man4/Makefile	2025-08-02 10:56:25.550587000 +0000
-@@ -62,8 +62,6 @@
- 	${_atf_test_case.4} \
+--- src.orig/share/man/man4/Makefile	2026-06-12 10:36:43.000000000 +0400
++++ src/share/man/man4/Makefile	2026-06-17 17:13:04.314974000 +0400
+@@ -66,8 +66,6 @@
+ 	atp.4 \
  	${_atrtc.4} \
  	${_attimer.4} \
 -	audit.4 \
 -	auditpipe.4 \
  	aue.4 \
- 	axe.4 \
- 	axge.4 \
-@@ -287,23 +285,6 @@
+ 	${_aw_gpio.4} \
+ 	${_aw_mmc.4} \
+@@ -171,7 +169,6 @@
+ 	fdt_pinctrl.4 \
+ 	fdtbus.4 \
+ 	ffclock.4 \
+-	ffs.4 \
+ 	filemon.4 \
+ 	firewire.4 \
+ 	${_ftgpio.4} \
+@@ -312,23 +309,6 @@
  	lpbb.4 \
  	lpt.4 \
  	ltc430x.4 \
@@ -34,3 +42,20 @@ diff -Naur src.orig/share/man/man4/Makefile src/share/man/man4/Makefile
  	malo.4 \
  	max44009.4 \
  	md.4 \
+@@ -717,7 +697,6 @@
+ MLINKS+=fd.4 stderr.4 \
+ 	fd.4 stdin.4 \
+ 	fd.4 stdout.4
+-MLINKS+=ffs.4 ufs.4
+ MLINKS+=fdt.4 FDT.4
+ MLINKS+=firewire.4 ieee1394.4
+ MLINKS+=fwe.4 if_fwe.4
+@@ -1003,7 +982,7 @@
+ _ccd.4=		ccd.4
+ .endif
+ 
+-.if ${MK_CDDL} != "no"
++.if ${MK_DTRACE} != "no"
+ _dtrace_provs=	dtrace_audit.4 \
+ 		dtrace_callout_execute.4 \
+ 		dtrace_dtrace.4 \

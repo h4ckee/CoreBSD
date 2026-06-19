@@ -1,7 +1,7 @@
 diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
---- src.orig/libexec/rc/rc.d/Makefile	2025-11-28 04:15:53.000000000 +0400
-+++ src/libexec/rc/rc.d/Makefile	2026-01-19 12:51:32.562284000 +0400
-@@ -5,137 +5,14 @@
+--- src.orig/libexec/rc/rc.d/Makefile	2026-06-12 10:36:43.000000000 +0400
++++ src/libexec/rc/rc.d/Makefile	2026-06-16 17:32:28.959413000 +0400
+@@ -5,136 +5,16 @@
  CONFSPACKAGE=	rc
  
  # Files which are always installed and go in the -rc package.
@@ -32,11 +32,11 @@ diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
 -	ipsec \
 -	kld \
 -	kldxref \
--	ldconfig \
++CONFS=	\
+ 	ldconfig \
 -	linux \
 -	local \
 -	localpkg \
--	mixer \
 -	motd \
 -	mountcritlocal \
 -	mountcritremote \
@@ -44,7 +44,7 @@ diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
 -	mdconfig \
 -	mdconfig2 \
 -	msgs \
--	netif \
+ 	netif \
 -	netoptions \
 -	netwait \
 -	noshutdown \
@@ -75,7 +75,6 @@ diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
 -	var \
 -	var_run \
 -	watchdogd
-+CONFS=	ldconfig netif
  
  # Groups for files which don't go in -rc, or which depend on src.conf knobs.
  
@@ -140,7 +139,7 @@ diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
  CONFGROUPS+=			DEVD
  DEVDPACKAGE=			devd
  DEVD=		devd
-@@ -152,229 +29,26 @@
+@@ -151,230 +31,26 @@
  CRONPACKAGE=			cron
  CRON=		cron
  
@@ -293,9 +292,10 @@ diff -Naur src.orig/libexec/rc/rc.d/Makefile src/libexec/rc/rc.d/Makefile
 -VIPACKAGE=			vi
 -VI=		virecover
 -
--CONFGROUPS.${MK_CUSE}+=		VOSS
--VOSSPACKAGE=			sound
--VOSS=		virtual_oss
+-CONFGROUPS.${MK_SOUND}+=	SOUND
+-SOUNDPACKAGE=			sound
+-SOUND=		mixer \
+-		virtual_oss
 -
 -CONFGROUPS.${MK_WIRELESS}+=	HOSTAPD
 -HOSTAPDPACKAGE=			hostapd

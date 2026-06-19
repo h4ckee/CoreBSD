@@ -1,6 +1,6 @@
 diff -Naur src.orig/sbin/devd/Makefile src/sbin/devd/Makefile
---- src.orig/sbin/devd/Makefile	2025-11-28 04:15:53.000000000 +0400
-+++ src/sbin/devd/Makefile	2026-01-19 12:56:24.019232000 +0400
+--- src.orig/sbin/devd/Makefile	2026-06-12 10:36:43.000000000 +0400
++++ src/sbin/devd/Makefile	2026-06-17 14:54:07.459264000 +0400
 @@ -6,9 +6,6 @@
  CONFS=	devd.conf
  DEVD=	devmatch.conf
@@ -20,17 +20,29 @@ diff -Naur src.orig/sbin/devd/Makefile src/sbin/devd/Makefile
 -CONSOLE+=		moused.conf syscons.conf
 -CONSOLEPACKAGE=		console-tools
 -
- CONFGROUPS+=		SND
- SNDDIR=			${DEVDDIR}
- SND=			snd.conf
-@@ -55,10 +47,6 @@
- NVMEDIR=		${DEVDDIR}
- NVME+=			nvmf.conf
- NVMEPACKAGE=		nvme-tools
+ .if ${MK_BLUETOOTH} != "no"
+ CONFGROUPS+=		BLUETOOTH
+ BLUETOOTHDIR=		${DEVDDIR}
+@@ -44,22 +36,6 @@
+ HYPERVDIR=${DEVDDIR}
+ HYPERV+=	hyperv.conf
+ HYPERVPACKAGE=	hyperv-tools
+-.endif
+-
+-CONFGROUPS+=		NVME
+-NVMEDIR=		${DEVDDIR}
+-NVME+=			nvmf.conf
+-NVMEPACKAGE=		nvme-tools
+-
+-.if ${MK_SOUND} != "no"
+-CONFGROUPS+=		SND
+-SNDDIR=			${DEVDDIR}
+-SND=			snd.conf
+-SNDPACKAGE=		sound
+-.endif
 -
 -.if ${MK_USB} != "no"
 -DEVD+=	uath.conf ulpt.conf
--.endif
+ .endif
  
  .if ${MACHINE_ARCH} == "powerpc"
- DEVD+=	apple.conf
