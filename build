@@ -5,13 +5,12 @@ if (( USER_ID )); then
 	exit 1
 fi
 
-VERSION="15.0-RELEASE"
+VERSION="15.1-RELEASE"
 HWMODEL="$(sysctl -n hw.model)"
 TARGET="$(sysctl -n hw.machine)"
 TARGET_ARCH="$(sysctl -n hw.machine_arch)"
 BASEURL="http://ftp2.ru.freebsd.org/pub/FreeBSD/releases/${TARGET}/${VERSION}"
 MKSHURL="http://www.mirbsd.org/MirOS/dist/mir/mksh"
-DOASURL="https://codeberg.org/thejessesmith/doas/archive"
 DOASURL="https://codeberg.org/thejessesmith/doas/archive"
 BASESRC="src.txz"
 MKSHSRC="mksh-R59c.tgz"
@@ -72,9 +71,9 @@ extract_sources() {
 	echo "===> Removing extra directories"
 	find -E "$SRCDIR" \( \
 		-path "$SRCDIR"/sys/dev/ntb/test -o -path "$SRCDIR"/contrib/file/doc 		-o \
-		-path "$SRCDIR"/contrib/llvm-project/lld/docs -o -path "$SRCDIR"/bin/test	\) \
+		-path "$SRCDIR"/bin/test -o -path "$SRCDIR"/contrib/llvm-project/lld/docs 	\) \
 	-prune -o -type d \( \
-		-regex '.*/(docs?|(.*_)?tests?)' -o -name .github				-o \
+		-regex '.*/(docs?|(.*[_-])?tests?)' -o -name .github				-o \
 		-name demos		-o -name example\*		-o -name html		-o \
 		-name perl		-o -name regress\*		-o -name travis\*	\) \
 	-exec rm -rf '{}' \+

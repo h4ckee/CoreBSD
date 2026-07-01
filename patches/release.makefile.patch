@@ -1,6 +1,6 @@
 diff -Naur src.orig/release/Makefile src/release/Makefile
---- src.orig/release/Makefile	2025-11-28 03:15:53.000000000 +0300
-+++ src/release/Makefile	2026-04-24 20:35:38.255541000 +0300
+--- src.orig/release/Makefile	2026-06-12 10:36:43.000000000 +0400
++++ src/release/Makefile	2026-06-16 17:50:48.267298000 +0400
 @@ -235,33 +235,38 @@
  	    DESTDIR=${.OBJDIR}/${.TARGET} MK_AT=no \
  	    MK_INSTALLLIB=no MK_MAIL=no \
@@ -51,12 +51,11 @@ diff -Naur src.orig/release/Makefile src/release/Makefile
  	done
  .endif
  .endif
-@@ -277,19 +282,96 @@
+@@ -277,18 +282,96 @@
  	${PKG_CLEAN} || true
  .endif
  # Set up installation environment
 -	ln -fs /tmp/bsdinstall_etc/resolv.conf ${.TARGET}/etc/resolv.conf
--	echo sendmail_enable=\"NONE\" > ${.TARGET}/etc/rc.conf
 -	echo hostid_enable=\"NO\" >> ${.TARGET}/etc/rc.conf
 -	echo vfs.mountroot.timeout=\"10\" >> ${.TARGET}/boot/loader.conf
 +	echo autoboot_delay=\"4\" > ${.TARGET}/boot/loader.conf

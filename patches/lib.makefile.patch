@@ -1,6 +1,6 @@
 diff -Naur src.orig/lib/Makefile src/lib/Makefile
---- src.orig/lib/Makefile	2026-01-08 19:00:00.835633000 +0400
-+++ src/lib/Makefile	2026-01-10 18:28:31.321924000 +0400
+--- src.orig/lib/Makefile	2026-06-12 10:36:42.000000000 +0400
++++ src/lib/Makefile	2026-06-17 14:47:41.134607000 +0400
 @@ -29,17 +29,11 @@
  
  SUBDIR=	${SUBDIR_BOOTSTRAP} \
@@ -42,10 +42,10 @@ diff -Naur src.orig/lib/Makefile src/lib/Makefile
  	libjail \
  	libkiconv \
  	libkldelf \
-@@ -74,53 +65,32 @@
+@@ -73,53 +64,32 @@
+ 	liblzma \
  	libmemstat \
  	libmd \
- 	libmixer \
 -	libmt \
  	lib80211 \
  	libnetbsd \
@@ -64,7 +64,6 @@ diff -Naur src.orig/lib/Makefile src/lib/Makefile
 -	librss \
  	librt \
 -	librtld_db \
--	libsamplerate \
  	libsbuf \
 -	libsmb \
  	libstdbuf \
@@ -79,6 +78,7 @@ diff -Naur src.orig/lib/Makefile src/lib/Makefile
  	libulog \
  	libutil \
 -	libutil++ \
+-	libuvmem \
 -	${_libvgl} \
 -	libwrap \
  	libxo \
@@ -96,7 +96,7 @@ diff -Naur src.orig/lib/Makefile src/lib/Makefile
  SUBDIR_DEPEND_googletest= libregex
  SUBDIR_DEPEND_libarchive= libz libbz2 libexpat liblzma libmd libzstd
  SUBDIR_DEPEND_libauditdm= libbsm
-@@ -142,7 +112,7 @@
+@@ -141,7 +111,7 @@
  .endif
  SUBDIR_DEPEND_libmagic= libz
  SUBDIR_DEPEND_libmemstat= libkvm
@@ -105,7 +105,7 @@ diff -Naur src.orig/lib/Makefile src/lib/Makefile
  SUBDIR_DEPEND_libpjdlog= libutil
  SUBDIR_DEPEND_libprocstat= libkvm libutil
  SUBDIR_DEPEND_libradius= libmd
-@@ -156,8 +126,6 @@
+@@ -155,8 +125,6 @@
  .if ${MK_OFED} != "no"
  SUBDIR_DEPEND_libpcap= ofed
  .endif
@@ -114,15 +114,7 @@ diff -Naur src.orig/lib/Makefile src/lib/Makefile
  
  # NB: keep these sorted by MK_* knobs
  
-@@ -175,7 +143,6 @@
- .endif
- 
- SUBDIR.${MK_CUSE}+= 	libcuse
--SUBDIR.${MK_CUSE}+=	virtual_oss
- SUBDIR.${MK_TOOLCHAIN}+=libpe
- SUBDIR.${MK_DIALOG}+=	libdpv libfigpar
- SUBDIR.${MK_FDT}+=	libfdt
-@@ -225,13 +192,6 @@
+@@ -223,20 +191,12 @@
  SUBDIR.${MK_BHYVE}+=	libvmmapi
  .endif
  
@@ -136,3 +128,10 @@ diff -Naur src.orig/lib/Makefile src/lib/Makefile
  SUBDIR.${MK_PF}+=	libpfctl
  SUBDIR.${MK_PMC}+=	libpmc libpmcstat
  SUBDIR.${MK_RADIUS_SUPPORT}+=	libradius
+ SUBDIR.${MK_SENDMAIL}+=	libmilter libsm libsmdb libsmutil
+ SUBDIR.${MK_TELNET}+=	libtelnet
+ SUBDIR.${MK_SOUND}+=	libmixer
+-SUBDIR.${MK_CUSE}.${MK_SOUND}+=	libsamplerate virtual_oss
+ SUBDIR.${MK_TESTS_SUPPORT}+=	atf
+ SUBDIR.${MK_TESTS_SUPPORT}+=	liblutok
+ SUBDIR.${MK_TESTS}+=	tests

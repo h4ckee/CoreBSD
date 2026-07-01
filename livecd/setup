@@ -69,7 +69,7 @@ i=0; for device in "${rootpooldevs[@]}"; do
 	if [[ "$swapsize" && -z "${datapooldevs[@]}" ]]; then
 		gpart add -a 1m -l swap"$i" -t freebsd-swap -s "$swapsize" "$device" &> /dev/null || exit
 	fi
-	gpart add -a 1m -l zroot"$i" -t freebsd-zfs "$device" &> /dev/null || exit
+	gpart add -a 1m -l "${rootpool}${i}" -t freebsd-zfs "$device" &> /dev/null || exit
 	gpart bootcode -b /boot/pmbr -p /boot/gptzfsboot -i 1 "$device" &> /dev/null || exit
 	(( i++ ))
 done; unset i
@@ -81,7 +81,7 @@ i=0; for device in "${datapooldevs[@]}"; do
 	if [ "$swapsize" ]; then
 		gpart add -a 1m -l swap"$i" -t freebsd-swap -s "$swapsize" "$device" &> /dev/null || exit
 	fi
-	gpart add -a 1m -l zdata"$i" -t freebsd-zfs "$device" &> /dev/null || exit
+	gpart add -a 1m -l "${datapool}${i}" -t freebsd-zfs "$device" &> /dev/null || exit
 	(( i++ ))
 done; unset i
 
@@ -102,7 +102,7 @@ zpool create \
 	-O redundant_metadata=some \
 	-m none \
 	-f "$rootpool" \
-	$mode /dev/gpt/zroot* || exit
+	$mode /dev/gpt/"$rootpool"* || exit
 zfs allow -g wheel clone,create,destroy,mount,promote,rename,rollback,snapshot "$rootpool" || exit
 zfs create -o mountpoint=none "$rootpool"/ROOT || exit
 zfs create -o mountpoint=/ -o canmount=noauto "$rootpool"/ROOT/default || exit
@@ -127,7 +127,7 @@ if (( ${#datapooldevs[@]} )); then
 		-O redundant_metadata=some \
 		-m none \
 		-f "$datapool" \
-		/dev/gpt/zdata* || exit
+		/dev/gpt/"$datapool"* || exit
 	zfs allow -g wheel clone,create,destroy,mount,promote,rename,rollback,snapshot "$datapool" || exit
 	zfs create -o mountpoint=/usr -o canmount=off "$datapool"/usr || exit
 	zfs create -o mountpoint=/usr/obj "$datapool"/usr/obj || exit
@@ -191,8 +191,7 @@ chroot "$mountdir" /bin/sh -l 2>&1
 
 echo '===> Unmounting filesystems'
 umount "$mountdir"/dev || exit
-zfs unmount -a || exit
-umount "$mountdir" || exit
+zpool export -a || exit
 
 echo '--------------------------------------------------------------'
 echo ">>> Installation completed at $( date )"
