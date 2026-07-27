@@ -126,20 +126,24 @@ patch_sources() {
 	cp -R "$CURDIR"/files/mksh		"$SRCDIR"/bin/
 	cp -R "$CURDIR"/files/doas		"$SRCDIR"/usr.bin/
 	cp -R "$CURDIR"/files/rc/*		"$SRCDIR"/libexec/rc/
-	cp "$CURDIR"/files/devd/*		"$SRCDIR"/sbin/devd/
 	cp "$CURDIR"/livecd/*			"$SRCDIR"/release/
 	cp "$CURDIR"/kernel/*			"$SRCDIR"/sys/"$TARGET"/conf/
 	cp "$CURDIR"/files/shells		"$SRCDIR"/etc/
+	cp "$CURDIR"/files/nsswitch.conf	"$SRCDIR"/lib/libc/net/
 	cp "$CURDIR"/files/loader*		"$SRCDIR"/stand/defaults/
 	cp "$CURDIR"/files/dot.*		"$SRCDIR"/share/skel/
+	cp "$CURDIR"/files/devd/*		"$SRCDIR"/sbin/devd/
 	cp "$CURDIR"/files/devfs.rules		"$SRCDIR"/sbin/devfs/
 	cp "$CURDIR"/files/sysctl.conf		"$SRCDIR"/sbin/sysctl/
 	cp "$CURDIR"/files/pf.conf		"$SRCDIR"/sbin/pfctl/
+	cp "$CURDIR"/files/login.conf		"$SRCDIR"/usr.bin/login/
 	cp "$CURDIR"/files/etcupdate.conf	"$SRCDIR"/usr.sbin/etcupdate/
+	cp "$CURDIR"/files/newsyslog.conf	"$SRCDIR"/usr.sbin/newsyslog/
+	cp "$CURDIR"/files/pf_newsyslog.conf	"$SRCDIR"/usr.sbin/newsyslog/newsyslog.conf.d/pf.conf
 	cp "$CURDIR"/files/FreeBSD.conf*	"$SRCDIR"/usr.sbin/pkg/
 	cp "$CURDIR"/files/service.sh		"$SRCDIR"/usr.sbin/service/
+	cp "$CURDIR"/files/syslog.conf		"$SRCDIR"/usr.sbin/syslogd/
 	cp "$CURDIR"/files/wpa_supplicant.conf	"$SRCDIR"/usr.sbin/wpa/wpa_supplicant/
-	cp "$CURDIR"/files/login.conf		"$SRCDIR"/usr.bin/login/
 	case "$HWMODEL" in
 	*Core\(TM\)\ i[57]*)
 		sed -E -i '' '/hw\.(ath|psm)/d' "$SRCDIR"/sbin/sysctl/sysctl.conf
