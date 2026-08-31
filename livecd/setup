@@ -11,35 +11,37 @@ mountdir='/mnt'
 
 usage() {
 	cat <<- INFO
-	usage: ${0##*/} -a device [ -a device] [ -b device -b ...] [-r poolname] [-d poolname] [-m mountdir] [-s swapsize] [-u username]
-	    -a    rootpool device   (zmirror created if = 2)
-	    -b    datapool device   (zstripe created if > 1)
-	    -r    rootpool name     (default: zroot)
-	    -d    datapool name     (default: zdata)
-	    -m    mountdir name     (default: /mnt)
-	    -s    swap size in M|G  (default: -)
-	    -u    user name         (default: -)
+	usage: ${0##*/} [-e] -a device [-b device] [-r poolname] [-d poolname] [-m mountdir] [-s swapsize] [-u username]
+	    -a    rootpool device     (zmirror created if = 2)
+	    -b    datapool device     (zstripe created if > 1)
+	    -r    rootpool name       (default: zroot)
+	    -d    datapool name       (default: zdata)
+	    -m    mountdir name       (default: /mnt)
+	    -s    swap size in M|G    (default: -)
+	    -u    user name           (default: -)
+	    -e    encrypt home dataset
 	available devices: $(sysctl -n kern.disks | egrep -o 'a?da[0-9]+' | sort | tr '\n' ' ')
 	INFO
 	exit
 }
 
-while getopts 'a:b:r:d:m:s:u:' option; do
+while getopts 'a:b:r:d:m:s:u:e' option; do
 	case "$option" in
-		a)	rootpooldevs+=("${OPTARG##/dev/}") ;;
-		b)	datapooldevs+=("${OPTARG##/dev/}") ;;
+		a)	rootdevs+=("${OPTARG##/dev/}") ;;
+		b)	datadevs+=("${OPTARG##/dev/}") ;;
 		r)	rootpool="$OPTARG" ;;
 		d)	datapool="$OPTARG" ;;
 		m)	mountdir="$OPTARG" ;;
 		s)	swapsize="$OPTARG" ;;
 		u)	username="$OPTARG" ;;
+		e)	encrypt='-o encryption=on -o keyformat=passphrase -o keylocation=prompt' ;;
 		?)	usage ;;
 	esac
 done
 
-if (( ${#rootpooldevs[@]} == 0 || ${#rootpooldevs[@]} > 2 )); then
+if (( ${#rootdevs[@]} == 0 || ${#rootdevs[@]} > 2 )); then
 	usage
-elif (( ${#rootpooldevs[@]} == 2 )); then
+elif (( ${#rootdevs[@]} == 2 )); then
 	mode='mirror'
 fi
 if [ ! -d "$mountdir" ]; then
@@ -50,23 +52,22 @@ if [[ "$swapsize" && "$swapsize" != @([1-9]*([0-9])|+([1-9]*[0-9]).+([0-9])|[0-9
 	echo >&2 "ERROR: $swapsize is not a correct size"
 	exit
 fi
-for device in "${rootpooldevs[@]}" "${datapooldevs[@]}"; do
+for device in "${rootdevs[@]}" "${datadevs[@]}"; do
 	if [ ! -c /dev/"$device" ]; then
 		echo >&2 "ERROR: /dev/${device} is not a block device"
 		exit
 	fi
 done
 
-importedpools=$(zpool list -Ho name)
-[ "$importedpools" ] && zpool export -af
+zpool export -af || exit
 
-i=0; for device in "${rootpooldevs[@]}"; do
+i=0; for device in "${rootdevs[@]}"; do
 	echo "===> Creating GPT scheme on $device"
 	gpart destroy -F "$device" &> /dev/null
 	gpart create -s gpt "$device" &> /dev/null || exit
 	gpart set -a active "$device" &> /dev/null || exit
 	gpart add -a 4k -l gptboot"$i" -t freebsd-boot -s 512k "$device" &> /dev/null || exit
-	if [[ "$swapsize" && -z "${datapooldevs[@]}" ]]; then
+	if [[ "$swapsize" && -z "${datadevs[@]}" ]]; then
 		gpart add -a 1m -l swap"$i" -t freebsd-swap -s "$swapsize" "$device" &> /dev/null || exit
 	fi
 	gpart add -a 1m -l "${rootpool}${i}" -t freebsd-zfs "$device" &> /dev/null || exit
@@ -74,7 +75,7 @@ i=0; for device in "${rootpooldevs[@]}"; do
 	(( i++ ))
 done; unset i
 
-i=0; for device in "${datapooldevs[@]}"; do
+i=0; for device in "${datadevs[@]}"; do
 	echo "===> Creating GPT scheme on $device"
 	gpart destroy -F "$device" &> /dev/null
 	gpart create -s gpt "$device" &> /dev/null || exit
@@ -85,7 +86,7 @@ i=0; for device in "${datapooldevs[@]}"; do
 	(( i++ ))
 done; unset i
 
-for device in "${rootpooldevs[@]}"; do
+for device in "${rootdevs[@]}"; do
 	glabel refresh "$device" &> /dev/null || exit
 done
 
@@ -113,7 +114,7 @@ zfs create -o mountpoint=/usr/src -o setuid=off "$rootpool"/usr/src || exit
 zfs create -o mountpoint=/var -o canmount=off "$rootpool"/var || exit
 zfs create -o mountpoint=/var/log -o setuid=off -o exec=off "$rootpool"/var/log || exit
 zfs create -o mountpoint=/var/tmp -o setuid=off -o exec=on "$rootpool"/var/tmp || exit
-if (( ${#datapooldevs[@]} )); then
+if (( ${#datadevs[@]} )); then
 	echo "===> Creating filesystems on $datapool"
 	zpool create \
 		-R "$mountdir" \
@@ -134,14 +135,14 @@ if (( ${#datapooldevs[@]} )); then
 	zfs create -o mountpoint=/usr/ports -o setuid=off "$datapool"/usr/ports || exit
 	zfs create -o mountpoint=/var -o canmount=off "$datapool"/var || exit
 	zfs create -o mountpoint=/var/cache -o setuid=off -o exec=off "$datapool"/var/cache || exit
-	zfs create -o mountpoint=/home "$datapool"/home || exit
+	zfs create -o mountpoint=/home $encrypt "$datapool"/home || exit
 	mkdir -p "$mountdir"/boot/zfs || exit
 	zpool set cachefile="$mountdir"/boot/zfs/zpool.cache "$datapool" || exit
 else
 	zfs create -o mountpoint=/usr/obj "$rootpool"/usr/obj || exit
 	zfs create -o mountpoint=/usr/ports -o setuid=off "$rootpool"/usr/ports || exit
 	zfs create -o mountpoint=/var/cache -o setuid=off -o exec=off "$rootpool"/var/cache || exit
-	zfs create -o mountpoint=/home "$rootpool"/home || exit
+	zfs create -o mountpoint=/home $encrypt "$rootpool"/home || exit
 fi
 
 for archive in "${archives[@]}"; do

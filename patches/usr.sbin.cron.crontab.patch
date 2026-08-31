@@ -22,4 +22,4 @@ diff -Naur src.orig/usr.sbin/cron/cron/crontab src/usr.sbin/cron/cron/crontab
  1,31	0-5	*	*	*	root	adjkerntz -a
 +#
 +# Examine data in all pools to verify that it checksums correctly
-+30	15	1	*	*	root	zpool scrub -a
++0	17	1,15	*	*	root	zpool scrub -a
