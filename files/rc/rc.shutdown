@@ -47,9 +47,9 @@ if ! umount -a &> /dev/null; then
 	umount -af
 fi
 
-if ! zfs unmount -a &> /dev/null; then
+if ! zfs unmount -ua &> /dev/null; then
 	sleep 1
-	zfs unmount -af
+	zfs unmount -uaf
 fi
 
 mount -ur /

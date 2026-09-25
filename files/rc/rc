@@ -99,7 +99,7 @@ if [ "$import" ]; then
 	(( $? )) && echo >&2 "Importing $cachefile failed"
 fi
 
-zfs mount -a || echo >&2 'Mounting ZFS filesystems failed'
+zfs mount -la || echo >&2 'Mounting ZFS filesystems failed'
 
 mount -a -t nonfs,nosmbfs || echo >&2 'Mounting fstab filesystems failed'
 
