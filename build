@@ -69,7 +69,7 @@ extract_sources() {
 	echo "===> Extracting $DOASSRC"
 	LC_ALL=C bsdtar -C "$SRCDIR"/contrib --uid 0 --gid 0 -xf "$TMPDIR"/"$DOASSRC" --exclude="doas/compat" || exit 1
 	echo "===> Removing extra directories"
-	find -E "$SRCDIR" \( \
+	find -E "$SRCDIR" \( -path "$SRCDIR"/sys/modules/mac_test				-o \
 		-path "$SRCDIR"/sys/dev/ntb/test -o -path "$SRCDIR"/contrib/file/doc 		-o \
 		-path "$SRCDIR"/bin/test -o -path "$SRCDIR"/contrib/llvm-project/lld/docs 	\) \
 	-prune -o -type d \( \
@@ -193,7 +193,9 @@ set_environment() {
 		;;
 	*)	echo "Profile for $HWMODEL is not defined"; exit 1 ;;
 	esac
-	if [ "$COMMAND" = "img" ]; then
+	if [ "$COMMAND" = "gen" ]; then
+		export KERNCONF="GENERIC"
+	elif [ "$COMMAND" = "img" ]; then
 		export KERNCONF="COREBSD"
 		export WITHOUT_MODULES="aac aacraid accf_data accf_dns accf_http acl_nfs4 acl_posix1e ae aesni age agp \
 			ahci aic7xxx alc ale amd_ecc_inject amdsbwd amdtemp arcmsr ata ath_hal axgbe bce bfe bge bios \
@@ -300,6 +302,7 @@ usage() {
 	    src - fetch source tree
 	    pts - apply patches
 	    krn - update kernel
+	    gen - build generic kernel
 	    all - update world + kernel
 	    img - build iso image
 
@@ -311,13 +314,14 @@ COMMAND="$1"
 case "$COMMAND" in
 	src)	check_sources ;;
 	pts)	patch_sources ;;
-	krn)	check_patched
+	gen|krn)
+		check_patched
 		clean_directory "$OBJDIR"
 		set_environment
 		build_kernel
 		install_kernel
 		clean_directory "$OBJDIR"
-		shutdown -rq now
+#		shutdown -rq now
 		;;
 	all)	check_patched
 		clean_directory "$OBJDIR"
